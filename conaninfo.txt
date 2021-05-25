@@ -1,0 +1,59 @@
+[settings]
+    arch=x86_64
+    build_type=Release
+    compiler=Visual Studio
+    compiler.runtime=MD
+    compiler.version=16
+    os=Windows
+
+[requires]
+    libdwarf/20191104.Y.Z
+    lief/0.10.1
+
+[options]
+
+
+[full_settings]
+    arch=x86_64
+    arch_build=x86_64
+    build_type=Release
+    compiler=Visual Studio
+    compiler.runtime=MD
+    compiler.version=16
+    os=Windows
+    os_build=Windows
+
+[full_requires]
+    frozen/1.0.0:5ab84d6acfe1f23c4fae0ab88f26e3a396351ac9
+    libdwarf/20191104:d4241079d50393bfd9fa5ae2b47bdfde776f31c3
+    libelf/0.8.13:3fb49604f9c2f729b85ba3115852006824e72cab
+    lief/0.10.1:45ac3383eca66f234d22211781dd97746fc82bb3
+    mbedtls/2.16.3-apache:d8ac7a0f959aa6a09fd6a37c84b5d5aa5d138d1f
+    nlohmann_json/3.9.1:5ab84d6acfe1f23c4fae0ab88f26e3a396351ac9
+    rang/3.1.0:5ab84d6acfe1f23c4fae0ab88f26e3a396351ac9
+    zlib/1.2.11:3fb49604f9c2f729b85ba3115852006824e72cab
+
+[full_options]
+    libdwarf:shared=False
+    libelf:shared=False
+    lief:shared=False
+    lief:with_art=True
+    lief:with_c_api=True
+    lief:with_dex=True
+    lief:with_elf=True
+    lief:with_frozen=True
+    lief:with_json=True
+    lief:with_macho=True
+    lief:with_oat=True
+    lief:with_pe=True
+    lief:with_vdex=True
+    mbedtls:shared=False
+    mbedtls:with_zlib=True
+    zlib:minizip=deprecated
+    zlib:shared=False
+
+[recipe_hash]
+
+
+[env]
+
