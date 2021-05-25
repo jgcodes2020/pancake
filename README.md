@@ -7,7 +7,7 @@ Pancake is a library to interface with a closed-source modified version of the
 [Wafel](https://github.com/branpk/wafel).
 
 ## FAQ
-I'm probabl
+I'm probably going to get these questions a lot, so here goes.
 ### Why "Pancake"?
 There are two tools currently in use by the SM64 TASing community: 
 [STROOP](https://github.com/SM64-TAS-ABC/STROOP) and 
