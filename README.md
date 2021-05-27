@@ -26,12 +26,11 @@ CLI tools:
 
 - Python 3.8
 - Meson (install using `pip install meson`)
-- Ninja (install using `pip install ninja`)
+- Ninja (install using `pip install ninja` or download from their [Github](https://github.com/ninja-build/ninja/releases/tag/v1.10.2))
 
-Then clone this repo and run `meson setup build`. This should install the 
-necessary files from ConanCenter and setup the Ninja backend for building.
+Then clone this repo and run `meson setup build`. The dependencies are already
+included and will be unpacked by Meson.
 
-**Make sure that Conan is using Visual Studio as its compiler.**
+Afterwards, run `setup_meson.bat`. This creates the necessary build configurations.
 
-Afterwards, run `cd build` and then `meson compile`. The resulting static library
-can be used immediately.
+Finally, either run `build debug` or `build release` to build the desired configuration.
