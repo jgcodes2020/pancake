@@ -14,21 +14,17 @@
 #include <string>
 #include <memory>
 
-#include "LIEF/LIEF.hpp"
+#include "libdwarf.h"
 
 
-using std::cout, std::cin, std::flush;
+using std::cout, std::cin, std::flush, std::endl;
 using std::string;
-
-using namespace LIEF;
 
 int main() {
   string s;
-  cout << "Enter a lib path: ";
+  cout << "Enter a lib path: " << flush;
   std::getline(cin, s);
-  cout << "Using lib " << s << "\n" << flush;
+  cout << "Using lib " << s << endl;
 
-  std::unique_ptr<PE::Binary> bin = PE::Parser::parse(s);
-
-  cout << (*bin) << std::endl;
+  
 }

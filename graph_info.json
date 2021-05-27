@@ -9,58 +9,6 @@
    "False"
   ],
   [
-   "lief:shared",
-   "False"
-  ],
-  [
-   "lief:with_art",
-   "True"
-  ],
-  [
-   "lief:with_c_api",
-   "True"
-  ],
-  [
-   "lief:with_dex",
-   "True"
-  ],
-  [
-   "lief:with_elf",
-   "True"
-  ],
-  [
-   "lief:with_frozen",
-   "True"
-  ],
-  [
-   "lief:with_json",
-   "True"
-  ],
-  [
-   "lief:with_macho",
-   "True"
-  ],
-  [
-   "lief:with_oat",
-   "True"
-  ],
-  [
-   "lief:with_pe",
-   "True"
-  ],
-  [
-   "lief:with_vdex",
-   "True"
-  ],
-  [
-   "mbedtls:shared",
-   "False"
-  ],
-  [
-   "mbedtls:with_zlib",
-   "True"
-  ],
-  [
    "zlib:minizip",
    "deprecated"
   ],

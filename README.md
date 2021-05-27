@@ -27,7 +27,6 @@ CLI tools:
 - Python 3.8
 - Meson (install using `pip install meson`)
 - Ninja (install using `pip install ninja`)
-- Conan (install using `pip install conan`)
 
 Then clone this repo and run `meson setup build`. This should install the 
 necessary files from ConanCenter and setup the Ninja backend for building.

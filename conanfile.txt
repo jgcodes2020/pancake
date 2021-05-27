@@ -1,3 +1,0 @@
-[requires]
-libdwarf/20191104
-lief/0.10.1

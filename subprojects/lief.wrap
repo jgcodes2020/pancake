@@ -1,0 +1,6 @@
+[wrap-file]
+directory = lief
+
+source_filename = lief.zip
+[provide]
+dependency_names = lief-0.11.5
