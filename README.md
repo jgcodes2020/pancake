@@ -22,16 +22,17 @@ pancakes with stroopwafels, and as a subtle nod to pannenkoek2012.
 ## Building
 I will be posting prebuilt versions when the library is feature-complete. If 
 you want to build this for yourself or work on it, you'll need the following 
-CLI tools:
+tools:
 
 - Python 3.8
+- Visual Studio 2019
 - Meson (install using `pip install meson`)
-- Ninja (install using `pip install ninja`)
+- Ninja (install using `pip install ninja` or download from their [Github](https://github.com/ninja-build/ninja/releases/tag/v1.10.2))
 
-Then clone this repo and run `meson setup build`. This should install the 
-necessary files from ConanCenter and setup the Ninja backend for building.
+Then clone this repo and run `meson setup build`. The dependencies are already
+included and will be unpacked by Meson.
 
-**Make sure that Conan is using Visual Studio as its compiler.**
+Start a Visual Studio developer prompt.
+Afterwards, run `setup_meson.bat`. This creates the necessary build configurations.
 
-Afterwards, run `cd build` and then `meson compile`. The resulting static library
-can be used immediately.
+Finally, either run `build debug` or `build release` to build the desired configuration.

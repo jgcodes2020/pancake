@@ -1,16 +1,24 @@
 exp_headers = include_directories('export')
+int_headers = include_directories('private')
+
+buildtype = get_option('buildtype')
 
 deps = [
-  subproject('libdwarf').get_variable('dwarf'),
-  subproject('lief').get_variable('lief')
+  subproject('libdwarf').get_variable('lib'),
+  subproject('LIEF').get_variable(buildtype)
 ]
 
-static_library('pancake', 'cpp/sm64-win.cpp', 
-  include_directories: exp_headers,
-  dependencies: deps
+includer = generator(py, 
+  arguments: ['../script/always_include.py', '@INPUT@', '-o', '@OUTPUT@', '-H', 'ciso646'],
+  output: '@BASENAME@.gen.cpp',
 )
 
-executable('experiment', 'experiment/experiment.cpp',
-  include_directories: exp_headers,
+#static_library('pancake', includer.process('cpp/sm64-win.cpp'), 
+#  include_directories: [exp_headers, int_headers],
+#  dependencies: deps
+#)
+
+executable('experiment', includer.process('experiment/experiment.cpp'),
+  include_directories: [exp_headers, int_headers],
   dependencies: deps
 )

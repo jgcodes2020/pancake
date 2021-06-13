@@ -1,3 +1,16 @@
 {
-  "python.pythonPath": "C:\\Program Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.8_3.8.2800.0_x64__qbz5n2kfra8p0\\python3.8.exe"
+  "python.pythonPath": "C:\\Program Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.8_3.8.2800.0_x64__qbz5n2kfra8p0\\python3.8.exe",
+  "files.associations": {
+    "*.mcmeta": "json",
+    "*.fsh": "glsl-vertex",
+    "*.vsh": "glsl",
+    "*.bin": "hex",
+    "*.wrap": "ini",
+    "filesystem": "cpp",
+    "fstream": "c",
+    "xlocmes": "c",
+    "io.h": "c",
+    "corecrt_io.h": "c"
+  },
+  "C_Cpp.intelliSenseEngine": "Disabled"
 }

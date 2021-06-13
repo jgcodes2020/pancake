@@ -1,6 +1,4 @@
 [wrap-file]
-directory = libdwarf
 
+directory = libdwarf
 source_filename = libdwarf.zip
-[provide]
-dependency_names = libdwarf-2021.3.5
