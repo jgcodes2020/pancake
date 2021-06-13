@@ -32,7 +32,10 @@ tools:
 Then clone this repo and run `meson setup build`. The dependencies are already
 included and will be unpacked by Meson.
 
+<<<<<<< HEAD
 Start a Visual Studio developer prompt.
+=======
+>>>>>>> 9aa4a43d0311b125694ff05f682a80787a65a5ca
 Afterwards, run `setup_meson.bat`. This creates the necessary build configurations.
 
 Finally, either run `build debug` or `build release` to build the desired configuration.
