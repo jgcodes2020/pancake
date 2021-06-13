@@ -25,13 +25,11 @@ you want to build this for yourself or work on it, you'll need the following
 tools:
 
 - Python 3.8
-- Visual Studio 2019
+- MSYS2 with MinGW-w64 (see [this StackOverflow thing](https://stackoverflow.com/questions/30069830/how-to-install-mingw-w64-and-msys2))
 - Meson (install using `pip install meson`)
-- Ninja (install using `pip install ninja` or download from their [Github](https://github.com/ninja-build/ninja/releases/tag/v1.10.2))
+- Ninja (install using `pip install ninja` or download from their [GitHub](https://github.com/ninja-build/ninja/releases/tag/v1.10.2))
 
-Then clone this repo and run `meson setup build`. The dependencies are already
-included and will be unpacked by Meson.
+Then clone this repository and run `setup.bat` or `"script\setup.py"`.
+Dependencies are bundled in .zip archives and Meson will unpack these on setup.
 
-Afterwards, run `setup_meson.bat`. This creates the necessary build configurations.
-
-Finally, either run `build debug` or `build release` to build the desired configuration.
+To build, run `build.bat debug` or `build.bat release`.

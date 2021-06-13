@@ -1,5 +1,3 @@
-debug
-release
 subprojects/*
 !subprojects/packagefiles
 !subprojects/*.wrap
