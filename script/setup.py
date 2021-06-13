@@ -8,7 +8,7 @@ import subprocess
 project_dir = Path(__file__).parents[1]
 
 print("This deletes any existing build folders. Do you want to continue?")
-confirm = input("[type \"Yes.\" (without quotes) to continue]")
+confirm = input("[type \"Yes.\" (without quotes) to continue] ")
 if confirm != "Yes.":
     sys.exit(2)
 
@@ -19,7 +19,7 @@ for d in subproj_dir.iterdir():
         shutil.rmtree(d)
 
 print("Setting up build...")
-shutil.rmtree(project_dir.joinpath("debug"), ignore_errors=True)
+shutil.rmtree(project_dir.joinpath("build"), ignore_errors=True)
 exit_code = subprocess.call(["meson", "setup", "build"])
 if exit_code != 0:
     sys.exit(exit_code)

@@ -13,12 +13,12 @@ includer = generator(py,
   output: '@BASENAME@.gen.cpp',
 )
 
-#static_library('pancake', includer.process('cpp/sm64-win.cpp'), 
+#static_library('pancake', 'cpp/sm64-win.cpp', 
 #  include_directories: [exp_headers, int_headers],
 #  dependencies: deps
 #)
 
-executable('experiment', includer.process('experiment/experiment.cpp'),
+executable('experiment', 'experiment/experiment.cpp',
   include_directories: [exp_headers, int_headers],
   dependencies: deps
 )
