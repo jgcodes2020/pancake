@@ -2,4 +2,4 @@
 subprojects/*
 !subprojects/packagefiles
 !subprojects/*.wrap
-!local
+local
