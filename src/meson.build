@@ -11,17 +11,7 @@ deps = [
 
 message('Compiling for ' + host_machine.system())
 
-includer = generator(py, 
-  arguments: ['../script/always_include.py', '@INPUT@', '-o', '@OUTPUT@', '-H', 'ciso646'],
-  output: '@BASENAME@.gen.cpp',
-)
-
-# static_library('pancake', platform_dir / 'sm64.cpp', 
-#   include_directories: [exp_headers, int_headers],
-#   dependencies: deps
-# )
-
-executable('experiment', 'experiment/experiment.cpp',
+pancake = static_library('pancake', [], 
   include_directories: [exp_headers, int_headers],
   dependencies: deps
 )

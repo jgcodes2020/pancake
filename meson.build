@@ -9,5 +9,11 @@ project('pancake', 'cpp',
 cxx = meson.get_compiler('cpp')
 py = find_program('python3', 'python')
 
+# Enforce correct compilers
+if (host_machine.system() == 'windows')
+  assert(cxx.get_id() == 'msvc', 'You need to use Visual C++ on Windows.')
+endif
+
 # Compile static library
 subdir('src')
+subdir('test')

@@ -1,3 +1,3 @@
 @echo off
-python %~dp0script\setup.py %*
+python %~dp0buildscript\setup.py %*
 @echo on
