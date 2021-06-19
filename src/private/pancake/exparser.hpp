@@ -14,6 +14,7 @@
 #include <stdexcept>
 #include <string>
 #include <sstream>
+#include <iostream>
 #include <utility>
 #include <any>
 #include <vector>
@@ -36,6 +37,33 @@ namespace pancake::exparser {
     std::vector<instruction> instructions;
   };
   
+  inline std::ostream& operator<<(std::ostream& out, const access_code& code) {
+    out << "get " << code.global;
+    for (auto& i: code.instructions) {
+      out << " -> ";
+      switch (i.first) {
+        case opcode::SUBSCRIPT: {
+          out << "subscript " << std::any_cast<size_t>(i.second);
+        } break;
+        case opcode::MEMBER: {
+          out << "member " << std::any_cast<std::string>(i.second);
+        } break;
+        default: break;
+      }
+    }
+    return out;
+  }
+  inline std::ostream& operator<<(std::ostream& out, const opcode& code) {
+    switch (code) {
+      case opcode::NONE:
+        return out << "NO-OP";
+      case opcode::SUBSCRIPT:
+        return out << "SUBSCRIPT";
+      case opcode::MEMBER:
+        return out << "MEMBER";
+    }
+  }
+  
   /**
    * @brief Parses an expression into instructions.
    * 
@@ -46,44 +74,6 @@ namespace pancake::exparser {
   
   
   class misc_parsing {
-  private:
-    inline static size_t digit(char c, size_t max) {
-      if (max > 36) {
-        std::stringstream fmt;
-        fmt << "Attempted to parse base-" << max << ", the max is base-36";
-        throw std::invalid_argument(fmt.str());
-      }
-      size_t result = 0;
-      if (c >= '0' && c <= '9') {
-        // subtract 0x30
-        result = static_cast<size_t>(
-          static_cast<uint8_t>(c) - 48
-        );
-      }
-      else if (c >= 'A' && c <= 'Z') {
-        // subtract 0x41 then add 10
-        result = static_cast<size_t>(
-          static_cast<uint8_t>(c) - 55
-        );
-      }
-      else if (c >= 'a' && c <= 'z') {
-        // subtract 0x61 then add 10
-        result = static_cast<size_t>(
-          static_cast<uint8_t>(c) - 87
-        );
-      }
-      else {
-        std::stringstream fmt;
-        fmt << c << " is not a valid digit";
-        throw std::invalid_argument(fmt.str());
-      }
-      
-      if (result > max) {
-        std::stringstream fmt;
-        fmt << c << " is not a valid digit in base-" << max;
-        throw std::invalid_argument(fmt.str());
-      }
-    }
   public:
     /**
      * @brief Parses an integer literal.

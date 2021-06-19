@@ -12,32 +12,23 @@
 
 #include <string>
 #include <locale>
+#include <codecvt>
 
 namespace pancake {
   /**
    * @brief String conversion stuff.
    */
   namespace strcvt {
-    using std::string, std::wstring;
     /**
      * @brief The UTF-8 locale.
      */
-    const std::locale UTF8 = std::locale("en_US.utf8");
+    std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>> converter;
     
-    string to_utf8(wstring str) {
-      using mb2wc_t = std::codecvt<wchar_t, char, std::mbstate_t>;
-      auto& cvt = std::use_facet<mb2wc_t>(UTF8);
-      
-      std::mbstate_t mb = std::mbstate_t{};
-      string res(str.size() * cvt.max_length(), '\0');
-      const wchar_t* from_n; char* to_n;
-      cvt.out(mb,
-        &str[0], &str[str.size()], from_n,
-        &res[0], &res[res.size()], to_n
-      );
-      
-      res.resize(to_n - &res[0]);
-      return res;
+    inline std::string to_utf8(std::wstring str) {
+      return converter.to_bytes(str);
+    }
+    inline std::wstring to_utf16(std::string str) {
+      return converter.from_bytes(str);
     }
   }
   

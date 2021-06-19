@@ -11,7 +11,7 @@ deps = [
 
 message('Compiling for ' + host_machine.system())
 
-pancake = static_library('pancake', platform_dir/'sm64.cpp', 
+pancake = static_library('pancake', platform_dir/'sm64.cpp', 'cpp/exparser.cpp', 
   include_directories: [exp_headers, int_headers],
   dependencies: deps
 )
