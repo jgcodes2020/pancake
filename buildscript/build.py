@@ -28,6 +28,7 @@ try:
     if sys.platform.startswith("win"):
         bscript_dir = Path(__file__).parent
         # Run VSWhere to find VS
+        print("Finding Visual Studio...")
         vswhere = subprocess.run(
             [str(bscript_dir.joinpath("vswhere.exe")), 
                 "-requires", "Microsoft.VisualStudio.Component.VC.Tools.x86.x64",
@@ -38,6 +39,7 @@ try:
         # Use VS path to locate vcvars64.bat
         vcvars_path = Path(vspath[0]["installationPath"]).joinpath("VC\\Auxiliary\\Build\\vcvars64.bat")
         # Run vcvars64.bat and print environment
+        print("Initializing vcvars64 environment...")
         vcvars = subprocess.run(
             ["cmd", "/c", str(vcvars_path), "&&", "set"],
             capture_output=True, encoding="utf-8"

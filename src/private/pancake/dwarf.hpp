@@ -1,6 +1,6 @@
 /**
  * @file dwarf.hpp
- * @author your name (you@domain.com)
+ * @author jgcodes2020
  * @brief Helper functions around libdwarf, nicer exception handling
  * @version 0.1
  * @date 2021-06-14
