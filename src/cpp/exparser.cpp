@@ -24,8 +24,8 @@ namespace pancake::exparser {
     regex("^(?:\\.|->)([A-Za-z_]\\w*)"),
   };
   
-  const access_code parse(const std::string expr) {
-    access_code result;
+  const ast parse(const std::string expr) {
+    ast result;
     auto begin = expr.begin();
     smatch match;
     // Find global first

@@ -3,6 +3,7 @@ from pathlib import Path
 import subprocess
 import sys; import os
 import json
+import shutil
 
 prevenv = os.environ.copy()
 try:
@@ -16,6 +17,21 @@ try:
     parser.add_argument("config",
         help="Should either be \"debug\" or \"release\".",
         default="debug"
+    )
+    parser.add_argument("--wrap-reload", "-W", 
+        action="store_true",
+        dest="wrap_reload",
+        help="Reloads subproject wraps."
+    )
+    parser.add_argument("--use-vs", "-V",
+        action="store_true",
+        dest="use_vs",
+        help="Uses the Visual Studio backend."
+    )
+    parser.add_argument("--no-compile", "-c",
+        action="store_false",
+        dest="do_compile",
+        help="Don't compile the file."
     )
 
     args = parser.parse_args()
@@ -48,31 +64,36 @@ try:
         vcenv = {var.split("=", 1)[0] : var.split("=", 1)[1] for var in vcvars.stdout.splitlines()[5:]}
         vcenv["PATH"] = vcenv["Path"]
         os.environ.update(vcenv)
-
+    
+    if args.wrap_reload:
+        print("Clearing loaded wraps...")
+        for f in project_dir.joinpath("subprojects").iterdir():
+            if f.is_dir() and f.name != "packagefiles":
+                shutil.rmtree(f);
+    backend = "vs" if args.use_vs else "ninja"
     if args.config == "debug":
-        print("Configuring debug")
-        subprocess.call(
-            ["meson", "configure", "--buildtype=debug"
-                # Add additional options to Meson here
-            ],
+        print("Configuring debug...")
+        config = subprocess.run(
+            ["meson", "configure", "--buildtype=debug", f"--backend={backend}"],
             cwd=build_dir
         )
+        config.check_returncode()
     elif args.config == "release":
-        print("Configuring release")
-        subprocess.call(
-            ["meson", "configure", "--buildtype=release"
-                # Add additional options to Meson here
-            ],
+        print("Configuring release...")
+        config = subprocess.run(
+            ["meson", "configure", "--buildtype=release", f"--backend={backend}"],
             cwd=build_dir
         )
+        config.check_returncode()
         
     else:
         print("Invalid configuration! Use either debug or release")
         sys.exit(2)
-
-    subprocess.call(
-        ["meson", "compile"],
-        cwd=build_dir
-    )
+    if args.do_compile:
+        print("Running Meson build...")
+        subprocess.run(
+            ["meson", "compile"],
+            cwd=build_dir
+        ).check_returncode()
 finally:
     os.environ.update(prevenv)

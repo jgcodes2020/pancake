@@ -10,7 +10,9 @@
 #ifndef _PANCAKE_SM64_HPP_
 #define _PANCAKE_SM64_HPP_
 
+#include <stdexcept>
 #include <string>
+#include <sstream>
 #include <filesystem>
 #include <memory>
 #include <any>
@@ -23,9 +25,37 @@ namespace pancake {
   namespace fs = std::filesystem;
   
   /**
-   * @brief A map of strings to pointers to their respective struct fields.
+   * @brief Runtime wrapper around a libsm64 struct.
    */
-  using struct_t = std::unordered_map<string, any>;
+  class struct_t {
+  private:
+    struct impl;
+    unique_ptr<impl> pimpl;
+    
+    std::pair<type_info, void*> get_member(string name);
+  public:
+    const string type_name;
+    
+    /**
+     * @brief Gets a member. Uses RTTI to ensure type safety when retrieving values.
+     * 
+     * @tparam T must match the type of the requested member.
+     * @param name the name of the member
+     * @return A reference to the specified member
+     */
+    template<class T>
+    T& get(string name) {
+      auto member = get_member(name);
+      if (typeid(T) != member.first) {
+        std::stringstream fmt;
+        fmt << "Member " << name << " is of type ";
+        fmt << member.first.name() << ", not of type " << typeid(T).name();
+        throw std::invalid_argument(fmt.str());
+      }
+      return *reinterpret_cast<T*>(member.second);
+    }
+  };
+  
   class sm64 {
   private:
     struct impl;

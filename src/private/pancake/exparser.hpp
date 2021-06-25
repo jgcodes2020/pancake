@@ -32,12 +32,16 @@ namespace pancake::exparser {
     MEMBER    = 2
   };
   using instruction = std::pair<opcode, std::any>;
-  struct access_code {
+  /**
+   * @brief Parsed output. Not really a tree per se, but it may if I expand the syntax.
+   * 
+   */
+  struct ast {
     std::string global;
     std::vector<instruction> instructions;
   };
   
-  inline std::ostream& operator<<(std::ostream& out, const access_code& code) {
+  inline std::ostream& operator<<(std::ostream& out, const ast& code) {
     out << "get " << code.global;
     for (auto& i: code.instructions) {
       out << " -> ";
@@ -70,7 +74,7 @@ namespace pancake::exparser {
    * @param expr the expression to parse 
    * @return An "access code" containing info on how to retrieve the desired value.
    */
-  const access_code parse(std::string expr);
+  const ast parse(std::string expr);
   
   
   class misc_parsing {
