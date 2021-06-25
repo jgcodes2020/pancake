@@ -21,21 +21,24 @@ I will be posting prebuilt versions when the library is feature-complete.
 ### Building it yourself (Windows)
 If you want to build this for yourself or work on it, you'll need the following tools:
 
-- Python 3.8
+- Python 3.8 or greater
 - Visual Studio 2019
 - Meson (install using `pip install meson`)
 - Ninja (install using `pip install ninja` or download from their [GitHub](https://github.com/ninja-build/ninja/releases/tag/v1.10.2))
 
-After installing MSYS2 and MinGW-w64, add `${MSYS_HOME}\mingw64\bin` to your path. Then, open your favourite Windows command prompt, `cd` to wherever you cloned the repo and run the following to build the project:
+After installing everything, open your favourite Windows command prompt, `cd` to wherever you cloned the repo and run the following to build the project:
 
 **cmd.exe**
 ```bat
-setup
-build debug
+setup.py
+build.py debug
 ```
 **PowerShell**
 ```ps
-.\setup
-.\build debug
+.\setup.py
+.\build.py debug
 ```
+
+If the above commands don't work, use `python setup.py` and `python build.py debug` instead.
+
 The dependencies will be downloaded or unzipped automatically by Meson, so you need not worry about that. Well, except for one thing. This library depends on Wafel's libsm64. This should be accessible on the release of 0.7.2, but for now, you'll need to build from source on the master branch, then unlock libsm64 using an SM64 ROM.
