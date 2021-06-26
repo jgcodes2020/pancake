@@ -36,16 +36,13 @@ int main(int argc, char* argv[]) {
   dw_debug dbg(argv[1]);
   cout << "Searching for gMarioStates...\n";
   // And you thought IIFEs were only for JS?
-  dw_die die_gMarioStates = [dbg]() -> dw_die {
-    dw_global_list globals = dbg.list_globals();
-    for (size_t i = 0; i < globals.size(); i++) {
-      if (globals[i].name() == "gMarioStates"){
-        return dw_die(globals[i]);
-      }
-    }
-    throw std::logic_error("gMarioStates doesn't exist");
-  }();
-  bool e = die_gMarioStates.has_attr(DW_AT::specification);
-  cout << "gMarioStates die has spec attr: " << e << "\n";
+  dw_die die_gMarioStates = dbg.list_globals()["gMarioStates"];
+  
+  auto e = die_gMarioStates
+    .attr(DW_AT::specification).as_linked_die()
+    .attr(DW_AT::type).as_linked_die()
+    .attr(DW_AT::type).as_linked_die()
+    .attr(DW_AT::name).as_string();
+  cout << "gMarioStates die has tag: " << e << "\n";
   return 0;
 }

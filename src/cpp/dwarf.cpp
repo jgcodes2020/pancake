@@ -169,6 +169,28 @@ namespace dwarf {
     return iterator(m_size, m_list, m_size);
   }
   
+  dw_global dw_global_list::operator[](string name) const {
+    Dwarf_Global g;
+    char* cstr;
+    const char* c_name = name.c_str();
+    Dwarf_Error err;
+    int rcode;
+    
+    for (int i = 0; i < m_size; i++) {
+      g = m_list[i];
+      rcode = dwarf_globname(g, &cstr, &err);
+      if (rcode != DW_DLV::OK) 
+        throw dw_error(m_dbg, err);
+      
+      if (std::strcmp(cstr, c_name) == 0) {
+        return dw_global(m_dbg, g);
+      }
+    }
+    stringstream fmt;
+    fmt << name << " was not found";
+    throw std::invalid_argument(fmt.str());
+  }
+  
   // dw_debug
   
   dw_debug::dw_debug(const char* path) :
@@ -216,12 +238,12 @@ namespace dwarf {
     return dw_global_list(m_dbg, list, size);
   }
   
+  
   // dw_die
   
   dw_die::dw_die(dw_global g) :
     m_dbg(g.m_dbg),
     m_die([this, g]() {
-      auto flags = cout.flags();
       
       const Dwarf_Off&& die_offset = [this, g]() {
         Dwarf_Off result;
@@ -232,7 +254,6 @@ namespace dwarf {
         }
         return result;
       }();
-      cout << std::hex << m_die << std::endl;
       return [this, die_offset]() {
         Dwarf_Error err;
         Dwarf_Die die;
@@ -252,7 +273,16 @@ namespace dwarf {
   }
   
   dw_attribute dw_die::attr(DW_AT name) {
-    return dw_attribute(*this, name);
+    Dwarf_Error err;
+    int rcode;
+    
+    Dwarf_Attribute attr;
+    rcode = dwarf_attr(m_die, static_cast<Dwarf_Half>(name), &attr, &err);
+    if (rcode != DW_DLV::OK) {
+      throw dw_error(m_dbg, err);
+    }
+    
+    return dw_attribute(m_dbg, attr);
   }
   
   bool dw_die::has_attr(DW_AT name) {
@@ -279,24 +309,6 @@ namespace dwarf {
   }
   
   // dw_attribute
-  
-  dw_attribute::dw_attribute(const dw_die& die, DW_AT name) :
-    m_dbg(die.m_dbg), m_attr([this, die, name]() -> Dwarf_Attribute {
-      Dwarf_Error err;
-      Dwarf_Attribute attr;
-      ((void) *(die.m_die));
-      cout << '(' << ((std::intptr_t) die.m_die) << ", " << static_cast<uint16_t>(name) << ")\n";
-      int rcode = dwarf_attr(die.m_die, static_cast<uint16_t>(name), &attr, &err);
-      if (rcode == DW_DLV::NO_ENTRY) {
-        std::stringstream fmt;
-        fmt << "DIE does not contain attribute " << std::hex << static_cast<uint16_t>(name);
-        throw std::invalid_argument(fmt.str());
-      }
-      else if (rcode == DW_DLV::ERROR_) {
-        throw dw_error(m_dbg, err);
-      }
-      return attr;
-    }()) {}
   
   dw_attribute::~dw_attribute() {
     dwarf_dealloc_attribute(m_attr);
@@ -337,18 +349,13 @@ namespace dwarf {
       throw dw_error(m_dbg, err);
     }
     
-    dw_die result(m_dbg, [this, offset]() -> Dwarf_Die {
-      Dwarf_Die result; Dwarf_Error err;
-      int rcode = dwarf_offdie_b(m_dbg, offset, false, &result, &err);
-      if (rcode == DW_DLV::ERROR_) {
-        throw dw_error(m_dbg, err);
-      }
-      return result;
-    }());
-
+    Dwarf_Die die;
+    rcode = dwarf_offdie_b(m_dbg, offset, true, &die, &err);
+    if (rcode != DW_DLV::OK) {
+      throw dw_error(m_dbg, err);
+    }
     
-    
-    return result;
+    return dw_die(m_dbg, die);
   }
   
   uint64_t dw_attribute::as_unsigned_int() {

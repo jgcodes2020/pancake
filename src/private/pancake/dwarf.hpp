@@ -77,7 +77,7 @@ namespace dwarf {
     friend class dw_die;
   private:
     const Dwarf_Debug m_dbg;
-    Dwarf_Global m_glob;
+    const Dwarf_Global m_glob;
     dw_global(Dwarf_Debug dbg, Dwarf_Global g) :
       m_dbg(dbg), m_glob(g) {}
   public:
@@ -119,14 +119,13 @@ namespace dwarf {
       return m_size;
     }
     
-    dw_global operator[](size_t index) const {
-      if (index >= m_size) {
-        std::stringstream fmt;
-        fmt << "Index " << index << " out of bounds for size " << m_size;
-        throw std::out_of_range(fmt.str());
-      }
-      return dw_global(m_dbg, m_list[index]);
-    }
+    /**
+     * @brief Acquires a specific property.
+     * 
+     * @param name 
+     * @return dw_global 
+     */
+    dw_global operator[](string name) const;
   };
   
   class dw_debug {
@@ -148,10 +147,6 @@ namespace dwarf {
      */
     dw_debug(string path) :
       dw_debug(path.c_str()) {}
-      
-    const Dwarf_Debug& operator*() {
-      return m_dbg;
-    }
     
     dw_global_list list_globals() const;
   };
@@ -161,7 +156,8 @@ namespace dwarf {
   private:
     const Dwarf_Debug m_dbg;
     const Dwarf_Attribute m_attr;
-    dw_attribute(const dw_die& die, DW_AT attr);
+    dw_attribute(Dwarf_Debug dbg, Dwarf_Attribute attr) :
+      m_dbg(dbg), m_attr(attr) {}
   public:
     ~dw_attribute();
     
@@ -199,34 +195,20 @@ namespace dwarf {
   class dw_die {
     friend class dw_attribute;
   private:
-    Dwarf_Debug m_dbg;
-    Dwarf_Die m_die;
-    
+    const Dwarf_Debug m_dbg;
+    const Dwarf_Die m_die;
+  public:
     dw_die(Dwarf_Debug dbg, Dwarf_Die die):
       m_dbg(dbg), m_die(die) {}
   public:
     dw_die(dw_global g);
+    dw_die(uintptr_t off);
     ~dw_die();
-    
-    Dwarf_Die operator*() {
-      return m_die;
-    }
-    
-    dw_die& operator=(const dw_die& that) {
-      m_dbg = that.m_dbg;
-      m_die = that.m_die;
-      return *this;
-    }
-    dw_die& operator=(dw_die&& that) {
-      m_dbg = std::move(that.m_dbg);
-      m_die = std::move(that.m_die);
-      return *this;
-    }
     
     /**
      * @brief Returns this DIE's tag.
      * 
-     * @return DW_TAG 
+     * @return this DIE's tag
      */
     DW_TAG tag();
     
@@ -248,6 +230,13 @@ namespace dwarf {
      * @return false if this die does not have the requested attribute.
      */
     bool has_attr(DW_AT name);
+    
+    /**
+     * @brief Returns a handle which can be used later to retrieve another instance of this DIE.
+     * 
+     * @return a handle which can be used to retrieve another instance of this DIE
+     */
+    uintptr_t handle();
   };
 }
 #endif

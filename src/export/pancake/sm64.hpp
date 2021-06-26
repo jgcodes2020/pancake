@@ -10,17 +10,17 @@
 #ifndef _PANCAKE_SM64_HPP_
 #define _PANCAKE_SM64_HPP_
 
+#include <any>
 #include <stdexcept>
 #include <string>
 #include <sstream>
 #include <filesystem>
 #include <memory>
-#include <any>
+#include <type_traits>
 #include <unordered_map>
+#include <vcruntime_typeinfo.h>
 
 namespace pancake {
-  using std::unique_ptr, std::any;
-  using std::string;
   
   namespace fs = std::filesystem;
   
@@ -30,11 +30,12 @@ namespace pancake {
   class struct_t {
   private:
     struct impl;
-    unique_ptr<impl> pimpl;
+    std::unique_ptr<impl> pimpl;
     
-    std::pair<type_info, void*> get_member(string name);
+    std::pair<type_info&, void*> get_member(std::string name);
+    struct_t();
   public:
-    const string type_name;
+    const std::string type_name;
     
     /**
      * @brief Gets a member. Uses RTTI to ensure type safety when retrieving values.
@@ -44,7 +45,7 @@ namespace pancake {
      * @return A reference to the specified member
      */
     template<class T>
-    T& get(string name) {
+    T& operator[](std::string name) {
       auto member = get_member(name);
       if (typeid(T) != member.first) {
         std::stringstream fmt;
@@ -57,10 +58,22 @@ namespace pancake {
   };
   
   class sm64 {
+    friend class struct_t;
   private:
     struct impl;
-    unique_ptr<impl> pimpl;
+    std::shared_ptr<impl> pimpl;
+    
+    std::pair<type_info&, void*> _impl_get(std::string expr);
+    std::any _impl_constant(std::string name);
   public:
+    class savestate {
+    private:
+      struct impl;
+      std::unique_ptr<impl> pimpl;
+      
+      void save(std::shared_ptr<sm64::impl> impl);
+      void load(std::shared_ptr<sm64::impl> impl);
+    };
     /**
      * @brief Loads libsm64.
      * 
@@ -69,31 +82,93 @@ namespace pancake {
     sm64(fs::path path);
     
     /**
-     * @brief Returns the value of a variable.
-     * @details This allows `.`, `->`, `[]`. If you need specific bits, wrap in a bitset.
+     * @brief Loads libsm64.
      * 
-     * @param expr a C-style accessor expression.
-     * @return a std::any. If nothing was found, returns nullptr. Structs are replaced with `struct_t`.
+     * @param path path to libsm64
      */
-    any read(string expr);
+    sm64(std::string path);
     
     /**
-     * @brief Returns the value of a constant.
-     * @details Said constant is usually a macro.
+     * @brief Loads libsm64.
      * 
-     * @param expr 
-     * @return const any 
+     * @param path path to libsm64
      */
-    const any constant(string expr);
+    sm64(const char* path);
     
     /**
-     * @brief Sets the value of a variable.
+     * @brief Returns a pointer to a specific field.
      * 
-     * @tparam T 
-     * @param value 
+     * @tparam T Must be an integer or floating-point type that is not `long double`
+     * @param expr an accessor expression.
+     * @return T& the value from the accessor expression
      */
     template<typename T>
-    void write(T value);
+    T& get(std::string expr) {
+      static_assert(std::conjunction<
+        std::is_arithmetic<T>,
+        std::negation<std::is_same<T, long double>>
+      >::value, "T should be any integer, or float or double");
+      
+      auto impl = _impl_get(expr);
+      // type-safety check
+      if (typeid(T) != impl.first) {
+        std::stringstream fmt;
+        fmt << "Expected T to be " << impl.first.name() << ", instead was " << typeid(T).name();
+        throw type_error(fmt.str());
+      }
+      // unsafe cast back to correct type
+      return *reinterpret_cast<T*>(impl.second);
+    }
+    
+    /**
+     * @brief Advances the savestate forward by 1 frame.
+     * 
+     */
+    void advance();
+    
+    /**
+     * @brief Allocates a savestate buffer.
+     * 
+     * @return a new savestate bound to this game.
+     */
+    savestate alloc_svst();
+    /**
+     * @brief Saves the game's state to the savestate buffer.
+     * 
+     * @param st the savestate to save
+     * @exception std::domain_error if the savestate is not linked to THIS game.
+     */
+    void save_svst(savestate& st);
+    /**
+     * @brief Loads the game's state from a savestate buffer.
+     * 
+     * @param st 
+     * @exception std::domain_error if the savestate is not linked to THIS game.
+     */
+    void load_svst(const savestate& st);
+    
+    /**
+     * @brief Loads a constant from 
+     * 
+     * @tparam T 
+     * @param name 
+     * @return const T 
+     */
+    template<typename T>
+    const T constant(std::string name) {
+      static_assert(std::disjunction<
+        std::is_void<T>,
+        std::is_same<T, double>,
+        std::is_same<T, uint64_t>
+      >::value, "T must be either double, uint64_t, or void");
+      std::any value = _impl_constant(name);
+      if (typeid(T) != value.type()) {
+        std::stringstream fmt;
+        fmt << "Expected T to be " << value.type().name() << ", instead was " << typeid(T).name();
+        throw type_error(fmt.str());
+      }
+      return std::any_cast<T>(value);
+    }
   };
 }
 #endif

@@ -6,7 +6,8 @@ platform_dir = 'cpp' / host_machine.system()
 
 deps = [
   subproject('libdwarf').get_variable(buildtype),
-  subproject('LIEF').get_variable(buildtype)
+  subproject('LIEF').get_variable(buildtype),
+  dependency('nlohmann_json')
 ]
 
 message('Compiling for ' + host_machine.system())
