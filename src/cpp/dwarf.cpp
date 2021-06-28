@@ -3,13 +3,20 @@
 
 #include <cstdint>
 #include <iostream>
-#include <ostream>
+#include <optional>
 #include <sstream>
 #include <stdexcept>
 #include <cstring>
 #include <string.h>
 
-using std::string, std::cout, std::stringstream;
+#include "pancake/exception.hpp"
+
+using namespace std;
+
+static void check_not_null(void* ptr, string msg) {
+  if (ptr == nullptr)
+    throw pancake::null_pointer_exception(msg);
+}
 
 namespace dwarf {
   // dw_global
@@ -18,14 +25,14 @@ namespace dwarf {
     Dwarf_Error err;
     char* cstr;
     int rcode = dwarf_globname(m_glob, &cstr, &err);
-    if (rcode != DW_DLV::OK) {
+    if (rcode == DW_DLV::ERROR) {
       throw dw_error(m_dbg, err);
     }
     return string(cstr);
   }
   
   // dw_global_list
-  
+  /*
   class dw_global_list::iterator {
   public:
     using value_type = Dwarf_Global;
@@ -41,9 +48,6 @@ namespace dwarf {
     iterator(size_t start_index, Dwarf_Global* list, size_t size) :
       list(list), size(size), index(start_index) {}
     
-    /*******************************
-    FORWARD ITERATOR
-    ********************************/
     
     // prefix increment
     iterator& operator++() {
@@ -75,10 +79,6 @@ namespace dwarf {
       return !(operator==(other));
     }
     
-    /*******************************
-    BIDIRECTIONAL ITERATOR
-    ********************************/
-    
     // Prefix decrement
     iterator& operator--() {
       if (index > 0) index--;
@@ -91,10 +91,6 @@ namespace dwarf {
       if (index > 0) index--;
       return result;
     }
-    
-    /*******************************
-    RANDOM-ACCESS ITERATOR
-    ********************************/
     
     // add and assign
     iterator& operator+=(difference_type n) {
@@ -168,6 +164,7 @@ namespace dwarf {
   dw_global_list::iterator dw_global_list::end() {
     return iterator(m_size, m_list, m_size);
   }
+  */
   
   dw_global dw_global_list::operator[](string name) const {
     Dwarf_Global g;
@@ -179,7 +176,7 @@ namespace dwarf {
     for (int i = 0; i < m_size; i++) {
       g = m_list[i];
       rcode = dwarf_globname(g, &cstr, &err);
-      if (rcode != DW_DLV::OK) 
+      if (rcode == DW_DLV::ERROR) 
         throw dw_error(m_dbg, err);
       
       if (std::strcmp(cstr, c_name) == 0) {
@@ -205,7 +202,7 @@ namespace dwarf {
         nullptr, 0, 0,
         &err
       );
-      if (rcode != DW_DLV::OK) {
+      if (rcode == DW_DLV::ERROR) {
         std::stringstream fmt;
         fmt << "Error occurred during init: " << dwarf_errmsg(err);
         dwarf_dealloc_error(dbg, err);
@@ -217,7 +214,7 @@ namespace dwarf {
   dw_debug::~dw_debug() {
     Dwarf_Error err;
     int rcode = dwarf_finish(m_dbg, &err);
-    if (rcode != DW_DLV::OK) {
+    if (rcode == DW_DLV::ERROR) {
       std::cerr << "Error occurred during finalization: " << dwarf_errmsg(err);
       dwarf_dealloc_error(m_dbg, err);
       std::cerr << "Program will abort *immediately*.";
@@ -231,7 +228,7 @@ namespace dwarf {
     Dwarf_Error err;
     
     int rcode = dwarf_get_globals(m_dbg, &list, &size, &err);
-    if (rcode != DW_DLV::OK) {
+    if (rcode == DW_DLV::ERROR) {
       throw dw_error(m_dbg, err);
     }
     
@@ -249,7 +246,7 @@ namespace dwarf {
         Dwarf_Off result;
         Dwarf_Error err;
         int rcode = dwarf_global_die_offset(g.m_glob, &result, &err);
-        if (rcode != DW_DLV::OK) {
+        if (rcode == DW_DLV::ERROR) {
           throw dw_error(m_dbg, err);
         }
         return result;
@@ -258,27 +255,23 @@ namespace dwarf {
         Dwarf_Error err;
         Dwarf_Die die;
         int rcode = dwarf_offdie_b(m_dbg, die_offset, true, &die, &err);
-        if (rcode != DW_DLV::OK) {
+        if (rcode == DW_DLV::ERROR) {
           throw dw_error(m_dbg, err);
         }
         auto flags = cout.flags();
         cout.flags(flags);
         return die;
       }();    
-    }()) {
-    }
-  
-  dw_die::~dw_die() {
-    dwarf_dealloc_die(m_die);
-  }
+    }()) {}
   
   dw_attribute dw_die::attr(DW_AT name) {
+    check_not_null(m_die, "Contained DIE was null");
     Dwarf_Error err;
     int rcode;
     
     Dwarf_Attribute attr;
     rcode = dwarf_attr(m_die, static_cast<Dwarf_Half>(name), &attr, &err);
-    if (rcode != DW_DLV::OK) {
+    if (rcode == DW_DLV::ERROR) {
       throw dw_error(m_dbg, err);
     }
     
@@ -286,44 +279,99 @@ namespace dwarf {
   }
   
   bool dw_die::has_attr(DW_AT name) {
+    check_not_null(m_die, "Contained DIE was null");
     Dwarf_Bool x;
     Dwarf_Error err;
     
     cout << std::hex << m_die << std::endl;
     
     int rcode = dwarf_hasattr(m_die, static_cast<Dwarf_Half>(name), &x, &err);
-    if (rcode != DW_DLV::OK) {
+    if (rcode == DW_DLV::ERROR) {
       throw dw_error(m_dbg, err);
     }
     return x;
   }
   
   DW_TAG dw_die::tag() {
+    check_not_null(m_die, "Contained DIE was null");
     Dwarf_Half c_tag;
     Dwarf_Error err;
     int rcode = dwarf_tag(m_die, &c_tag, &err);
-    if (rcode != DW_DLV::OK) {
+    if (rcode == DW_DLV::ERROR) {
       throw dw_error(m_dbg, err);
     }
     return static_cast<DW_TAG>(c_tag);
   }
   
-  // dw_attribute
-  
-  dw_attribute::~dw_attribute() {
-    dwarf_dealloc_attribute(m_attr);
+  dw_attribute_list dw_die::list_attrs() {
+    check_not_null(m_die, "Contained DIE was null");
+    Dwarf_Attribute* attrs;
+    Dwarf_Signed size;
+    Dwarf_Error err;
+    int rcode = dwarf_attrlist(m_die, &attrs, &size, &err);
+    if (rcode == DW_DLV::ERROR) {
+      throw dw_error(m_dbg, err);
+    }
+    return dw_attribute_list(m_dbg, attrs, static_cast<size_t>(size));
   }
   
-  DW_FORM dw_attribute::get_form() {
+  dw_die dw_die::first_child() {
+    check_not_null(m_die, "Contained DIE was null");
+    Dwarf_Die child;
+    Dwarf_Error err;
+    int rcode = dwarf_child(m_die, &child, &err);
+    if (rcode == DW_DLV::NO_ENTRY) {
+      return dw_die(m_dbg, nullptr);
+    }
+    else if (rcode == DW_DLV::ERROR) {
+      throw dw_error(m_dbg, err);
+    }
+    else {
+      return dw_die(m_dbg, child);
+    }
+  }
+  
+  dw_die dw_die::sibling() {
+    check_not_null(m_die, "Contained DIE was null");
+    Dwarf_Die sibling;
+    Dwarf_Error err;
+    int rcode = dwarf_siblingof_b(m_dbg, m_die, true, &sibling, &err);
+    if (rcode == DW_DLV::NO_ENTRY) {
+      return dw_die(m_dbg, nullptr);
+    }
+    else if (rcode == DW_DLV::ERROR) {
+      throw dw_error(m_dbg, err);
+    }
+    else {
+      return dw_die(m_dbg, sibling);
+    }
+  }
+  
+  // dw_attribute
+  
+  DW_FORM dw_attribute::form() {
+    
+    
     Dwarf_Error err;
     
     uint16_t form;
     int rcode = dwarf_whatform(m_attr, &form, &err);
-    if (rcode == DW_DLV::ERROR_) {
+    if (rcode == DW_DLV::ERROR) {
       throw dw_error(m_dbg, err);
     }
     
     return static_cast<DW_FORM>(form);
+  }
+  
+  DW_AT dw_attribute::name() {
+    Dwarf_Error err;
+    
+    uint16_t form;
+    int rcode = dwarf_whatattr(m_attr, &form, &err);
+    if (rcode == DW_DLV::ERROR) {
+      throw dw_error(m_dbg, err);
+    }
+    return static_cast<DW_AT>(form);
   }
   
   string dw_attribute::as_string() {
@@ -331,7 +379,7 @@ namespace dwarf {
     
     char* cstr;
     int rcode = dwarf_formstring(m_attr, &cstr, &err);
-    if (rcode == DW_DLV::ERROR_) {
+    if (rcode == DW_DLV::ERROR) {
       throw dw_error(m_dbg, err);
     }
     
@@ -345,13 +393,13 @@ namespace dwarf {
     
     Dwarf_Off offset;
     rcode = dwarf_global_formref(m_attr, &offset, &err);
-    if (rcode == DW_DLV::ERROR_) {
+    if (rcode == DW_DLV::ERROR) {
       throw dw_error(m_dbg, err);
     }
     
     Dwarf_Die die;
     rcode = dwarf_offdie_b(m_dbg, offset, true, &die, &err);
-    if (rcode != DW_DLV::OK) {
+    if (rcode == DW_DLV::ERROR) {
       throw dw_error(m_dbg, err);
     }
     
@@ -363,7 +411,7 @@ namespace dwarf {
     
     uint64_t result;
     int rcode = dwarf_formudata(m_attr, &result, &err);
-    if (rcode == DW_DLV::ERROR_) {
+    if (rcode == DW_DLV::ERROR) {
       throw dw_error(m_dbg, err);
     }
     
@@ -375,10 +423,29 @@ namespace dwarf {
     
     int64_t result;
     int rcode = dwarf_formsdata(m_attr, &result, &err);
-    if (rcode == DW_DLV::ERROR_) {
+    if (rcode == DW_DLV::ERROR) {
       throw dw_error(m_dbg, err);
     }
     
     return result;
+  }
+  
+  // dw_attribute_list
+  
+  dw_attribute dw_attribute_list::operator[](size_t index) const {
+    if (index >= m_size) {
+      stringstream fmt;
+      fmt << "Index " << index << " out of range for size " << m_size;
+      throw std::out_of_range(fmt.str());
+    }
+    
+    return dw_attribute(m_dbg, m_attrs[index], false);
+  }
+  
+  dw_attribute_list::~dw_attribute_list() {
+    for (size_t i = 0; i < m_size; i++) {
+      dwarf_dealloc_attribute(m_attrs[i]);
+    }
+    dwarf_dealloc(m_dbg, (void*) m_attrs, DW_DLA_LIST);
   }
 }

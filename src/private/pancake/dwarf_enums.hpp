@@ -13,9 +13,11 @@
 #include <cstdint>
 #include <iostream>
 
+#undef ERROR
+
 namespace dwarf {
   enum DW_DLV {
-    OK = 0, ERROR_ = 1, NO_ENTRY = -1
+    OK = 0, ERROR = 1, NO_ENTRY = -1
   };
   enum class DW_AT : uint16_t {
     sibling = 0x01,

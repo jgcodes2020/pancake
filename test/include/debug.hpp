@@ -93,7 +93,7 @@ inline void stack_trace() {
   
   frames               = CaptureStackBackTrace(0, 100, stack, nullptr);
   symbol               = reinterpret_cast<SYMBOL_INFO*>(calloc(sizeof(SYMBOL_INFO) + 256*sizeof(char), 1));
-  symbol->MaxNameLen   = 255;
+  symbol->MaxNameLen   = 50;
   symbol->SizeOfStruct = sizeof(SYMBOL_INFO);
   line                 = reinterpret_cast<IMAGEHLP_LINE*>(calloc(sizeof(IMAGEHLP_LINE), 1));
   

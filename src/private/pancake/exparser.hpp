@@ -76,6 +76,14 @@ namespace pancake::exparser {
    */
   const ast parse(std::string expr);
   
+  /**
+   * @brief Uses the macro definitions to preprocess the string.
+   * 
+   * @param expr the expression to preprocess
+   * @return The preprocessed string
+   */
+  std::string preprocess(std::string expr);
+  
   
   class misc_parsing {
   public:

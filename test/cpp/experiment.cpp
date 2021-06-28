@@ -20,6 +20,7 @@ I will be changing this file from time to time.
 #include <signal.h>
 
 #include "libdwarf.h"
+#include "pancake/sm64.hpp"
 #include "pancake/exparser.hpp"
 #include "pancake/dwarf.hpp"
 
@@ -33,16 +34,7 @@ int main(int argc, char* argv[]) {
   // Register handlers
   debug_handlers();
   
-  dw_debug dbg(argv[1]);
-  cout << "Searching for gMarioStates...\n";
-  // And you thought IIFEs were only for JS?
-  dw_die die_gMarioStates = dbg.list_globals()["gMarioStates"];
+  sm64 game(argv[1]);
   
-  auto e = die_gMarioStates
-    .attr(DW_AT::specification).as_linked_die()
-    .attr(DW_AT::type).as_linked_die()
-    .attr(DW_AT::type).as_linked_die()
-    .attr(DW_AT::name).as_string();
-  cout << "gMarioStates die has tag: " << e << "\n";
   return 0;
 }

@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# Prepends includes into source files.
 from sys import argv, stderr
 import argparse
 

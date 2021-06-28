@@ -17,6 +17,7 @@
 #include <stdexcept>
 #include <memory>
 #include <filesystem>
+#include <optional>
 
 #include "pancake/dwarf_enums.hpp"
 
@@ -30,8 +31,6 @@ namespace dwarf {
     dwarf_dealloc(dbg, string, DW_DLA_STRING);
   }
   
-  using std::string;
-  
   /********************
   C++ UTILITY LIBRARY
   *******************/
@@ -43,7 +42,7 @@ namespace dwarf {
   public:
     dw_error(const char* what):
       std::runtime_error(what) {}
-    dw_error(const string& what):
+    dw_error(const std::string& what):
       std::runtime_error(what) {}
     /**
      * @brief Constructs a throwable error, then deallocates the provided error struct.
@@ -66,7 +65,7 @@ namespace dwarf {
    * @param strict If true, throws on any return code that isn't DW_DLV_OK
    */
   inline void check_error(Dwarf_Debug dbg, int rcode, Dwarf_Error err, bool strict) {
-    if (rcode == DW_DLV::ERROR_)
+    if (rcode == DW_DLV::ERROR)
       throw dw_error(dbg, err);
     else if ((rcode != DW_DLV::OK) && strict)
       throw dw_error("DWARF error: unexpected return code");
@@ -85,7 +84,7 @@ namespace dwarf {
       return m_glob;
     }
   
-    string name();
+    std::string name();
   };
   
   class dw_global_list {
@@ -98,11 +97,6 @@ namespace dwarf {
     dw_global_list(Dwarf_Debug dbg, Dwarf_Global* list, size_t size) :
       m_dbg(dbg), m_list(list), m_size(size) {}
   public:
-    /**
-     * @brief Iterator over global list.
-     * @note The iterator will refuse to move its index value past the array.
-     */
-    class iterator;
     
     ~dw_global_list() {
       dwarf_globals_dealloc(m_dbg, m_list, m_size);
@@ -111,9 +105,6 @@ namespace dwarf {
     Dwarf_Global* operator*() {
       return m_list;
     }
-    
-    iterator begin();
-    iterator end();
     
     size_t size() const {
       return m_size;
@@ -125,7 +116,7 @@ namespace dwarf {
      * @param name 
      * @return dw_global 
      */
-    dw_global operator[](string name) const;
+    dw_global operator[](std::string name) const;
   };
   
   class dw_debug {
@@ -145,7 +136,7 @@ namespace dwarf {
      * 
      * @param path the executable file/shared library to parse
      */
-    dw_debug(string path) :
+    dw_debug(std::string path) :
       dw_debug(path.c_str()) {}
     
     dw_global_list list_globals() const;
@@ -153,22 +144,28 @@ namespace dwarf {
   
   class dw_attribute {
     friend class dw_die;
+    friend class dw_attribute_list;
   private:
     const Dwarf_Debug m_dbg;
     const Dwarf_Attribute m_attr;
-    dw_attribute(Dwarf_Debug dbg, Dwarf_Attribute attr) :
-      m_dbg(dbg), m_attr(attr) {}
+    const bool m_needs_dealloc;
+    dw_attribute(Dwarf_Debug dbg, Dwarf_Attribute attr, bool dealloc = true) :
+      m_dbg(dbg), m_attr(attr), m_needs_dealloc(dealloc) {}
   public:
-    ~dw_attribute();
+    ~dw_attribute() {
+      if (m_needs_dealloc) dwarf_dealloc_attribute(m_attr);
+    }
     
-    DW_FORM get_form();
+    DW_FORM form();
+    
+    DW_AT name();
     
     /**
      * @brief Returns this attribute as a string, if it is a string attribute.
      * 
      * @return the string value of this attribute
      */
-    string as_string();
+    std::string as_string();
     
     /**
      * @brief Returns this attribute as a referenced DIE, if this attribute is a reference.
@@ -192,18 +189,76 @@ namespace dwarf {
     int64_t as_signed_int();
   };
   
+  class dw_attribute_list {
+    friend class dw_die;
+  private:
+    const Dwarf_Debug m_dbg;
+    const Dwarf_Attribute* m_attrs;
+    const size_t m_size;
+    dw_attribute_list(Dwarf_Debug dbg, Dwarf_Attribute* attrs, size_t size) :
+      m_dbg(dbg), m_attrs(attrs), m_size(size) {}
+  public:
+    ~dw_attribute_list();
+    
+    size_t size() const {
+      return m_size;
+    }
+    
+    dw_attribute operator[](size_t index) const;
+  };
+  
   class dw_die {
     friend class dw_attribute;
   private:
-    const Dwarf_Debug m_dbg;
-    const Dwarf_Die m_die;
+    Dwarf_Debug m_dbg;
+    Dwarf_Die m_die;
+    bool m_dealloc;
   public:
-    dw_die(Dwarf_Debug dbg, Dwarf_Die die):
-      m_dbg(dbg), m_die(die) {}
+    dw_die(Dwarf_Debug dbg, Dwarf_Die die, bool dealloc = true):
+      m_dbg(dbg), m_die(die), m_dealloc(dealloc) {}
   public:
     dw_die(dw_global g);
     dw_die(uintptr_t off);
-    ~dw_die();
+    ~dw_die() {
+      if (m_dealloc && (m_die != nullptr))
+        dwarf_dealloc_die(m_die);
+    }
+    // disable copy construction/assignment
+    dw_die& operator=(dw_die const& other) = delete;
+    dw_die(dw_die const& other) = delete;
+    
+    // allow move construction/assignment
+    dw_die& operator=(dw_die&& other) {
+      std::swap(m_dbg, other.m_dbg);
+      std::swap(m_die, other.m_die);
+      m_dealloc = true;
+      return *this;
+    }
+    dw_die(dw_die&& other) {
+      std::swap(m_dbg, other.m_dbg);
+      std::swap(m_die, other.m_die);
+      m_dealloc = true;
+    }
+    
+    /**
+     * @brief Checks whether this die is a null DIE.
+     * 
+     * @return true if this die is null
+     * @return false if this die is not null
+     */
+    bool is_null() {
+      return (m_dbg == nullptr || m_die == nullptr);
+    }
+    /**
+     * @brief The inverse of `dw_die::is_null()`.
+     * 
+     * @return true if this die is not null
+     * @return false if this die is null
+     */
+    operator bool () {
+      return !(m_dbg == nullptr || m_die == nullptr);
+    }
+    
     
     /**
      * @brief Returns this DIE's tag.
@@ -232,11 +287,25 @@ namespace dwarf {
     bool has_attr(DW_AT name);
     
     /**
-     * @brief Returns a handle which can be used later to retrieve another instance of this DIE.
+     * @brief Lists the attributes on this DIE.
      * 
-     * @return a handle which can be used to retrieve another instance of this DIE
+     * @return dw_attribute_list a list of attributes.
      */
-    uintptr_t handle();
+    dw_attribute_list list_attrs();
+    
+    /**
+     * @brief Returns the first child of this DIE, if available.
+     * 
+     * @return A DIE.
+     */
+    dw_die first_child();
+    
+    /**
+     * @brief Returns the next sibling of this DIE, if available.
+     * 
+     * @return An optional containing the DIE if available, otherwise it is empty.
+     */
+    dw_die sibling();
   };
 }
 #endif
