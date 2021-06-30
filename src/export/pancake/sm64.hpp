@@ -18,7 +18,9 @@
 #include <memory>
 #include <type_traits>
 #include <unordered_map>
-#include <vcruntime_typeinfo.h>
+
+#include "pancake/exception.hpp"
+#include "pancake/movie.hpp"
 
 namespace pancake {
   
@@ -60,10 +62,13 @@ namespace pancake {
    * 
    */
   class sm64 {
-    friend class struct_t;
+    friend struct m64::frame;
   private:
     struct impl;
     std::shared_ptr<impl> pimpl;
+    
+    // Internal pointer cache for other internal classes.
+    std::unordered_map<std::string, void*> ptr_cache;
     
     void* const _impl_get(std::string expr);
     std::any _impl_constant(std::string name);

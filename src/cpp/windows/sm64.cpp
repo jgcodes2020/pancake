@@ -73,6 +73,14 @@ namespace pancake {
         .attr(DW_AT::type).as_linked_die();
       
       for (auto& in : ast.instructions) {
+        cerr << "current DIE tag is: " << die.tag() << endl;
+        cerr << "current instruction is: " << in.first << endl << endl;
+        
+        if (die.tag() == DW_TAG::typedef_) {
+          die = die
+            .attr(DW_AT::type).as_linked_die();
+        }
+        
         switch (in.first) {
           case opcode::SUBSCRIPT: {
             size_t index = any_cast<size_t>(in.second);
@@ -100,8 +108,12 @@ namespace pancake {
             ptr += (size * index);
           } break;
           case opcode::MEMBER: {
-            string member = any_cast<string>(member);
+            string member = any_cast<string>(in.second);
             if (die.tag() == DW_TAG::pointer_type) {
+              die = die
+                .attr(DW_AT::type).as_linked_die();
+            }
+            if (die.tag() == DW_TAG::typedef_) {
               die = die
                 .attr(DW_AT::type).as_linked_die();
             }
@@ -158,7 +170,7 @@ namespace pancake {
               } break;
               default: {
                 stringstream fmt;
-                fmt << "Failed evaluating expression " << expr << ": expected struct or union";
+                fmt << "Failed evaluating expression " << expr << ": expected struct or union (actual: " << die.tag() << ")";
                 throw type_error(fmt.str());
               }
             }
@@ -167,6 +179,11 @@ namespace pancake {
             throw std::logic_error("INTERNAL ERROR: this should not happen, report this as a bug.");
           }
         }
+      }
+      
+      if (die.tag() == DW_TAG::typedef_) {
+        die = die
+          .attr(DW_AT::type).as_linked_die();
       }
       
       if (die.tag() != DW_TAG::base_type) {
@@ -200,14 +217,14 @@ namespace pancake {
       // .data
       section = bin->get_section(".data");
       save_sections[0] = region {
-        .address = section.virtual_address(),
-        .size    = section.virtual_size()
+        section.virtual_address(),
+        section.virtual_size()
       };
       // .bss
       section = bin->get_section(".bss");
       save_sections[1] = region {
-        .address = section.virtual_address(),
-        .size    = section.virtual_size()
+        section.virtual_address(),
+        section.virtual_size()
       };
       
       game_ptr = game.pimpl->dll;

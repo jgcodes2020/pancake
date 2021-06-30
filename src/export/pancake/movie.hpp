@@ -16,9 +16,8 @@
 #include <filesystem>
 #include <iostream>
 
-#include "pancake/sm64.hpp"
-
 namespace pancake {
+  class sm64;
   class m64 {
   public:
     struct frame {
@@ -97,7 +96,7 @@ namespace pancake {
        * 
        * @param game 
        */
-      void apply(sm64& game);
+      void apply(sm64& game) const;
     };
   private:
     std::vector<frame> m_inputs;

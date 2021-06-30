@@ -4,9 +4,13 @@
 #include <iostream>
 #include <fstream>
 #include <memory>
+#include <stdint.h>
 #include <string>
 #include <filesystem>
 #include <vector>
+#include <utility>
+
+#include "pancake/sm64.hpp"
 
 using namespace std;
 namespace fs = std::filesystem;
@@ -45,11 +49,11 @@ namespace pancake {
       for (uint32_t i = 0; i < len; i++) {
         size_t offset = i * 4;
         m_inputs.push_back(frame {
-          .buttons = static_cast<uint16_t>(
+          static_cast<uint16_t>(
             ((uint8_t) data[offset] << 8) |
             ((uint8_t) data[offset + 1])),
-          .stick_x = static_cast<int8_t>(data[offset + 2]),
-          .stick_y = static_cast<int8_t>(data[offset + 3])
+          static_cast<int8_t>(data[offset + 2]),
+          static_cast<int8_t>(data[offset + 3])
         });
       }
     }
@@ -71,5 +75,39 @@ namespace pancake {
   
   auto m64::cend() const {
     return m_inputs.cend();
+  }
+  
+  void m64::frame::apply(pancake::sm64& game) const {
+    uint16_t* button;
+    int8_t* stick_x, * stick_y;
+    
+    if (game.ptr_cache.count("controller1.button")) 
+      button = reinterpret_cast<uint16_t*>(game.ptr_cache["controller1.button"]);
+    else {
+      button = &game.get<uint16_t>("gControllerPads[0].button");
+      game.ptr_cache.insert(pair {
+        "controller1.button", button
+      });
+    }
+    if (game.ptr_cache.count("controller1.stick_x")) 
+      stick_x = reinterpret_cast<int8_t*>(game.ptr_cache["controller1.stick_x"]);
+    else {
+      stick_x = &game.get<int8_t>("gControllerPads[0].stick_x");
+      game.ptr_cache.insert(pair {
+        "controller1.stick_x", stick_x
+      });
+    }
+    if (game.ptr_cache.count("controller1.stick_y")) 
+      stick_y = reinterpret_cast<int8_t*>(game.ptr_cache["controller1.stick_y"]);
+    else {
+      stick_y = &game.get<int8_t>("gControllerPads[0].stick_y");
+      game.ptr_cache.insert(pair {
+        "controller1.stick_y", stick_y
+      });
+    }
+    
+    *button = this->buttons;
+    *stick_x = this->stick_x;
+    *stick_y = this->stick_y;
   }
 }

@@ -34,7 +34,6 @@ namespace pancake::exparser {
   using instruction = std::pair<opcode, std::any>;
   /**
    * @brief Parsed output. Not really a tree per se, but it may if I expand the syntax.
-   * 
    */
   struct ast {
     std::string global;
@@ -66,6 +65,11 @@ namespace pancake::exparser {
       case opcode::MEMBER:
         return out << "MEMBER";
     }
+    return out;
+  }
+  template<typename T, typename U>
+  inline std::ostream& operator<<(std::ostream& out, const std::pair<T, U> pair) {
+    return out << "pair {" << pair.first << ", " << pair.second << "}";
   }
   
   /**
@@ -77,7 +81,7 @@ namespace pancake::exparser {
   const ast parse(std::string expr);
   
   /**
-   * @brief Uses the macro definitions to preprocess the string.
+   * @brief Preprocesses object fields onto an expression.
    * 
    * @param expr the expression to preprocess
    * @return The preprocessed string

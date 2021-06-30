@@ -14,7 +14,7 @@ rsrc_gen = generator(py,
 
 deps = [
   subproject('libdwarf').get_variable(buildtype),
-  subproject('LIEF').get_variable(buildtype),
+  subproject('LIEF').get_variable('dep'),
   dependency('nlohmann_json')
 ]
 
@@ -23,6 +23,7 @@ message('Compiling for ' + host_machine.system())
 pancake = static_library('pancake', 
   [
     'cpp/exparser.cpp', 'cpp/dwarf.cpp',
+    platform_dir/'sm64.cpp', 'cpp/movie.cpp',
     rsrc_gen.process('resources/sm64_macro_defns.json')
   ],
   include_directories: [exp_headers, int_headers],

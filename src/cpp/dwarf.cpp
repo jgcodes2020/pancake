@@ -283,7 +283,7 @@ namespace dwarf {
     Dwarf_Bool x;
     Dwarf_Error err;
     
-    cout << std::hex << m_die << std::endl;
+    cerr << std::hex << m_die << std::endl;
     
     int rcode = dwarf_hasattr(m_die, static_cast<Dwarf_Half>(name), &x, &err);
     if (rcode == DW_DLV::ERROR) {

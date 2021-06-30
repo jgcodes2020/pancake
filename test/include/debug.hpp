@@ -163,7 +163,7 @@ inline void on_exception() {
 }
 
 inline void debug_handlers() {
-  SetConsoleCP(CP_UTF8);
+  SetConsoleOutputCP(CP_UTF8);
   signal(SIGSEGV, on_signal);
   std::set_terminate(on_exception);
 }
