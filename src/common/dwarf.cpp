@@ -31,6 +31,10 @@ namespace dwarf {
     return string(cstr);
   }
   
+  dw_die dw_global::as_die() {
+    return dw_die(*this);
+  }
+  
   // dw_global_list
   /*
   class dw_global_list::iterator {

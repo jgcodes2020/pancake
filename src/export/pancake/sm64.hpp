@@ -162,7 +162,7 @@ namespace pancake {
     template<typename T>
     const T constant(std::string name) {
       static_assert(std::disjunction<
-        std::is_same<T, nullptr_t>,
+        std::is_null_pointer<T>,
         std::is_same<T, double>,
         std::is_same<T, int64_t>
       >::value, "T must be either double, int64_t, or nullptr_t");

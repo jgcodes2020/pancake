@@ -35,6 +35,8 @@ namespace dwarf {
   C++ UTILITY LIBRARY
   *******************/
   
+  class dw_die;
+  
   /**
    * @brief Throwable version of Dwarf_Error.
    */
@@ -85,6 +87,8 @@ namespace dwarf {
     }
   
     std::string name();
+    
+    dw_die as_die();
   };
   
   class dw_global_list {
@@ -209,6 +213,7 @@ namespace dwarf {
   
   class dw_die {
     friend class dw_attribute;
+    friend class dw_global;
   private:
     Dwarf_Debug m_dbg;
     Dwarf_Die m_die;
@@ -216,8 +221,8 @@ namespace dwarf {
   public:
     dw_die(Dwarf_Debug dbg, Dwarf_Die die, bool dealloc = true):
       m_dbg(dbg), m_die(die), m_dealloc(dealloc) {}
-  public:
     dw_die(dw_global g);
+  public:
     dw_die(uintptr_t off);
     ~dw_die() {
       if (m_dealloc && (m_die != nullptr))
@@ -225,7 +230,11 @@ namespace dwarf {
     }
     // disable copy construction/assignment
     dw_die& operator=(dw_die const& other) = delete;
-    dw_die(dw_die const& other) = delete;
+    dw_die(dw_die const& other) {
+      m_dbg = other.m_dbg;
+      m_die = other.m_die;
+      m_dealloc = false;
+    }
     
     // allow move construction/assignment
     dw_die& operator=(dw_die&& other) {
@@ -296,14 +305,14 @@ namespace dwarf {
     /**
      * @brief Returns the first child of this DIE, if available.
      * 
-     * @return A DIE.
+     * @return A DIE representing the child if it exists, otherwise, it is marked as a NULL die.
      */
     dw_die first_child();
     
     /**
      * @brief Returns the next sibling of this DIE, if available.
      * 
-     * @return An optional containing the DIE if available, otherwise it is empty.
+     * @return A DIE representing the sibling if it exists, otherwise, it is marked as a NULL die.
      */
     dw_die sibling();
   };

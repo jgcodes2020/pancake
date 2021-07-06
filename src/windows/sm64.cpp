@@ -17,7 +17,7 @@
 #include <LIEF/LIEF.hpp>
 #include <nlohmann/json.hpp>
 
-#include "pancake/exparser.hpp"
+#include "pancake/expr/parse.hpp"
 #include "pancake/macro_defns.hpp"
 #include "pancake/utils.hpp"
 #include "pancake/exception.hpp"

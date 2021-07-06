@@ -50,11 +50,25 @@ try:
 
     print("Setting up build...")
     shutil.rmtree(project_dir.joinpath("build"), ignore_errors=True)
-    exit_code = subprocess.call(["meson", "setup", "build"], cwd=project_dir)
+    exit_code = subprocess.run(["meson", "setup", "build"], cwd=project_dir).returncode
     if exit_code != 0:
         sys.exit(exit_code)
-    print("")
-
-    print("Done!")
+    
+    print("Setting up configuration...")
+    if sys.platform.startswith("win"):
+        winlibs = ', '.join([
+            "-lkernel32", "-luser32", "-lgdi32", 
+            "-lwinspool", "-lshell32", "-lole32", 
+            "-loleaut32", "-luuid", "-lcomdlg32", 
+            "-ladvapi32", "-ldbghelp"
+        ])
+        exit_code = subprocess.run(["meson", "configure",
+            f"-Dcpp_winlibs={winlibs}"
+        ], cwd=project_dir.joinpath("build"))
+        if exit_code != 0:
+            sys.exit(exit_code)
+        
+    
+    print("\nDone!")
 finally:
     os.environ.update(prevenv)

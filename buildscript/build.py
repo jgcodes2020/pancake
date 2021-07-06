@@ -51,6 +51,7 @@ try:
                 "-format", "json", "-utf8"
             ], capture_output=True, encoding="utf-8"
         )
+        vswhere.check_returncode()
         vspath = json.loads(vswhere.stdout)
         # Use VS path to locate vcvars64.bat
         vcvars_path = Path(vspath[0]["installationPath"]).joinpath("VC\\Auxiliary\\Build\\vcvars64.bat")
@@ -60,35 +61,43 @@ try:
             ["cmd", "/c", str(vcvars_path), "&&", "set"],
             capture_output=True, encoding="utf-8"
         )
+        vcvars.check_returncode()
         # Use dict comprehension to get final env variable
         vcenv = {var.split("=", 1)[0] : var.split("=", 1)[1] for var in vcvars.stdout.splitlines()[5:]}
         vcenv["PATH"] = vcenv["Path"]
         os.environ.update(vcenv)
     
+    # Clear loaded wraps
     if args.wrap_reload:
         print("Clearing loaded wraps...")
         for f in project_dir.joinpath("subprojects").iterdir():
             if f.is_dir() and f.name != "packagefiles":
                 shutil.rmtree(f);
+    # Load existing config
+    introspect = subprocess.run(
+        ["meson", "introspect", "--buildoptions"],
+        cwd=build_dir, encoding="utf-8", capture_output=True
+    )
+    current_opts = json.loads(introspect.stdout)
+    opt_buildtype = next(filter(lambda obj: obj["name"] == "buildtype", current_opts))
+    opt_backend = next(filter(lambda obj: obj["name"] == "backend", current_opts))
+    # Create config command
+    print("Configuring Meson...")
     backend = "vs" if args.use_vs else "ninja"
-    if args.config == "debug":
-        print("Configuring debug...")
-        config = subprocess.run(
-            ["meson", "configure", "--buildtype=debug", f"--backend={backend}"],
+    config = args.config
+    
+    compile_cmd = ["meson", "configure"]
+    if (opt_backend["value"] != backend):
+        compile_cmd.append(f"--backend={backend}")
+    if (opt_buildtype["value"] != config):
+        compile_cmd.append(f"--buildtype={config}")
+    # Check if config is needed and run
+    if (len(compile_cmd) > 2):
+        subprocess.run(
+            compile_cmd,
             cwd=build_dir
-        )
-        config.check_returncode()
-    elif args.config == "release":
-        print("Configuring release...")
-        config = subprocess.run(
-            ["meson", "configure", "--buildtype=release", f"--backend={backend}"],
-            cwd=build_dir
-        )
-        config.check_returncode()
-        
-    else:
-        print("Invalid configuration! Use either debug or release")
-        sys.exit(2)
+        ).check_returncode()
+    
     if args.do_compile:
         print("Running Meson build...")
         subprocess.run(
