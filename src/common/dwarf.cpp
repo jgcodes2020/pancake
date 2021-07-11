@@ -1,5 +1,4 @@
 #include "pancake/dwarf.hpp"
-#include "libdwarf.h"
 
 #include <cstdint>
 #include <iostream>
@@ -9,6 +8,7 @@
 #include <cstring>
 #include <string.h>
 
+#include "libdwarf/libdwarf.h"
 #include "pancake/exception.hpp"
 
 using namespace std;
@@ -200,11 +200,9 @@ namespace dwarf {
       Dwarf_Debug dbg;
       Dwarf_Error err;
       int rcode = dwarf_init_path(
-        path, nullptr, 0,
-        DW_DLC_READ, DW_GROUPNUMBER_ANY,
-        nullptr, nullptr, &dbg,
-        nullptr, 0, 0,
-        &err
+        path, nullptr, 0, 0,
+        nullptr, nullptr,
+        &dbg, &err
       );
       if (rcode == DW_DLV::ERROR) {
         std::stringstream fmt;
@@ -268,6 +266,25 @@ namespace dwarf {
       }();    
     }()) {}
   
+  dw_die::dw_die(const dw_die& other) {
+    m_dbg = other.m_dbg;
+    
+    Dwarf_Error err;
+    int rcode;
+    
+    Dwarf_Off off;
+    rcode = dwarf_dieoffset(other.m_die, &off, &err);
+    if (rcode == DW_DLV::ERROR) {
+      throw dw_error(m_dbg, err);
+    }
+    
+    Dwarf_Die newdie;
+    rcode = dwarf_offdie_b(m_dbg, off, true, &newdie, &err);
+    if (rcode == DW_DLV::ERROR) {
+      throw dw_error(m_dbg, err);
+    }
+  }
+  
   dw_attribute dw_die::attr(DW_AT name) {
     check_not_null(m_die, "Contained DIE was null");
     Dwarf_Error err;
@@ -286,8 +303,6 @@ namespace dwarf {
     check_not_null(m_die, "Contained DIE was null");
     Dwarf_Bool x;
     Dwarf_Error err;
-    
-    cerr << std::hex << m_die << std::endl;
     
     int rcode = dwarf_hasattr(m_die, static_cast<Dwarf_Half>(name), &x, &err);
     if (rcode == DW_DLV::ERROR) {

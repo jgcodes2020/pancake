@@ -23,11 +23,11 @@ namespace pancake::expr {
   // These are in the order: decimal, hexadecimal, binary, octal
   inline static const regex EXP_SUBSCRIPT = regex(R"(^\[((?:\d|[1-9]\d+)|(?:0x[\da-fA-F]+)|(?:0b[01]+)|(?:0[0-7]+))\])");
   // Same as the global identifier regex, but with a . or -> tacked on in front.
-  inline static const regex EXP_MEMBER = regex(R"(^(\.|->)([A-Za-z_]\w*))");
+  inline static const regex EXP_MEMBER = regex(R"(^(?:\.|->)([A-Za-z_]\w*))");
   // Matches either a [, a ], a ., a ->, an identifier,
   // a decimal literal, a hex literal, a binary literal, or an octal literal.
   inline static const regex EXP_TOKEN = regex(
-    R"(^(\[|\]|\.|(?:->)|(?:[A-Za-z_]\w*)|(?:[1-9]?[0-9]+)|)"
+    R"(^\s*(\[|\]|\.|(?:->)|(?:[A-Za-z_]\w*)|(?:[1-9]?[0-9]+)|)"
     R"((?:\d|[1-9]\d+)|(?:0x[\da-fA-F]+)|(?:0b[01]+)|(?:0[0-7]+)))"
   );
   
@@ -43,16 +43,20 @@ namespace pancake::expr {
         stringstream fmt;
         fmt << "Failed preprocessing expression " << expr;
         fmt << " at column " << begin - expr.begin();
-        fmt << ": Did not start with a valid token";
+        fmt << ": No valid token";
         throw std::invalid_argument(fmt.str());
       }
       
       string matched = match.str(1);
+      cerr << "Parsing token \"" << matched << "\"\n";
       
       // search object fields
-      auto search_space = sm64_macro_defns::get()["object_fields"];
-      auto entry = search_space.find(matched);
-      if (entry != search_space.end()) {
+      nlohmann::json::iterator entry;
+      if ([&]() mutable -> bool {
+        auto search_space = sm64_macro_defns::get()["object_fields"];
+        entry = search_space.find(matched);
+        return entry != search_space.end();
+      }()) {
         auto obj = *entry;
         out << "rawData." << static_cast<string>(obj.at("array"));
         for (auto& i : obj.at("indices")) {
@@ -60,10 +64,11 @@ namespace pancake::expr {
         }
         continue;
       }
-      // search constants
-      search_space = sm64_macro_defns::get()["constants"];
-      entry = search_space.find(matched);
-      if (entry != search_space.end()) {
+      else if ([&]() mutable -> bool {
+        auto search_space = sm64_macro_defns::get()["constants"];;
+        entry = search_space.find(matched);
+        return entry != search_space.end();
+      }()) {
         auto obj = *entry;
         string type = obj.at("type");
         if (type == "s64") {
@@ -78,7 +83,11 @@ namespace pancake::expr {
           "Report this as an issue on the issue tracker."
         );
       }
+      else {
+        out << matched;
+      }
     }
+    cerr << expr << " -> " << out.str() << "\n";
     return out.str();
   }
   
@@ -88,7 +97,9 @@ namespace pancake::expr {
     smatch match;
     // Find global first
     if (!regex_search(begin, expr.end(), match, EXP_IDENTIFIER)) {
-      
+      stringstream fmt;
+      fmt << "Expression \"" << expr << "\" does not begin with a global";
+      throw std::invalid_argument(fmt.str());
     }
     result.global = match.str(1);
     begin += match.length();
@@ -114,6 +125,8 @@ namespace pancake::expr {
         throw std::invalid_argument(fmt.str());
       }
     }
+    cerr << expr << " -> " << result << "\n";
+    
     return result;
   }
 }

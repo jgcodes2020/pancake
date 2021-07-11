@@ -42,3 +42,8 @@ build.py debug
 If the above commands don't work, use `python setup.py` and `python build.py debug` instead.
 
 The dependencies will be downloaded or unzipped automatically by Meson, so you need not worry about that. Well, except for one thing. This library depends on Wafel's libsm64. This should be accessible on the release of 0.7.2, but for now, you'll need to build from source on the master branch, then unlock libsm64 using an SM64 ROM.
+
+## Legal issues
+I am currently not willing to license Pancake under open source, simply due to issues relating to the Super Mario 64 decompilation. Should these issues be resolved and an agreement reached, I will take action accordingly.
+
+libdwarf is licensed under LGPL 2.1. To comply, I have provided a fork of libdwarf with my changes to the buildscript [here](https://github.com/jgcodes2020/libdwarf-code/tree/choose-msvcrt). It does not actually modify libdwarf's actual code, but rather allows it to be built using libcmt instead of msvcrt.

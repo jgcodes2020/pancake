@@ -78,36 +78,8 @@ namespace pancake {
   }
   
   void m64::frame::apply(pancake::sm64& game) const {
-    uint16_t* button;
-    int8_t* stick_x, * stick_y;
-    
-    if (game.ptr_cache.count("controller1.button")) 
-      button = reinterpret_cast<uint16_t*>(game.ptr_cache["controller1.button"]);
-    else {
-      button = &game.get<uint16_t>("gControllerPads[0].button");
-      game.ptr_cache.insert(pair {
-        "controller1.button", button
-      });
-    }
-    if (game.ptr_cache.count("controller1.stick_x")) 
-      stick_x = reinterpret_cast<int8_t*>(game.ptr_cache["controller1.stick_x"]);
-    else {
-      stick_x = &game.get<int8_t>("gControllerPads[0].stick_x");
-      game.ptr_cache.insert(pair {
-        "controller1.stick_x", stick_x
-      });
-    }
-    if (game.ptr_cache.count("controller1.stick_y")) 
-      stick_y = reinterpret_cast<int8_t*>(game.ptr_cache["controller1.stick_y"]);
-    else {
-      stick_y = &game.get<int8_t>("gControllerPads[0].stick_y");
-      game.ptr_cache.insert(pair {
-        "controller1.stick_y", stick_y
-      });
-    }
-    
-    *button = this->buttons;
-    *stick_x = this->stick_x;
-    *stick_y = this->stick_y;
+    game.get<uint16_t>("gControllerPads[0].button") = this->buttons;
+    game.get<int8_t>("gControllerPads[0].stick_x") = this->stick_x;
+    game.get<int8_t>("gControllerPads[0].stick_y") = this->stick_y;
   }
 }

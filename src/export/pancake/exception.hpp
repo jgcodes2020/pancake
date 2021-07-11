@@ -16,8 +16,8 @@ namespace pancake {
   /**
    * @brief Specifies that an accessor expression is not complete.
    */
-  class incomplete_accessor : public std::domain_error {
-    using std::domain_error::domain_error;
+  class incomplete_accessor : public std::invalid_argument {
+    using std::invalid_argument::invalid_argument;
   };
   /**
    * @brief Specifies that a type mismatch was detected at runtime.

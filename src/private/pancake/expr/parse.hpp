@@ -85,7 +85,7 @@ namespace pancake::expr {
      * @return const size_t 
      */
     inline static size_t parse_int_literal(std::string expr) {
-      if (expr.rfind("0b", 0) || expr.rfind("0B", 0)) {
+      if (expr.size() > 2 && (expr.rfind("0b", 0) || expr.rfind("0B", 0))) {
         return static_cast<size_t>(std::stoll(expr.substr(2)), 2);
       }
       else {

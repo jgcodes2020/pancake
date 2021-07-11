@@ -21,15 +21,17 @@ using namespace std;
 #ifdef _MSC_VER
 #include <intrin.h>
 // Highest set bit.
-inline uint32_t bsr(uint64_t i) {
+__forceinline uint32_t bsr(uint64_t i) {
   unsigned long x;
-  _BitScanReverse64(&x, i);
-  return x;
+  if (_BitScanReverse64(&x, i))
+    return x;
+  else
+   return 64;
 }
 #elif defined(__GNUC__) || defined(__MINGW32__)
 // Highest set bit.
-inline uint32_t bsr(uint64_t i) {
-  return __builtin_clzll(i);
+__attribute__((always_inline)) uint32_t bsr(uint64_t i) {
+  return __builtin_ffsll(i) - 1;
 }
 #endif
 
@@ -154,7 +156,7 @@ inline void on_exception() {
   try {
     std::rethrow_exception(exc_ptr);
   }
-  catch (std::exception e) {
+  catch (const std::exception& e) {
     cerr << "\033[0;91mException of type \033[0;96m" << typeid(e).name() << "\033[0;91m thrown\n";
     cerr << "what(): \033[0m" << e.what() << "\n";
   }

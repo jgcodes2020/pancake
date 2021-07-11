@@ -1,0 +1,7 @@
+.. _api_pancake:
+
+SM64
+==========
+
+.. doxygenfile:: pancake/sm64.hpp
+   :project: Pancake

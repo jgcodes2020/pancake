@@ -22,7 +22,7 @@
 #include "pancake/dwarf_enums.hpp"
 
 namespace dwarf {
-  #include <libdwarf.h>
+  #include <libdwarf/libdwarf.h>
   
   /********************
   C EXTENSION LIBRARY
@@ -230,11 +230,7 @@ namespace dwarf {
     }
     // disable copy construction/assignment
     dw_die& operator=(dw_die const& other) = delete;
-    dw_die(dw_die const& other) {
-      m_dbg = other.m_dbg;
-      m_die = other.m_die;
-      m_dealloc = false;
-    }
+    dw_die(dw_die const& other);
     
     // allow move construction/assignment
     dw_die& operator=(dw_die&& other) {

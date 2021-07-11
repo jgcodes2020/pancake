@@ -10,6 +10,8 @@
 #include <locale>
 #include <regex>
 
+#include <unordered_map>
+#include <variant>
 #include <vcruntime_string.h>
 #include <vector>
 #include <windows.h>
@@ -18,7 +20,9 @@
 #include <nlohmann/json.hpp>
 
 #include "pancake/expr/parse.hpp"
+#include "pancake/expr/compile.hpp"
 #include "pancake/macro_defns.hpp"
+#include "pancake/overload.hpp"
 #include "pancake/utils.hpp"
 #include "pancake/exception.hpp"
 #include "pancake/dwarf.hpp"
@@ -30,29 +34,46 @@ using namespace nlohmann;
 
 namespace fs = std::filesystem;
 
-using pancake::exparser::opcode;
+using namespace pancake::expr;
 
-template<typename T>
-static T dll_get(HMODULE handle, string name) {
+using rvaddress_t = uintptr_t;
+
+template<typename T = void*>
+static T get_proc_address(HMODULE handle, string name) {
   return reinterpret_cast<T>(
     GetProcAddress(handle, name.c_str())
   );
+}
+static rvaddress_t get_proc_rva(HMODULE handle, string name) {
+  return static_cast<rvaddress_t>(
+    get_proc_address<uint8_t*>(handle, name) - reinterpret_cast<uint8_t*>(handle)
+  );
+}
+template<typename T = void*>
+static T rva_to_pointer(HMODULE handle, rvaddress_t rva) {
+  return reinterpret_cast<T>(
+    reinterpret_cast<uint8_t*>(handle) + rva
+  );
+}
+static rvaddress_t pointer_to_rva(HMODULE handle, void* ptr) {
+  return reinterpret_cast<uint8_t*>(ptr) - reinterpret_cast<uint8_t*>(handle);
 }
 
 
 namespace pancake {
   
   struct sm64::impl {
-  public:
     HMODULE dll;
     dw_debug dbg;
     string path;
+    
+    std::unordered_map<string, expr_eval> cache;
     
     impl(string path) : 
       dll(LoadLibraryW(strcvt::to_utf16(path).c_str())),
       dbg(dw_debug(path)),
       path(path) {
-      dll_get<void(*)(void)>(dll, "sm64_init")();
+      get_proc_address<void(*)(void)>(dll, "sm64_init")();
     }
     
     ~impl() {
@@ -60,144 +81,44 @@ namespace pancake {
     }
     
     void* const get(string expr) {
-      auto ast = exparser::parse(exparser::preprocess(expr));
       
-      uint8_t* ptr = dll_get<uint8_t*>(dll, ast.global);
-      dw_die die = dbg.list_globals()[ast.global];
-      // resolve incomplete DIE
-      if (die.has_attr(DW_AT::specification)) {
-        die = die
-          .attr(DW_AT::specification).as_linked_die();
+      expr_eval eval;
+      auto search = cache.find(expr);
+      if (search != cache.end()) {
+        eval = search->second;
       }
-      die = die
-        .attr(DW_AT::type).as_linked_die();
+      else {
+        eval = compile(
+          parse(preprocess(expr)),
+        dbg);
+        cache.insert(pair<string, expr_eval>(expr, eval));
+      }
       
-      for (auto& in : ast.instructions) {
-        cerr << "current DIE tag is: " << die.tag() << endl;
-        cerr << "current instruction is: " << in.first << endl << endl;
-        
-        if (die.tag() == DW_TAG::typedef_) {
-          die = die
-            .attr(DW_AT::type).as_linked_die();
-        }
-        
-        switch (in.first) {
-          case opcode::SUBSCRIPT: {
-            size_t index = any_cast<size_t>(in.second);
-            DW_TAG die_tag = die.tag();
-            if (die_tag != DW_TAG::array_type && die_tag != DW_TAG::pointer_type) {
+      rvaddress_t ptr = get_proc_rva(dll, eval.global);
+      cerr << eval << "\n";
+      for (size_t i = 0; i < eval.steps.size(); i++) {
+        visit(overload {
+          [&](const expr_eval::offset& step) mutable -> void {
+            ptr += step.off;
+          },
+          [&](const expr_eval::indirect& step) mutable -> void {
+            if (ptr == 0) {
               stringstream fmt;
-              fmt << "Failed evaluating expression " << expr << ": expected array or pointer";
-              throw type_error(fmt.str());
+              fmt << "Expression \033[0;38;5;202m" << expr;
+              fmt << "\033[0m attempts to indirect a null pointer";
+              fmt << " (step " << i << ")";
+              throw invalid_argument(fmt.str());
             }
-            
-            // find array element size and push pointer forward
-            die = die
-              .attr(DW_AT::type).as_linked_die();
-            size_t size;
-            if (die.tag() == DW_TAG::typedef_) {
-              size = die
-                .attr(DW_AT::type).as_linked_die()
-                .attr(DW_AT::byte_size).as_unsigned_int();
-            }
-            else {
-              size = die
-                .attr(DW_AT::byte_size).as_unsigned_int();
-            }
-            
-            ptr += (size * index);
-          } break;
-          case opcode::MEMBER: {
-            string member = any_cast<string>(in.second);
-            if (die.tag() == DW_TAG::pointer_type) {
-              die = die
-                .attr(DW_AT::type).as_linked_die();
-            }
-            if (die.tag() == DW_TAG::typedef_) {
-              die = die
-                .attr(DW_AT::type).as_linked_die();
-            }
-            switch (die.tag()) {
-              case DW_TAG::structure_type: {
-                dw_die field_die = die.first_child();
-                {
-                  while (field_die) {
-                    if (field_die.attr(DW_AT::name).as_string() == member)
-                      goto past_struct_search;
-                    field_die = field_die.sibling();
-                  }
-                  
-                  stringstream fmt;
-                  fmt << "Failed evaluating expression " << expr << ": ";
-                  fmt << "Could not find struct member " << member;
-                  throw invalid_argument(fmt.str());
-                }
-                past_struct_search:
-                size_t offset = field_die
-                  .attr(DW_AT::data_member_location).as_unsigned_int();
-                
-                die = field_die
-                  .attr(DW_AT::type).as_linked_die();
-                
-                if (die.tag() == DW_TAG::typedef_)
-                  die = die
-                    .attr(DW_AT::type).as_linked_die();
-                
-                ptr += offset;
-              } break;
-              case DW_TAG::union_type: {
-                // don't offset pointer, but change DIE
-                dw_die field_die = die.first_child();
-                {
-                  while (field_die) {
-                    if (field_die.attr(DW_AT::name).as_string() == member)
-                      goto past_union_search;
-                    field_die = field_die.sibling();
-                  }
-                  
-                  stringstream fmt;
-                  fmt << "Failed evaluating expression " << expr << ": ";
-                  fmt << "Could not find union member " << member;
-                  throw invalid_argument(fmt.str());
-                }
-                past_union_search:
-                die = field_die
-                  .attr(DW_AT::type).as_linked_die();
-                
-                if (die.tag() == DW_TAG::typedef_)
-                  die = die
-                    .attr(DW_AT::type).as_linked_die();
-              } break;
-              default: {
-                stringstream fmt;
-                fmt << "Failed evaluating expression " << expr << ": expected struct or union (actual: " << die.tag() << ")";
-                throw type_error(fmt.str());
-              }
-            }
-          } break;
-          default: {
-            throw std::logic_error("INTERNAL ERROR: this should not happen, report this as a bug.");
+            uint8_t* next_ptr = *rva_to_pointer<uint8_t**>(dll, ptr);
+            ptr = pointer_to_rva(dll, next_ptr);
           }
-        }
+        }, eval.steps[i]);
       }
-      
-      if (die.tag() == DW_TAG::typedef_) {
-        die = die
-          .attr(DW_AT::type).as_linked_die();
-      }
-      
-      if (die.tag() != DW_TAG::base_type) {
-        stringstream fmt;
-        fmt << "Failed evaluating expression " << expr << ": ";
-        fmt << "Accessor does not refer to a field of primitive type";
-        throw incomplete_accessor(fmt.str());
-      }
-      
-      return reinterpret_cast<void*>(ptr);
+      return rva_to_pointer(dll, ptr);
     }
     
     void advance() {
-      dll_get<void(*)(void)>(dll, "sm64_update")();
+      get_proc_address<void(*)(void)>(dll, "sm64_update")();
     }
   };
   
