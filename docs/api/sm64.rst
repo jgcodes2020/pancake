@@ -1,6 +1,0 @@
-.. _api_sm64:
-
-sm64.hpp
-==========
-
-Nothing to see here, rewriting in progress

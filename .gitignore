@@ -1,5 +1,0 @@
-.cache/*
-subprojects/*
-!subprojects/packagefiles
-!subprojects/*.wrap
-local

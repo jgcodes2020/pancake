@@ -1,6 +1,0 @@
-[wrap-file]
-directory = libdwarf
-source_filename = libdwarf.zip
-
-[provide]
-libdwarf = dwarf_dep
