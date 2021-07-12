@@ -1,0 +1,31 @@
+name: build_docs
+on: [push]
+jobs:
+  build:
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v2
+      - name: Install git
+        run: sudo apt-get install git
+      - name: Build
+        uses: ammaraskar/sphinx-action@0.4
+      - name: Commit
+        run: |
+          # clone
+          git clone --single-branch https://github.com/jgcodes2020/pancake.git -b gh-pages gh-pages
+          rsync -a --delete docs/_build/html gh-pages
+          # setup github
+          cd gh-pages
+          git config user.email action@github.com
+          git config user.name "GitHub Actions"
+          # commit
+          git add .
+          git commit -m "Update docs: `date +"%D at %r"`" -a || true
+        shell: bash
+      - name: Push to GitHub
+        uses: ad-m/github-push-action@master
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          directory: gh-pages
+          branch: gh-pages

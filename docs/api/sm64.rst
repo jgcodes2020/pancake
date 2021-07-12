@@ -1,6 +1,6 @@
 .. _api_pancake:
 
-SM64
+sm64.hpp
 ==========
 
 .. doxygenfile:: pancake/sm64.hpp
