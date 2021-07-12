@@ -2,6 +2,16 @@
 
 movie.hpp
 ==========
-Classes to read inputs from Mupen64 input files.
+Classes to read (write coming soon) data from Mupen64 input files.
 
-Nothing to see here, rewriting in progress
+.. cpp:namespace:: pancake
+.. cpp:class:: m64 final
+
+  A Mupen64 input movie.  
+  I plan to add metadata access and saving soon, stay tuned!
+  
+  .. cpp:struct:: frame
+  
+    A single input frame.
+    
+    

@@ -165,7 +165,145 @@
             
   <div class="section" id="sm64-hpp">
 <span id="api-sm64"></span><h1>sm64.hpp<a class="headerlink" href="#sm64-hpp" title="Permalink to this headline">¶</a></h1>
-<p>Nothing to see here, rewriting in progress</p>
+<p>The core libsm64 interface.</p>
+<dl class="cpp class">
+<dt class="sig sig-object cpp" id="_CPPv4N7pancake4sm64E">
+<span id="_CPPv3N7pancake4sm64E"></span><span id="_CPPv2N7pancake4sm64E"></span><span id="pancake::sm64"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">sm64</span></span></span><a class="headerlink" href="#_CPPv4N7pancake4sm64E" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Interface class to libsm64. It’s quite primitive at the moment.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Safety cannot be guaranteed with this class, this is simply due to how low-level it is.</p>
+</div>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N7pancake4sm644sm64EPKc">
+<span id="_CPPv3N7pancake4sm644sm64EPKc"></span><span id="_CPPv2N7pancake4sm644sm64EPKc"></span><span id="pancake::sm64::sm64__cCP"></span><span class="sig-name descname"><span class="n"><span class="pre">sm64</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">char</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">path</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7pancake4sm644sm64EPKc" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Loads libsm64 from the DLL at the specified path.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>const char* path</strong> – C string with the path to the DLL</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N7pancake4sm644sm64ENSt6stringE">
+<span id="_CPPv3N7pancake4sm644sm64ENSt6stringE"></span><span id="_CPPv2N7pancake4sm644sm64ENSt6stringE"></span><span id="pancake::sm64::sm64__ss"></span><span class="sig-name descname"><span class="n"><span class="pre">sm64</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">path</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7pancake4sm644sm64ENSt6stringE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Loads libsm64 from the DLL at the specified path.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>std::string path</strong> – String with the path to the DLL</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N7pancake4sm644sm64ENSt10filesystem4pathE">
+<span id="_CPPv3N7pancake4sm644sm64ENSt10filesystem4pathE"></span><span id="_CPPv2N7pancake4sm644sm64ENSt10filesystem4pathE"></span><span id="pancake::sm64::sm64__std::filesystem::path"></span><span class="sig-name descname"><span class="n"><span class="pre">sm64</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">filesystem</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">path</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">path</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7pancake4sm644sm64ENSt10filesystem4pathE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Loads libsm64 from the DLL at the specified path.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>std::filesystem::path path</strong> – Path to the DLL.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4I0EN7pancake4sm643getER1TNSt6stringE">
+<span id="_CPPv3I0EN7pancake4sm643getENSt6stringE"></span><span id="_CPPv2I0EN7pancake4sm643getENSt6stringE"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><a class="reference internal" href="#_CPPv4I0EN7pancake4sm643getER1TNSt6stringE" title="pancake::sm64::get::T"><span class="n"><span class="pre">T</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">get</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">expr</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN7pancake4sm643getER1TNSt6stringE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Gets a reference to a variable from libsm64.</p>
+<div class="admonition caution">
+<p class="admonition-title">Caution</p>
+<p>This method is very unsafe. It does not ensure type safety (I have yet to figure out how),
+so know what return type you want from this method beforehand.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Type T</dt>
+<dd class="field-odd"><p>The type of the returned reference</p>
+</dd>
+<dt class="field-even">Parameters</dt>
+<dd class="field-even"><p><strong>std::string expr</strong> – An accessor expression</p>
+</dd>
+<dt class="field-odd">Throws</dt>
+<dd class="field-odd"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">std</span><span class="p">::</span><span class="n">invalid_argument</span></span></span> – if the accessor expression does not refer to a base type or is otherwise not present</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK7pancake4sm648constantENSt6stringE">
+<span id="_CPPv3NK7pancake4sm648constantENSt6stringE"></span><span id="_CPPv2NK7pancake4sm648constantENSt6stringE"></span><span id="pancake::sm64::constant__ssC"></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">variant</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">int64_t</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">nullptr_t</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">constant</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">name</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK7pancake4sm648constantENSt6stringE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Gets a constant, returning the specified type in a variant.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>std::string name</strong> – the name of the constant</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the requested constant, wrapped in a variant.</p>
+</dd>
+<dt class="field-odd">Rtype</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://en.cppreference.com/w/cpp/utility/variant">std::variant</a>&lt;double, int64_t, nullptr_t&gt;. <code class="docutils literal notranslate"><span class="pre">double</span></code> and <code class="docutils literal notranslate"><span class="pre">int64_t</span></code> should be self-explanatory, <code class="docutils literal notranslate"><span class="pre">nullptr</span></code> is returned for macro constants that are defined but lack a value.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N7pancake4sm647advanceEv">
+<span id="_CPPv3N7pancake4sm647advanceEv"></span><span id="_CPPv2N7pancake4sm647advanceEv"></span><span id="pancake::sm64::advance"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">advance</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7pancake4sm647advanceEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Advances the game by 1 frame.</p>
+</dd></dl>
+
+<p>The classes and functions below all deal with savestates.</p>
+<dl class="cpp class">
+<dt class="sig sig-object cpp" id="_CPPv4N7pancake4sm649savestateE">
+<span id="_CPPv3N7pancake4sm649savestateE"></span><span id="_CPPv2N7pancake4sm649savestateE"></span><span id="pancake::sm64::savestate"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">savestate</span></span></span><span class="w"> </span><span class="k"><span class="pre">final</span></span><a class="headerlink" href="#_CPPv4N7pancake4sm649savestateE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Opaque class containing savestate buffers.
+The implementation is platform-specific and non-extensible.</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK7pancake4sm6410alloc_svstEv">
+<span id="_CPPv3NK7pancake4sm6410alloc_svstEv"></span><span id="_CPPv2NK7pancake4sm6410alloc_svstEv"></span><span id="pancake::sm64::alloc_svstC"></span><a class="reference internal" href="#_CPPv4N7pancake4sm649savestateE" title="pancake::sm64::savestate"><span class="n"><span class="pre">savestate</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">alloc_svst</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK7pancake4sm6410alloc_svstEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Allocates a savestate buffer bound to this <a class="reference internal" href="#_CPPv4N7pancake4sm64E" title="pancake::sm64"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">sm64</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>An empty savestate buffer</p>
+</dd>
+<dt class="field-even">Rtype</dt>
+<dd class="field-even"><p><a class="reference internal" href="#_CPPv4N7pancake4sm649savestateE" title="pancake::sm64::savestate"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">savestate</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK7pancake4sm649save_svstER9savestate">
+<span id="_CPPv3NK7pancake4sm649save_svstER9savestate"></span><span id="_CPPv2NK7pancake4sm649save_svstER9savestate"></span><span id="pancake::sm64::save_svst__savestateRC"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">save_svst</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4N7pancake4sm649savestateE" title="pancake::sm64::savestate"><span class="n"><span class="pre">savestate</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">st</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK7pancake4sm649save_svstER9savestate" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Saves a savestate buffer.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>savestate&amp; st</strong> – The savestate to save to.</p>
+</dd>
+<dt class="field-even">Throws</dt>
+<dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">std</span><span class="p">::</span><span class="n">domain_error</span></span></span> – if the passed-in savestate is bound to a different <a class="reference internal" href="#_CPPv4N7pancake4sm64E" title="pancake::sm64"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">sm64</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N7pancake4sm649load_svstERK9savestate">
+<span id="_CPPv3N7pancake4sm649load_svstERK9savestate"></span><span id="_CPPv2N7pancake4sm649load_svstERK9savestate"></span><span id="pancake::sm64::load_svst__savestateCR"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">load_svst</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N7pancake4sm649savestateE" title="pancake::sm64::savestate"><span class="n"><span class="pre">savestate</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">st</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7pancake4sm649load_svstERK9savestate" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Loads a savestate buffer.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>savestate&amp; st</strong> – The savestate to load from.</p>
+</dd>
+<dt class="field-even">Throws</dt>
+<dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">std</span><span class="p">::</span><span class="n">domain_error</span></span></span> – if the passed-in savestate is bound to a different <a class="reference internal" href="#_CPPv4N7pancake4sm64E" title="pancake::sm64"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">sm64</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
 </div>
 
 

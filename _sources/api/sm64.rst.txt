@@ -3,4 +3,86 @@
 sm64.hpp
 ==========
 
-Nothing to see here, rewriting in progress
+The core libsm64 interface.
+
+.. cpp:namespace:: pancake
+.. cpp:class:: sm64
+  
+  Interface class to libsm64. It's quite primitive at the moment.
+  
+  .. note:: 
+    Safety cannot be guaranteed with this class, this is simply due to how low-level it is.
+  
+  .. cpp:function:: sm64(const char* path)
+    
+    Loads libsm64 from the DLL at the specified path.
+    
+    :param const char* path: C string with the path to the DLL
+    
+  .. cpp:function:: sm64(std::string path)
+  
+    Loads libsm64 from the DLL at the specified path.
+    
+    :param std::string path: String with the path to the DLL
+    
+  .. cpp:function:: sm64(std::filesystem::path path)
+  
+    Loads libsm64 from the DLL at the specified path.
+    
+    :param std::filesystem::path path: Path to the DLL.
+    
+  .. cpp:function:: template<typename T> \
+    T& get(std::string expr)
+    
+    Gets a reference to a variable from libsm64.
+    
+    .. caution::
+      This method is very unsafe. It does not ensure type safety (I have yet to figure out how),
+      so know what return type you want from this method beforehand.
+    
+    :type T: The type of the returned reference
+    :param std::string expr: An accessor expression
+    :throws std::invalid_argument: if the accessor expression does not refer to a base type \
+      or is otherwise not present
+  
+  .. cpp:function:: const std::variant<double, int64_t, nullptr_t> constant(std::string name) const
+  
+    Gets a constant, returning the specified type in a variant.
+    
+    :param std::string name: the name of the constant
+    :return: the requested constant, wrapped in a variant.
+    :rtype: `std::variant <https://en.cppreference.com/w/cpp/utility/variant>`_\<double, int64_t, nullptr_t\>. \
+      ``double`` and ``int64_t`` should be self-explanatory, ``nullptr`` is returned for macro constants that \
+      are defined but lack a value.
+  
+  .. cpp:function:: void advance()
+    
+    Advances the game by 1 frame.
+    
+  The classes and functions below all deal with savestates.
+  
+  .. cpp:class:: savestate final
+  
+    Opaque class containing savestate buffers.
+    The implementation is platform-specific and non-extensible.
+  
+  .. cpp:function:: savestate alloc_svst() const
+    
+    Allocates a savestate buffer bound to this :cpp:class:`sm64`.
+    
+    :return: An empty savestate buffer
+    :rtype: :cpp:class:`savestate`
+    
+  .. cpp:function:: void save_svst(savestate& st) const
+  
+    Saves a savestate buffer.
+    
+    :param savestate& st: The savestate to save to.
+    :throws std::domain_error: if the passed-in savestate is bound to a different :cpp:class:`sm64`
+    
+  .. cpp:function:: void load_svst(const savestate& st)
+  
+    Loads a savestate buffer.
+    
+    :param savestate& st: The savestate to load from.
+    :throws std::domain_error: if the passed-in savestate is bound to a different :cpp:class:`sm64`
