@@ -1,5 +1,8 @@
 name: build_docs
-on: [push]
+on: 
+  push:
+    branches:
+      - "master"
 jobs:
   build:
     runs-on: ubuntu-20.04
@@ -12,7 +15,7 @@ jobs:
         run: |
           # clone
           git clone --single-branch https://github.com/jgcodes2020/pancake.git -b gh-pages gh-pages
-          rsync -a --delete docs/_build/html/ gh-pages
+          rsync -a --delete docs/_build/html/ gh-pages --exclude .git
           # setup github
           cd gh-pages
           git config user.email action@github.com
@@ -24,7 +27,7 @@ jobs:
       - name: Push to GitHub
         uses: ad-m/github-push-action@master
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
           directory: gh-pages
           branch: gh-pages
           force: true
