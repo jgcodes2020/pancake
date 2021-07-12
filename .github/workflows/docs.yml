@@ -21,7 +21,7 @@ jobs:
         run: |
           # clone
           git clone --single-branch https://github.com/jgcodes2020/pancake.git -b gh-pages gh-pages
-          rsync -a --delete docs/_build/html gh-pages
+          rsync -a --delete docs/_build/html/ gh-pages/
           # setup github
           cd gh-pages
           git config user.email action@github.com
