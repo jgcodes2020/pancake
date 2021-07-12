@@ -6,15 +6,6 @@ jobs:
     steps:
       - name: Checkout repo
         uses: actions/checkout@v2
-      - name: Install dependencies
-        run: |
-          # APT deps
-          sudo apt-get install git
-          sudo apt-get install doxygen
-          # PIP deps
-          pip install breathe
-          pip install sphinx-sitemap
-          pip install sphinx-rtd-theme
       - name: Build
         uses: ammaraskar/sphinx-action@0.4
       - name: Commit
@@ -36,3 +27,4 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           directory: gh-pages
           branch: gh-pages
+          force: true
