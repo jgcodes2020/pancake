@@ -1,0 +1,3 @@
+breathe
+sphinx-sitemap
+sphinx-rtd-theme
