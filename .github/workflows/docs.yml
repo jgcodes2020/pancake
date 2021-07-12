@@ -16,11 +16,25 @@ jobs:
           # clone
           git clone --single-branch https://github.com/jgcodes2020/pancake.git -b gh-pages gh-pages
           rsync -a --delete docs/_build/html/ gh-pages --exclude .git
-          # setup github
+          # setup extra files
           cd gh-pages
+          cat > README.md <<EOF
+          # Pancake's docs on GitHub Pages
+          Well, look what you've found! These generated docs are maintained by GitHub Actions.
+          If you're looking to contribute to these docs, go to the `docs` folder on the `master` branch.
+          
+          Thanks!
+          EOF
+          cat > .nojekyll <<EOF
+          Whatchu know 'bout rolling down in the deep?
+          When your brain goes numb, you can call that mental freeze
+          When these people talk too much, put that crap in slow motion
+          Yeah, I feel like an astronaut in the ocean
+          EOF
+          
+          # commit
           git config user.email action@github.com
           git config user.name "GitHub Actions"
-          # commit
           git add .
           git commit -m "Update docs: `date +"%D at %r"`" -a || true
         shell: bash
