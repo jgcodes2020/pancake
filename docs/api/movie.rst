@@ -4,5 +4,4 @@ movie.hpp
 ==========
 Classes to read inputs from Mupen64 input files.
 
-.. doxygenfile:: pancake/movie.hpp
-   :project: Pancake
+Nothing to see here, rewriting in progress

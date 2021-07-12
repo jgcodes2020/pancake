@@ -1,7 +1,6 @@
-.. _api_pancake:
+.. _api_sm64:
 
 sm64.hpp
 ==========
 
-.. doxygenfile:: pancake/sm64.hpp
-   :project: Pancake
+Nothing to see here, rewriting in progress

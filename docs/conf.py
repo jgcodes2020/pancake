@@ -50,7 +50,7 @@ extensions = [
     'sphinx.ext.viewcode',
     'sphinx.ext.inheritance_diagram',
     'sphinx_sitemap',
-    'breathe'
+    # 'breathe'
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -95,8 +95,8 @@ html_static_path = ['_static']
 
 # -- Breathe configuration ---------------------------------------------------
 
-breathe_projects = {
-    "Pancake": "_build/xml"
-}
-breathe_default_project = "Pancake"
-breathe_default_members = ("members", "undoc-members")
+# breathe_projects = {
+#     "Pancake": "_build/xml"
+# }
+# breathe_default_project = "Pancake"
+# breathe_default_members = ("members", "undoc-members")
