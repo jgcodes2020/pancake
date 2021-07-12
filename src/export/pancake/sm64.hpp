@@ -18,6 +18,7 @@
 #include <memory>
 #include <type_traits>
 #include <unordered_map>
+#include <variant>
 
 #include "pancake/exception.hpp"
 #include "pancake/movie.hpp"
@@ -34,13 +35,9 @@ namespace pancake {
     struct impl;
     std::shared_ptr<impl> pimpl;
     
-    // Internal pointer cache for other internal classes.
-    std::unordered_map<std::string, void*> ptr_cache;
-    
     void* const _impl_get(std::string expr);
-    std::any _impl_constant(std::string name);
   public:
-    class savestate {
+    class savestate final {
       friend class sm64;
     private:
       struct impl;
@@ -106,14 +103,14 @@ namespace pancake {
      * 
      * @return a new savestate bound to this game.
      */
-    savestate alloc_svst();
+    savestate alloc_svst() const;
     /**
      * @brief Saves the game's state to the savestate buffer.
      * 
      * @param st the savestate to save
      * @exception std::domain_error if the savestate is not linked to THIS game.
      */
-    void save_svst(savestate& st);
+    void save_svst(savestate& st) const;
     /**
      * @brief Loads the game's state from a savestate buffer.
      * 
@@ -129,21 +126,7 @@ namespace pancake {
      * @param name the name of the constant
      * @return const T the constant
      */
-    template<typename T>
-    const T constant(std::string name) {
-      static_assert(std::disjunction<
-        std::is_null_pointer<T>,
-        std::is_same<T, double>,
-        std::is_same<T, int64_t>
-      >::value, "T must be either double, int64_t, or nullptr_t");
-      std::any value = _impl_constant(name);
-      if (typeid(T) != value.type()) {
-        std::stringstream fmt;
-        fmt << "Expected T to be " << value.type().name() << ", instead was " << typeid(T).name();
-        throw type_error(fmt.str());
-      }
-      return std::any_cast<T>(value);
-    }
+    const std::variant<double, int64_t, nullptr_t> constant(std::string name) const;
   };
 }
 #endif

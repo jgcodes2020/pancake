@@ -1,6 +1,7 @@
 #include "pancake/sm64.hpp"
 
 #include <any>
+#include <cstddef>
 #include <cstdint>
 #include <memory>
 #include <sstream>
@@ -10,6 +11,7 @@
 #include <locale>
 #include <regex>
 
+#include <type_traits>
 #include <unordered_map>
 #include <variant>
 #include <vcruntime_string.h>
@@ -40,9 +42,25 @@ using rvaddress_t = uintptr_t;
 
 template<typename T = void*>
 static T get_proc_address(HMODULE handle, string name) {
-  return reinterpret_cast<T>(
-    GetProcAddress(handle, name.c_str())
-  );
+  static_assert(std::is_pointer<T>::value, "OOOF");
+  
+  FARPROC fp = GetProcAddress(handle, name.c_str());
+  if (fp == nullptr) {
+    uint32_t errcode = GetLastError();
+    stringstream fmt;
+    fmt << "GetProcAddress returned error " << errcode << ": ";
+    
+    char* buffer = nullptr;
+    size_t msg_size = FormatMessageA(
+      FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS, 
+      nullptr, errcode, 0, (char*)&buffer, 0, nullptr);
+    
+    fmt << buffer;
+    
+    LocalFree(buffer);
+    throw runtime_error(fmt.str());
+  }
+  return reinterpret_cast<T>(fp);
 }
 static rvaddress_t get_proc_rva(HMODULE handle, string name) {
   return static_cast<rvaddress_t>(
@@ -73,7 +91,9 @@ namespace pancake {
       dll(LoadLibraryW(strcvt::to_utf16(path).c_str())),
       dbg(dw_debug(path)),
       path(path) {
+      std::cout << "Everything should be fine\n";
       get_proc_address<void(*)(void)>(dll, "sm64_init")();
+      std::cout << "Everything should be fine\n";
     }
     
     ~impl() {
@@ -94,7 +114,7 @@ namespace pancake {
         cache.insert(pair<string, expr_eval>(expr, eval));
       }
       
-      rvaddress_t ptr = get_proc_rva(dll, eval.global);
+      uint8_t* ptr = get_proc_address<uint8_t*>(dll, eval.global);
       cerr << eval << "\n";
       for (size_t i = 0; i < eval.steps.size(); i++) {
         visit(overload {
@@ -109,12 +129,11 @@ namespace pancake {
               fmt << " (step " << i << ")";
               throw invalid_argument(fmt.str());
             }
-            uint8_t* next_ptr = *rva_to_pointer<uint8_t**>(dll, ptr);
-            ptr = pointer_to_rva(dll, next_ptr);
+            ptr = *reinterpret_cast<uint8_t**>(ptr);
           }
         }, eval.steps[i]);
       }
-      return rva_to_pointer(dll, ptr);
+      return ptr;
     }
     
     void advance() {
@@ -197,11 +216,11 @@ namespace pancake {
     return pimpl->get(expr);
   }
   
-  sm64::savestate sm64::alloc_svst() {
+  sm64::savestate sm64::alloc_svst() const {
     return savestate(*this);
   }
   
-  void sm64::save_svst(savestate& st) {
+  void sm64::save_svst(savestate& st) const {
     st.save(*this);
   }
   
@@ -213,27 +232,34 @@ namespace pancake {
     pimpl->advance();
   }
   
-  any sm64::_impl_constant(string name) {
+  const variant<double, int64_t, nullptr_t> sm64::constant(string name) const {
     json constants = sm64_macro_defns::get()["constants"];
     auto match = constants.find(name);
     if (match == constants.end()) {
       stringstream fmt;
       fmt << name << " is not a constant";
-      throw domain_error(name);
+      throw invalid_argument(name);
     }
-    auto obj = *match;
-    string o_type = obj["type"];
-    if (o_type == "s64") {
-      return make_any<int64_t>(static_cast<int64_t>(obj["value"]));
+    json matched = *match;
+    string type = matched.at("type");
+    if (type == "s64") {
+      return variant<double, int64_t, nullptr_t>(
+        matched.at("value").get<int64_t>()
+      );
     }
-    else if (o_type == "f64") {
-      return make_any<double>(static_cast<double>(obj["value"]));
+    else if (type == "f64") {
+      return variant<double, int64_t, nullptr_t>(
+        matched.at("value").get<double>()
+      );
     }
-    else if (o_type == "void") {
-      return make_any<nullptr_t>(nullptr);
+    else if (type == "null") {
+      return variant<double, int64_t, nullptr_t>(nullptr);
     }
-    stringstream fmt;
-    fmt << name << " is not a constant";
-    throw domain_error(name);
+    else {
+      stringstream fmt;
+      fmt << "INTERNAL ERROR: ";
+      fmt << name << " was found but its type (" << type << ") was invalid";
+      throw runtime_error(fmt.str());
+    }
   }
 }

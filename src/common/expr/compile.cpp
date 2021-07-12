@@ -4,6 +4,7 @@
 #include "pancake/expr/parse.hpp"
 #include "pancake/overload.hpp"
 #include <iostream>
+#include <algorithm>
 #include <sstream>
 #include <stdexcept>
 #include <vcruntime.h>
@@ -11,6 +12,22 @@
 using namespace dwarf;
 
 using std::stringstream, std::invalid_argument, std::cerr;
+
+namespace {
+  void print_ast(std::ostream& out, const pancake::expr::expr_ast& ast, size_t limit) {
+    out << ast.global;
+    for (size_t i = 0; i < std::min(ast.steps.size(), limit); i++) {
+      std::visit(overload {
+        [&](const pancake::expr::expr_ast::member& step) {
+          out << "." << step.name;
+        },
+        [&](const pancake::expr::expr_ast::subscript& step) {
+          out << "[" << step.index << "]";
+        }
+      }, ast.steps[i]);
+    }
+  }
+}
 
 namespace pancake::expr {
   const expr_eval compile(const expr_ast& ast, dw_debug& dbg) {
@@ -27,12 +44,9 @@ namespace pancake::expr {
     
     if (die.tag() == DW_TAG::typedef_)
       die = die.attr(DW_AT::type).as_linked_die();
-    // throw for function DIE
-    if (die.tag() == DW_TAG::subprogram) {
-      stringstream fmt;
-      fmt << "\033[0;38;5;202m" << ast.global;
-      fmt << "\033[0m is a function pointer and should not be accessed";
-    }
+    // struct deref flag
+    bool deref_struct_ptr = false;
+    
     for (size_t i = 0; i < ast.steps.size(); i++) {
       if (die.tag() == DW_TAG::typedef_)
         die = die.attr(DW_AT::type).as_linked_die();
@@ -40,27 +54,23 @@ namespace pancake::expr {
         [&](const expr_ast::member& step) mutable -> void {
           if (die.tag() == DW_TAG::pointer_type) {
             die = die.attr(DW_AT::type).as_linked_die();
+            if (!deref_struct_ptr) {
+              deref_struct_ptr = true;
+            }
+            else {
+              result.steps.push_back(expr_eval::step(expr_eval::indirect()));
+            }
           }
           DW_TAG tag = die.tag();
           // make sure it is a struct or union
           if (tag != DW_TAG::structure_type && tag != DW_TAG::union_type) {
             stringstream fmt;
-            fmt << "Expected \033[0;38;5;202m" << ast.global;
-            for (size_t j = 0; j < i; j++) {
-              visit(overload {
-                [&](const expr_ast::member& step) {
-                  fmt << "." << step.name;
-                },
-                [&](const expr_ast::subscript& step) {
-                  fmt << "[" << step.index << "]";
-                }
-              }, ast.steps[j]);
-            }
+            fmt << "Expected \033[0;38;5;202m";
+            print_ast(fmt, ast, i);
             fmt << "\033[0m to be a struct or union, actually was \033[0;38;5;38m";
             fmt << tag << "\033[0m";
             throw invalid_argument(fmt.str());
           }
-          result.steps.push_back(expr_eval::step(expr_eval::indirect()));
           
           dw_die child = die.first_child();
           do {
@@ -72,16 +82,7 @@ namespace pancake::expr {
             stringstream fmt;
             fmt << "\033[0;38;5;202m" << step.name;
             fmt << "\033[0m is not a member of \033[0;38;5;38m";
-            for (size_t j = 0; j < i; j++) {
-              visit(overload {
-                [&](const expr_ast::member& step) {
-                  fmt << "." << step.name;
-                },
-                [&](const expr_ast::subscript& step) {
-                  fmt << "[" << step.index << "]";
-                }
-              }, ast.steps[j]);
-            }
+            print_ast(fmt, ast, i);
             fmt << "\033[0m";
             throw invalid_argument(fmt.str());
           }
@@ -89,11 +90,10 @@ namespace pancake::expr {
           die = child.attr(DW_AT::type).as_linked_die();
           if (tag == DW_TAG::structure_type) {
             // offset by address of struct member
-            result.steps.push_back(
-              expr_eval::step(expr_eval::offset {static_cast<intptr_t>(
-                child.attr(DW_AT::data_member_location).as_unsigned_int()
-              )})
-            );
+            intptr_t off = static_cast<intptr_t>(die.attr(DW_AT::data_member_location).as_signed_int());
+            if (off != 0) {
+              result.steps.push_back(expr_eval::step(expr_eval::offset {off}));
+            }
           }
           if (die.tag() == DW_TAG::typedef_)
             die = die.attr(DW_AT::type).as_linked_die();
@@ -102,17 +102,8 @@ namespace pancake::expr {
           DW_TAG tag = die.tag();
           if (tag != DW_TAG::pointer_type && tag != DW_TAG::array_type) {
             stringstream fmt;
-            fmt << "Expected \033[0;38;5;202m" << ast.global;
-            for (size_t j = 0; j < i; j++) {
-              visit(overload {
-                [&](const expr_ast::member& step) {
-                  fmt << "." << step.name;
-                },
-                [&](const expr_ast::subscript& step) {
-                  fmt << "[" << step.index << "]";
-                }
-              }, ast.steps[j]);
-            }
+            fmt << "Expected \033[0;38;5;202m";
+            print_ast(fmt, ast, i);
             fmt << "\033[0m to be a pointer or array, actually was \033[0;38;5;38m";
             fmt << tag;
             throw invalid_argument(fmt.str());

@@ -13,6 +13,6 @@
     "corecrt_io.h": "c"
   },
   "C_Cpp.intelliSenseEngine": "Disabled",
-  "restructuredtext.preview.sphinx.disabled": true,
+  "restructuredtext.preview.sphinx.disabled": false,
   "restructuredtext.confPath": "${workspaceFolder}\\docs"
 }

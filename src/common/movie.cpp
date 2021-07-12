@@ -61,7 +61,7 @@ namespace pancake {
     m_len = len;
   }
   
-  const m64::frame& m64::operator[](uint32_t frame) const {
+  m64::frame& m64::operator[](uint32_t frame) {
     return m_inputs.at(frame);
   }
   
@@ -69,12 +69,12 @@ namespace pancake {
     return m_len;
   }
   
-  auto m64::cbegin() const {
-    return m_inputs.cbegin();
+  auto m64::begin() const {
+    return m_inputs.begin();
   }
   
-  auto m64::cend() const {
-    return m_inputs.cend();
+  auto m64::end() const {
+    return m_inputs.end();
   }
   
   void m64::frame::apply(pancake::sm64& game) const {

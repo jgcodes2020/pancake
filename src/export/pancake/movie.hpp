@@ -20,72 +20,75 @@ namespace pancake {
   class sm64;
   class m64 {
   public:
-    struct frame {
+    struct frame final {
       /**
        * @brief Unscoped enum representing button inputs.
        * 
        */
-      enum button : uint16_t {
-        /**
-         * @brief The A button.
-         */
-        A = 0x8000,
-        /**
-         * @brief The B button.
-         */
-        B = 0x4000,
-        /**
-         * @brief The Z trigger.
-         */
-        Z = 0x2000,
+      class button final {
+        enum : uint16_t {
+          /**
+          * @brief The A button.
+          */
+          A = 0x8000,
+          /**
+          * @brief The B button.
+          */
+          B = 0x4000,
+          /**
+          * @brief The Z trigger.
+          */
+          Z = 0x2000,
 
-        /**
-         * @brief The START button.
-         */
-        START = 0x1000,
+          /**
+          * @brief The START button.
+          */
+          START = 0x1000,
 
-        /**
-         * @brief The UP key on the D-pad.
-         */
-        D_UP = 0x0800,
-        /**
-         * @brief The DOWN key on the D-pad.
-         */
-        D_DOWN = 0x0400,
-        /**
-         * @brief The LEFT key on the D-pad.
-         */
-        D_LEFT = 0x0200,
-        /**
-         * @brief The RIGHT key on the D-pad.
-         */
-        D_RIGHT = 0x0100,
+          /**
+          * @brief The UP key on the D-pad.
+          */
+          D_UP = 0x0800,
+          /**
+          * @brief The DOWN key on the D-pad.
+          */
+          D_DOWN = 0x0400,
+          /**
+          * @brief The LEFT key on the D-pad.
+          */
+          D_LEFT = 0x0200,
+          /**
+          * @brief The RIGHT key on the D-pad.
+          */
+          D_RIGHT = 0x0100,
 
-        /**
-         * @brief The L trigger.
-         */
-        L = 0x0020,
-        /**
-         * @brief The R trigger.
-         */
-        R = 0x0010,
+          /**
+          * @brief The L trigger.
+          */
+          L = 0x0020,
+          /**
+          * @brief The R trigger.
+          */
+          R = 0x0010,
 
-        /**
-         * @brief The C-up (aka C^) button.
-         */
-        C_UP = 0x0008,
-        /**
-         * @brief The C-down (aka Cv) button.
-         */
-        C_DOWN = 0x0004,
-        /**
-         * @brief The C-left (aka C< or C) button.
-         */
-        C_LEFT = 0x0002,
-        /**
-         * @brief The C-right (aka C>) button.
-         */
-        C_RIGHT = 0x0001,
+          /**
+          * @brief The C-up (aka C^) button.
+          */
+          C_UP = 0x0008,
+          /**
+          * @brief The C-down (aka Cv) button.
+          */
+          C_DOWN = 0x0004,
+          /**
+          * @brief The C-left (aka C< or C) button.
+          */
+          C_LEFT = 0x0002,
+          /**
+          * @brief The C-right (aka C>) button.
+          */
+          C_RIGHT = 0x0001
+        };
+        button() = delete;
       };
       
       uint16_t buttons;
@@ -128,7 +131,7 @@ namespace pancake {
      * @param frame the index of the frame
      * @return the input frame at the specified index
      */
-    const frame& operator[](uint32_t frame) const;
+    frame& operator[](uint32_t frame);
     
     /**
      * @brief Returns the length of this .m64.
@@ -138,18 +141,18 @@ namespace pancake {
     uint32_t size() const;
     
     /**
-     * @brief Returns a const iterator to the beginning of the input frames.
+     * @brief Returns an iterator to the beginning of the input frames.
      * 
      * @return auto the max number of input frames.
      */
-    auto cbegin() const;
+    auto begin() const;
     
     /**
-     * @brief Returns a const iterator to the beginning of the input frames.
+     * @brief Returns an iterator to the end of the input frames.
      * 
      * @return auto the max number of input frames.
      */
-    auto cend() const;
+    auto end() const;
   };
 }
 #endif
