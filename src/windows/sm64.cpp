@@ -91,9 +91,7 @@ namespace pancake {
       dll(LoadLibraryW(strcvt::to_utf16(path).c_str())),
       dbg(dw_debug(path)),
       path(path) {
-      std::cout << "Everything should be fine\n";
       get_proc_address<void(*)(void)>(dll, "sm64_init")();
-      std::cout << "Everything should be fine\n";
     }
     
     ~impl() {

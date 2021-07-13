@@ -15,13 +15,13 @@
 # sys.path.insert(0, os.path.abspath('.'))
 
 from sphinx.builders.html import StandaloneHTMLBuilder
-import subprocess, os
+# import subprocess, os
 
 # Doxygen setup
-subprocess.call(
-    ['doxygen', 'Doxyfile.in'],
-    shell = True
-)
+# subprocess.call(
+#     ['doxygen', 'Doxyfile.in'],
+#     shell = True
+# )
 
 
 # -- Project information -----------------------------------------------------
@@ -31,7 +31,7 @@ copyright = '2021, jgcodes2020'
 author = 'jgcodes2020'
 
 # The full version, including alpha/beta/rc tags
-release = '0.1'
+release = '0.1-beta'
 
 
 # -- General configuration ---------------------------------------------------

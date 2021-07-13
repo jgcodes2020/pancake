@@ -90,7 +90,7 @@ namespace pancake::expr {
           die = child.attr(DW_AT::type).as_linked_die();
           if (tag == DW_TAG::structure_type) {
             // offset by address of struct member
-            intptr_t off = static_cast<intptr_t>(die.attr(DW_AT::data_member_location).as_signed_int());
+            intptr_t off = static_cast<intptr_t>(child.attr(DW_AT::data_member_location).as_unsigned_int());
             if (off != 0) {
               result.steps.push_back(expr_eval::step(expr_eval::offset {off}));
             }

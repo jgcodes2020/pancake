@@ -3,7 +3,7 @@ project('pancake', 'cpp',
     'cpp_std=c++17',
     'b_vscrt=static_from_buildtype'
   ],
-  version: '0.1-WIP'
+  version: '0.1-beta'
 )
 
 cxx = meson.get_compiler('cpp')

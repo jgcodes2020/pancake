@@ -1,5 +1,6 @@
 .. _api_sm64:
 
+==========
 sm64.hpp
 ==========
 
@@ -9,6 +10,8 @@ The core libsm64 interface.
 .. cpp:class:: sm64
   
   Interface class to libsm64. It's quite primitive at the moment.
+  
+  **Constructors**
   
   .. note:: 
     Safety cannot be guaranteed with this class, this is simply due to how low-level it is.
@@ -30,6 +33,8 @@ The core libsm64 interface.
     Loads libsm64 from the DLL at the specified path.
     
     :param std::filesystem::path path: Path to the DLL.
+  
+  **Access functions**
     
   .. cpp:function:: template<typename T> \
     T& get(std::string expr)
@@ -41,7 +46,7 @@ The core libsm64 interface.
       so know what return type you want from this method beforehand.
     
     :type T: The type of the returned reference
-    :param std::string expr: An accessor expression
+    :param std::string expr: A valid :ref:`accessor expression <about_accessor_expressions>`
     :throws std::invalid_argument: if the accessor expression does not refer to a base type \
       or is otherwise not present
   
@@ -50,16 +55,14 @@ The core libsm64 interface.
     Gets a constant, returning the specified type in a variant.
     
     :param std::string name: the name of the constant
-    :return: the requested constant, wrapped in a variant.
-    :rtype: `std::variant <https://en.cppreference.com/w/cpp/utility/variant>`_\<double, int64_t, nullptr_t\>. \
-      ``double`` and ``int64_t`` should be self-explanatory, ``nullptr`` is returned for macro constants that \
-      are defined but lack a value.
+    :return: the requested constant, wrapped in a variant. If the constant is defined with no value,\
+      returns ``nullptr``.
   
   .. cpp:function:: void advance()
     
     Advances the game by 1 frame.
     
-  The classes and functions below all deal with savestates.
+  **Savestate functions**
   
   .. cpp:class:: savestate final
   
@@ -71,7 +74,6 @@ The core libsm64 interface.
     Allocates a savestate buffer bound to this :cpp:class:`sm64`.
     
     :return: An empty savestate buffer
-    :rtype: :cpp:class:`savestate`
     
   .. cpp:function:: void save_svst(savestate& st) const
   

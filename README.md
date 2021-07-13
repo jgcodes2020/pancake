@@ -26,24 +26,27 @@ If you want to build this for yourself or work on it, you'll need the following 
 - Meson (install using `pip install meson`)
 - Ninja (install using `pip install ninja` or download from their [GitHub](https://github.com/ninja-build/ninja/releases/tag/v1.10.2))
 
-After installing everything, open your favourite Windows command prompt, `cd` to wherever you cloned the repo and run the following to build the project:
-
-**cmd.exe**
+Symbolic links suck on Windows. To create the needed symlinks, run the following in admin `cmd.exe`:
 ```bat
-setup.py
-build.py debug
-```
-**PowerShell**
-```ps
-.\setup.py
-.\build.py debug
+cd (wherever you cloned pancake)
+del setup.py
+del build.py
+del compile_commands.json
+mklink "setup.py" "buildscript\setup.py"
+mklink "build.py" "buildscript\build.py"
+mklink "compile_commands.json" "build\compile_commands.json"
 ```
 
-If the above commands don't work, use `python setup.py` and `python build.py debug` instead.
+Then to build:
+
+```bat
+python setup.py
+python build.py debug
+```
 
 The dependencies will be downloaded or unzipped automatically by Meson, so you need not worry about that. Well, except for one thing. This library depends on Wafel's libsm64. This should be accessible on the release of 0.7.2, but for now, you'll need to build from source on the master branch, then unlock libsm64 using an SM64 ROM.
 
-## Legal issues
-I am currently not willing to license Pancake under open source, simply due to issues relating to the Super Mario 64 decompilation. Should these issues be resolved and an agreement reached, I will take action accordingly.
+## Legal issues, acknowledgements, etc.
+I am currently not willing to license Pancake as open source, simply due to the non-licensing of the Super Mario 64 decompilation. If I can be 100% sure Nintendo isn't going to chase after me, I will officially open-source this.
 
 libdwarf is licensed under LGPL 2.1. To comply, I have provided a fork of libdwarf with my changes to the buildscript [here](https://github.com/jgcodes2020/libdwarf-code/tree/choose-msvcrt). It does not actually modify libdwarf's actual code, but rather allows it to be built using libcmt instead of msvcrt.
