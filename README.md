@@ -48,7 +48,7 @@ python build.py debug
 ```
 You only need to run build.py after the initial setup. 
 
-The dependencies will be downloaded or unzipped automatically by Meson, so you need not worry about that. Well, except for one thing. This library depends on Wafel's libsm64. This should be accessible on the release of 0.7.2, but for now, you'll need to build from source on the master branch, then unlock libsm64 using an SM64 ROM.
+The dependencies will be downloaded or unzipped automatically by Meson, so you need not worry about that. Well, except for one thing. This library depends on Wafel's libsm64. This is available with Wafel 0.8.0, but you'll likely need to build Wafel from source to get libsm64 out of it.
 
 ### Installing
 If you want to install, provide the option `--do=install` to `build.py` like so:
