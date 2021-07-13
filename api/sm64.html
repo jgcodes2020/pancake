@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>sm64.hpp &mdash; Pancake 0.1 documentation</title>
+  <title>sm64.hpp &mdash; Pancake 0.1-beta documentation</title>
   
 
   
@@ -170,6 +170,7 @@
 <dt class="sig sig-object cpp" id="_CPPv4N7pancake4sm64E">
 <span id="_CPPv3N7pancake4sm64E"></span><span id="_CPPv2N7pancake4sm64E"></span><span id="pancake::sm64"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">sm64</span></span></span><a class="headerlink" href="#_CPPv4N7pancake4sm64E" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Interface class to libsm64. It’s quite primitive at the moment.</p>
+<p><strong>Constructors</strong></p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>Safety cannot be guaranteed with this class, this is simply due to how low-level it is.</p>
@@ -207,6 +208,7 @@
 </dl>
 </dd></dl>
 
+<p><strong>Access functions</strong></p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4I0EN7pancake4sm643getER1TNSt6stringE">
 <span id="_CPPv3I0EN7pancake4sm643getENSt6stringE"></span><span id="_CPPv2I0EN7pancake4sm643getENSt6stringE"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><a class="reference internal" href="#_CPPv4I0EN7pancake4sm643getER1TNSt6stringE" title="pancake::sm64::get::T"><span class="n"><span class="pre">T</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">get</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">expr</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN7pancake4sm643getER1TNSt6stringE" title="Permalink to this definition">¶</a><br /></dt>
@@ -221,7 +223,7 @@ so know what return type you want from this method beforehand.</p>
 <dd class="field-odd"><p>The type of the returned reference</p>
 </dd>
 <dt class="field-even">Parameters</dt>
-<dd class="field-even"><p><strong>std::string expr</strong> – An accessor expression</p>
+<dd class="field-even"><p><strong>std::string expr</strong> – A valid <a class="reference internal" href="../index.html#about-accessor-expressions"><span class="std std-ref">accessor expression</span></a></p>
 </dd>
 <dt class="field-odd">Throws</dt>
 <dd class="field-odd"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">std</span><span class="p">::</span><span class="n">invalid_argument</span></span></span> – if the accessor expression does not refer to a base type or is otherwise not present</p>
@@ -238,10 +240,7 @@ so know what return type you want from this method beforehand.</p>
 <dd class="field-odd"><p><strong>std::string name</strong> – the name of the constant</p>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>the requested constant, wrapped in a variant.</p>
-</dd>
-<dt class="field-odd">Rtype</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://en.cppreference.com/w/cpp/utility/variant">std::variant</a>&lt;double, int64_t, nullptr_t&gt;. <code class="docutils literal notranslate"><span class="pre">double</span></code> and <code class="docutils literal notranslate"><span class="pre">int64_t</span></code> should be self-explanatory, <code class="docutils literal notranslate"><span class="pre">nullptr</span></code> is returned for macro constants that are defined but lack a value.</p>
+<dd class="field-even"><p>the requested constant, wrapped in a variant. If the constant is defined with no value,returns <code class="docutils literal notranslate"><span class="pre">nullptr</span></code>.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -252,7 +251,7 @@ so know what return type you want from this method beforehand.</p>
 <dd><p>Advances the game by 1 frame.</p>
 </dd></dl>
 
-<p>The classes and functions below all deal with savestates.</p>
+<p><strong>Savestate functions</strong></p>
 <dl class="cpp class">
 <dt class="sig sig-object cpp" id="_CPPv4N7pancake4sm649savestateE">
 <span id="_CPPv3N7pancake4sm649savestateE"></span><span id="_CPPv2N7pancake4sm649savestateE"></span><span id="pancake::sm64::savestate"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">savestate</span></span></span><span class="w"> </span><span class="k"><span class="pre">final</span></span><a class="headerlink" href="#_CPPv4N7pancake4sm649savestateE" title="Permalink to this definition">¶</a><br /></dt>
@@ -267,9 +266,6 @@ The implementation is platform-specific and non-extensible.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>An empty savestate buffer</p>
-</dd>
-<dt class="field-even">Rtype</dt>
-<dd class="field-even"><p><a class="reference internal" href="#_CPPv4N7pancake4sm649savestateE" title="pancake::sm64::savestate"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">savestate</span></code></a></p>
 </dd>
 </dl>
 </dd></dl>
