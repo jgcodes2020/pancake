@@ -1,4 +1,8 @@
+# clangd cache
 .cache/*
+# subprojects
 subprojects/*
 !subprojects/packagefiles
 !subprojects/*.wrap
+# install folder
+install

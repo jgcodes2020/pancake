@@ -30,5 +30,17 @@ pancake = static_library('pancake',
     rsrc_gen.process('resources/sm64_macro_defns.json')
   ],
   include_directories: [exp_headers, int_headers],
-  dependencies: deps
+  dependencies: deps,
+  install: true,
+  install_dir: 'lib',
+  name_prefix: '',
+  name_suffix: 'lib'
+)
+
+install_headers(
+  'export/pancake/exception.hpp',
+  'export/pancake/movie.hpp',
+  'export/pancake/sm64.hpp',
+  install_dir: 'include',
+  subdir: 'pancake'
 )

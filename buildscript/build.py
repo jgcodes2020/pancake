@@ -1,9 +1,15 @@
-from argparse import ArgumentParser
+from argparse import ArgumentError, ArgumentParser
 from pathlib import Path
 import subprocess
 import sys; import os
 import json
 import shutil
+
+def do_option(opt: str):
+    if (opt in ["nothing", "compile", "install"]):
+        return opt
+    else:
+        raise ArgumentError("Do option must be nothing, compile or install")
 
 prevenv = os.environ.copy()
 try:
@@ -23,15 +29,10 @@ try:
         dest="wrap_reload",
         help="Reloads subproject wraps."
     )
-    parser.add_argument("--use-vs", "-V",
-        action="store_true",
-        dest="use_vs",
-        help="Uses the Visual Studio backend."
-    )
-    parser.add_argument("--no-compile", "-c",
-        action="store_false",
-        dest="do_compile",
-        help="Don't compile the file."
+    parser.add_argument("--do", "-d",
+        default="compile",
+        dest="do", type=do_option,
+        help="Specifies what to do: nothing, compile, or install. Defaults to compile."
     )
 
     args = parser.parse_args()
@@ -83,26 +84,31 @@ try:
     opt_backend = next(filter(lambda obj: obj["name"] == "backend", current_opts))
     # Create config command
     print("Configuring Meson...")
-    backend = "vs" if args.use_vs else "ninja"
     config = args.config
     
-    compile_cmd = ["meson", "configure"]
-    if (opt_backend["value"] != backend):
-        compile_cmd.append(f"--backend={backend}")
+    config_cmd = ["meson", "configure"]
     if (opt_buildtype["value"] != config):
-        compile_cmd.append(f"--buildtype={config}")
+        config_cmd.append(f"--buildtype={config}")
     # Check if config is needed and run
-    if (len(compile_cmd) > 2):
+    if (len(config_cmd) > 2):
         subprocess.run(
-            compile_cmd,
+            config_cmd,
             cwd=build_dir
         ).check_returncode()
     
-    if args.do_compile:
+    if args.do == "compile":
         print("Running Meson build...")
         subprocess.run(
             ["meson", "compile"],
             cwd=build_dir
         ).check_returncode()
+    elif args.do == "install":
+        print("Running Meson install...")
+        subprocess.run(
+            ["meson", "install"],
+            cwd=build_dir
+        ).check_returncode()
+    elif args.do == "nothing":
+        pass
 finally:
     os.environ.update(prevenv)

@@ -63,7 +63,7 @@ try:
             "-ladvapi32", "-ldbghelp"
         ])
         exit_code = subprocess.run(["meson", "configure",
-            f"-Dcpp_winlibs={winlibs}"
+            f"-Dcpp_winlibs={winlibs}", f"--prefix={project_dir.joinpath('install')}"
         ], cwd=project_dir.joinpath("build"))
         if exit_code != 0:
             sys.exit(exit_code)
