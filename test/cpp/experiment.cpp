@@ -1,4 +1,4 @@
-#include "debug.hpp"
+#include <debug.hpp>
 
 #include <algorithm>
 #include <cmath>
@@ -6,8 +6,8 @@
 #include <iomanip>
 #include <limits>
 
-#include "pancake/movie.hpp"
-#include "pancake/sm64.hpp"
+#include <pancake/movie.hpp>
+#include <pancake/sm64.hpp>
 
 using namespace pancake;
 using namespace std;

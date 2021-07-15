@@ -16,9 +16,9 @@
 #include <vector>
 #include <iostream>
 
-#include "pancake/dwarf.hpp"
-#include "pancake/expr/parse.hpp"
-#include "pancake/overload.hpp"
+#include <pancake/dwarf.hpp>
+#include <pancake/expr/parse.hpp>
+#include <pancake/overload.hpp>
 
 namespace pancake::expr {
   /**

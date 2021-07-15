@@ -18,8 +18,11 @@
 #include <filesystem>
 #include <iostream>
 
+
+
 namespace pancake {
   class sm64;
+  
   class m64 {
   public:
     /**
@@ -101,7 +104,7 @@ namespace pancake {
     };
   private:
     std::vector<frame> m_inputs;
-    uint32_t m_len;
+    uint32_t m_inputs_len;
   public:
     using iterator = decltype(m_inputs)::iterator;
     using const_iterator = decltype(m_inputs)::const_iterator;
@@ -140,7 +143,7 @@ namespace pancake {
       if (rsize & 0xFFFFFFFF00000000) {
         throw std::domain_error("M64 files are limited to 2^32 - 1 inputs");
       }
-      m_len = rsize;
+      m_inputs_len = rsize;
     }
     
     /**
@@ -243,4 +246,5 @@ namespace pancake {
   m64::button& operator&=(m64::button& lhs, m64::button rhs);
   m64::button& operator^=(m64::button& lhs, m64::button rhs);
 }
+#include <pancake/movie_button_ops.ipp>
 #endif

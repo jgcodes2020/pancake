@@ -19,7 +19,7 @@
 #include <filesystem>
 #include <optional>
 
-#include "pancake/dwarf_enums.hpp"
+#include <pancake/dwarf_enums.hpp>
 
 namespace dwarf {
   #include <libdwarf/libdwarf.h>

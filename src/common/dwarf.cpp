@@ -1,4 +1,4 @@
-#include "pancake/dwarf.hpp"
+#include <pancake/dwarf.hpp>
 
 #include <cstdint>
 #include <iostream>
@@ -8,8 +8,8 @@
 #include <cstring>
 #include <string.h>
 
-#include "libdwarf/libdwarf.h"
-#include "pancake/exception.hpp"
+#include <libdwarf/libdwarf.h>
+#include <pancake/exception.hpp>
 
 using namespace std;
 

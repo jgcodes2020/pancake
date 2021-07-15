@@ -1,4 +1,4 @@
-#include "pancake/expr/parse.hpp"
+#include <pancake/expr/parse.hpp>
 
 #include <cstdint>
 #include <regex>
@@ -8,7 +8,7 @@
 #include <iostream>
 #include <vector>
 
-#include "pancake/macro_defns.hpp"
+#include <pancake/macro_defns.hpp>
 
 using std::string, std::regex, std::regex_search, std::smatch;
 using std::cerr, std::stringstream;

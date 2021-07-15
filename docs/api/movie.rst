@@ -93,6 +93,7 @@ Classes to read (write coming soon) data from Mupen64 input files.
       
       :param sm64& game: The game to set inputs on
   
+  **Frame list operations**
   .. cpp:type: iterator
     
     An iterator over the frames of this M64.
@@ -103,7 +104,16 @@ Classes to read (write coming soon) data from Mupen64 input files.
     
   .. cpp:function:: m64::frame& operator[](uint32_t index)
     
-    Returns a reference to the ``index``th input frame of this M64.
+    Returns a reference to the ``index``th input frame of this M64.  
+    Does not check input bounds.
+    
+    :param uint32_t index: The index of the frame to get
+    :return: the requested frame
+  
+  .. cpp:function m64::frame& at(uint32_t index)
+    
+    Returns a reference to the ``index``th input frame of this M64.  
+    Unlike :cpp:function:`operator[]()`, ``at()`` checks input bounds.
     
     :param uint32_t index: The index of the frame to get
     :return: the requested frame

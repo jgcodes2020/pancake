@@ -2,8 +2,8 @@
   "python.pythonPath": "C:\\Program Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.8_3.8.2800.0_x64__qbz5n2kfra8p0\\python3.8.exe",
   "files.associations": {
     "*.mcmeta": "json",
-    "*.fsh": "glsl-vertex",
-    "*.vsh": "glsl",
+    "*.fsh": "glsl",
+    "*.vsh": "glsl-vertex",
     "*.bin": "hex",
     "*.wrap": "ini",
     "filesystem": "cpp",
@@ -14,5 +14,7 @@
   },
   "C_Cpp.intelliSenseEngine": "Disabled",
   "restructuredtext.preview.sphinx.disabled": false,
-  "restructuredtext.confPath": "${workspaceFolder}\\docs"
+  "restructuredtext.confPath": "${workspaceFolder}\\docs",
+  "mesonbuild.buildFolder": "build",
+  "mesonbuild.configureOnOpen": true
 }

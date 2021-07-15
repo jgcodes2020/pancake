@@ -1,4 +1,4 @@
-#include "pancake/sm64.hpp"
+#include <pancake/sm64.hpp>
 
 #include <any>
 #include <cstddef>
@@ -21,13 +21,13 @@
 #include <LIEF/LIEF.hpp>
 #include <nlohmann/json.hpp>
 
-#include "pancake/expr/parse.hpp"
-#include "pancake/expr/compile.hpp"
-#include "pancake/macro_defns.hpp"
-#include "pancake/overload.hpp"
-#include "pancake/strcvt.hpp"
-#include "pancake/exception.hpp"
-#include "pancake/dwarf.hpp"
+#include <pancake/expr/parse.hpp>
+#include <pancake/expr/compile.hpp>
+#include <pancake/macro_defns.hpp>
+#include <pancake/overload.hpp>
+#include <pancake/strcvt.hpp>
+#include <pancake/exception.hpp>
+#include <pancake/dwarf.hpp>
 
 using namespace std;
 using namespace dwarf;
