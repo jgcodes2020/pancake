@@ -1,30 +1,77 @@
 /**
  * @file movie.hpp Handling for Mupen64 recordings
  * @author jgcodes2020
- * @brief 
+ * @brief
  * @version 0.1
  * @date 2021-06-28
- * 
+ *
  * @copyright Copyright (c) 2021
  */
 #ifndef _PANCAKE_MOVIE_HPP_
 #define _PANCAKE_MOVIE_HPP_
 
 #include <cstdint>
-#include <stdexcept>
-#include <type_traits>
-#include <vector>
-#include <string>
+#include <string.h>
+#include <array>
 #include <filesystem>
 #include <iostream>
+#include <sstream>
+#include <stdexcept>
+#include <string>
+#include <type_traits>
+#include <vector>
+#include <iosfwd>
 
-
+/**
+ * @brief Defines bitwise operators on an enum.
+ */
+#define _PANCAKE_ENUM_BITFIELD_OPS(type)                         \
+  constexpr inline type operator|(type lhs, type rhs) {          \
+    using impltype = std::underlying_type_t<type>;               \
+    using enumtype = type;                                       \
+                                                                 \
+    return static_cast<enumtype>(                                \
+      static_cast<impltype>(lhs) | static_cast<impltype>(rhs));  \
+  }                                                              \
+                                                                 \
+  constexpr inline type operator&(type lhs, type rhs) {          \
+    using impltype = std::underlying_type_t<type>;               \
+    using enumtype = type;                                       \
+                                                                 \
+    return static_cast<enumtype>(                                \
+      static_cast<impltype>(lhs) & static_cast<impltype>(rhs));  \
+  }                                                              \
+                                                                 \
+  constexpr inline type operator^(type lhs, type rhs) {          \
+    using impltype = std::underlying_type_t<type>;               \
+    using enumtype = type;                                       \
+                                                                 \
+    return static_cast<enumtype>(                                \
+      static_cast<impltype>(lhs) ^ static_cast<impltype>(rhs));  \
+  }                                                              \
+                                                                 \
+  constexpr inline type operator~(type param) {                  \
+    using impltype = std::underlying_type_t<type>;               \
+    using enumtype = type;                                       \
+                                                                 \
+    return static_cast<enumtype>(~static_cast<impltype>(param)); \
+  }                                                              \
+                                                                 \
+  constexpr inline type& operator|=(type& lhs, type rhs) {       \
+    return (lhs = lhs | rhs);                                    \
+  }                                                              \
+                                                                 \
+  constexpr inline type& operator&=(type& lhs, type rhs) {       \
+    return (lhs = lhs & rhs);                                    \
+  }                                                              \
+                                                                 \
+  constexpr inline type& operator^=(type& lhs, type rhs) {       \
+    return (lhs = lhs ^ rhs);                                    \
+  }
 
 namespace pancake {
   class sm64;
-  
-  class m64 {
-  public:
+  struct frame final {
     /**
      * @brief Enum representing button inputs.
      */
@@ -90,161 +137,298 @@ namespace pancake {
        */
       C_RIGHT = 0x0001
     };
-    struct frame final {
-      
-      button buttons;
-      int8_t stick_x, stick_y;
-      
-      /**
-       * @brief Sets the input on an `sm64` instance to the current input.
-       * 
-       * @param game 
-       */
-      void apply(sm64& game) const;
-    };
+    button buttons;
+    int8_t stick_x, stick_y;
+
+    /**
+     * @brief Sets the input on an `sm64` instance to the current input.
+     *
+     * @param game
+     */
+    void apply(sm64& game) const;
+  };
+
+  /**
+   * @brief Indicates that a loaded M64 file is invalid.
+   *
+   */
+  class invalid_m64 : public std::runtime_error {
+    using std::runtime_error::runtime_error;
+  };
+
+  class m64 {
   private:
     std::vector<frame> m_inputs;
     uint32_t m_inputs_len;
+
   public:
-    using iterator = decltype(m_inputs)::iterator;
+    using iterator       = decltype(m_inputs)::iterator;
     using const_iterator = decltype(m_inputs)::const_iterator;
     
     /**
-     * @brief Loads an .m64 file from a path.
-     * 
-     * @param path the path to load from
+     * @brief Metadata struct, contains all the metadata.
      */
-    m64(std::string path);
-    /**
-     * @brief Loads an .m64 from a path.
-     * 
-     * @param path  the path to load from
-     */
-    m64(const char* path);
+    struct metadata_s {
+      friend class m64;
+    private:
+      uint32_t _num_input_frames;
+    public:
+      /**
+       * @brief The version of this M64. Should be 3.
+       */
+      uint32_t version;
+      /**
+       * @brief The recording timestamp. Used as a UID of sorts.
+       */
+      uint32_t timestamp;
+      
+      /**
+       * @brief The length of this movie in VIs.
+       */
+      uint32_t num_vis;
+      /**
+       * @brief The number of rerecords (i.e. rewinding back to savestates).
+       */
+      uint32_t rerecords;
+      /**
+       * @brief Essentially amounts to frames per second.
+       */
+      uint8_t vis_per_s;
+      
+      /**
+       * @brief The number of controllers used.
+       */
+      uint8_t num_controllers;
+      
+      /**
+       * @brief The number of input frames.
+       * @note Any operation that changes the length of the M64's internal vector
+       * updates this value.
+       */
+      const uint32_t& num_input_frames = _num_input_frames;
+      
+      /**
+       * @brief States that an M64 can be started from.
+       */
+      enum class start_flags : uint16_t {
+        FROM_SNAPSHOT = 0x01,
+        FROM_RESET    = 0x02,
+        FROM_EEPROM   = 0x04
+      };
+      /**
+       * @brief The way this M64 should be stated.
+       */
+      start_flags start_type;
+      
+      /**
+       * @brief Bit flags for controllers and their accessories.
+       */
+      enum class ctrler_flags : uint32_t {
+        CONTROLLER1_PRESENT = 0x0001,
+        CONTROLLER2_PRESENT = 0x0002,
+        CONTROLLER3_PRESENT = 0x0004,
+        CONTROLLER4_PRESENT = 0x0008,
+        CONTROLLER1_MEMORY  = 0x0010,
+        CONTROLLER2_MEMORY  = 0x0020,
+        CONTROLLER3_MEMORY  = 0x0040,
+        CONTROLLER4_MEMORY  = 0x0080,
+        CONTROLLER1_RUMBLE  = 0x0100,
+        CONTROLLER2_RUMBLE  = 0x0200,
+        CONTROLLER3_RUMBLE  = 0x0400,
+        CONTROLLER4_RUMBLE  = 0x0800
+      };
+      /**
+       * @brief The current set of flags for controllers and their accessories.
+       */
+      ctrler_flags controllers;
+      
+      /**
+       * @brief The internal ROM name.
+       * @note This will be truncated to 31 characters when serializing.
+       */
+      std::string rom_name;
+      /**
+       * @brief The CRC32 of the ROM.
+       */
+      uint32_t crc;
+      /**
+       * @brief The country code of the ROM.
+       */
+      uint16_t country_code;
+      
+      /**
+       * @brief The video plugin used.
+       * @note This will be truncated to 63 characters when serializing.
+       */
+      std::string video_plugin;
+      /**
+       * @brief The sound plugin used.
+       * @note This will be truncated to 63 characters when serializing.
+       */
+      std::string sound_plugin;
+      /**
+       * @brief The input plugin used (likely TAS Input).
+       * @note This will be truncated to 63 characters when serializing.
+       */
+      std::string input_plugin;
+      /**
+       * @brief The RSP (Reality Signal Processor) plugin used.
+       * @note This will be truncated to 63 characters when serializing.
+       */
+      std::string rsp_plugin;
+      
+      /**
+       * @brief A list of authors of this M64.
+       * @note This will be truncated to 221 bytes when serializing.
+       */
+      std::string authors;
+      
+      /**
+       * @brief A description of this M64.
+       * @note This will be truncated to 255 bytes when serializing.
+       */
+      std::string description;
+    } metadata;
     /**
      * @brief Loads an .m64 file from a path.
-     * 
+     *
      * @param path the path to load from
      */
     m64(std::filesystem::path path);
-    
+
     /**
-     * @brief Copies the inputs from the specified iterators.
-     * 
+     * @brief Creates an M64 directly from a list of inputs and metadata.
+     *
      * @tparam input_it an input iterator of m64::frame
      * @param begin the beginning iterator
      * @param end the ending iterator
+     * @param mdata the metadata
      */
-    template<typename input_it>
-    m64(input_it begin, input_it end) :
-      m_inputs(begin, end) {
+    template <typename input_it>
+    m64(input_it begin, input_it end, metadata_s& mdata) : m_inputs(begin, end), metadata(mdata) {
       size_t rsize = m_inputs.size();
       // if any of the upper 32 bits are set, it's too big
       if (rsize & 0xFFFFFFFF00000000) {
         throw std::domain_error("M64 files are limited to 2^32 - 1 inputs");
       }
-      m_inputs_len = rsize;
     }
-    
+
     /**
      * @brief Returns a specific input frame.
-     * 
+     *
      * @param frame the index of the frame
      * @return the input frame at the specified index
      */
     frame& operator[](uint32_t frame);
+    /**
+     * @brief Returns a specific input frame.
+     *
+     * @param frame the index of the frame
+     * @return the input frame at the specified index
+     */
+    const frame& operator[](uint32_t frame) const;
+
+    /**
+     * @brief Returns a specific input frame, checking bounds.
+     *
+     * @param frame the index of the frame
+     * @return the input frame at the specified index
+     */
+    frame& at(uint32_t frame);
+    const frame& at(uint32_t frame) const;
     
     /**
      * @brief Returns the first frame.
-     * 
+     *
      * @return the first frame
      */
     frame& front();
-    
+    const frame& front() const;
+
     /**
      * @brief Returns the last frame.
-     * 
+     *
      * @return the last frame
      */
     frame& back();
-    
+    const frame& back() const;
+
     /**
      * @brief Returns the length of this .m64.
-     * 
+     *
      * @return uint32_t the length of this .m64.
      */
     uint32_t size() const;
-    
+
     /**
      * @brief Returns an iterator to the beginning of the input frames.
-     * 
+     *
      * @return auto an iterator to the beginning of the input frames
      */
     iterator begin();
-    
+
     /**
      * @brief Returns an iterator to the end of the input frames.
-     * 
+     *
      * @return auto an iterator to the end of the input frame
      */
     iterator end();
-    
+
     /**
      * @brief Returns a const iterator to the beginning of the input frames.
-     * 
+     *
      * @return auto a const iterator to the beginning of the input frames
      */
     const_iterator begin() const;
-    
+
     /**
      * @brief Returns a const iterator to the end of the input frames.
-     * 
+     *
      * @return auto a const iterator to the end of the input frames
      */
     const_iterator end() const;
-    
+
     /**
      * @brief Returns a const iterator to the beginning of the input frames.
-     * 
+     *
      * @return auto a const iterator to the beginning of the input frames
      */
     const_iterator cbegin() const;
-    
+
     /**
      * @brief Returns a const iterator to the end of the input frames.
-     * 
+     *
      * @return auto a const iterator to the end of the input frames
      */
     const_iterator cend() const;
-    
+
     /**
      * @brief Adds a copy of this frame to the end of the inputs.
-     * 
+     *
      * @param frame the frame to add
      */
     void push_back(const frame& frame);
-    
+
     /**
      * @brief Adds a frame to the end of the inputs.
-     * 
+     *
      * @param frame the frame to add
      */
     void push_back(frame&& frame);
-    
+
     /**
      * @brief Removes the last frame.
      */
     void pop_back();
+    
+    /**
+     * @brief Serializes this M64 to an output stream.
+     * 
+     * @param out an output stream to write to
+     */
+    void dump(std::filesystem::path path);
   };
-  
-  m64::button operator|(m64::button lhs, m64::button rhs);
-  m64::button operator&(m64::button lhs, m64::button rhs);
-  m64::button operator^(m64::button lhs, m64::button rhs);
-  m64::button operator~(m64::button param);
-  
-  m64::button& operator|=(m64::button& lhs, m64::button rhs);
-  m64::button& operator&=(m64::button& lhs, m64::button rhs);
-  m64::button& operator^=(m64::button& lhs, m64::button rhs);
-}
-#include <pancake/movie_button_ops.ipp>
+  _PANCAKE_ENUM_BITFIELD_OPS(frame::button)
+  _PANCAKE_ENUM_BITFIELD_OPS(m64::metadata_s::ctrler_flags)
+}  // namespace pancake
 #endif

@@ -16,5 +16,6 @@
   "restructuredtext.preview.sphinx.disabled": false,
   "restructuredtext.confPath": "${workspaceFolder}\\docs",
   "mesonbuild.buildFolder": "build",
-  "mesonbuild.configureOnOpen": true
+  "mesonbuild.configureOnOpen": true,
+  "editor.renderIndentGuides": true
 }

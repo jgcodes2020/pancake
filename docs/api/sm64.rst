@@ -26,13 +26,13 @@ The core libsm64 interface.
   
     Loads libsm64 from the DLL at the specified path.
     
-    :param std::string path: String with the path to the DLL
+    :param path: String with the path to the DLL
     
   .. cpp:function:: sm64(std::filesystem::path path)
   
     Loads libsm64 from the DLL at the specified path.
     
-    :param std::filesystem::path path: Path to the DLL.
+    :param path: Path to the DLL.
   
   **Access functions**
     
@@ -41,12 +41,12 @@ The core libsm64 interface.
     
     Gets a reference to a variable from libsm64.
     
-    .. caution::
+    .. warning::
       This method is very unsafe. It does not ensure type safety (I have yet to figure out how),
       so know what return type you want from this method beforehand.
     
-    :type T: The type of the returned reference
-    :param std::string expr: A valid :ref:`accessor expression <about_accessor_expressions>`
+    :tparam T: The type of the returned reference
+    :param expr: A valid :ref:`accessor expression <about_accessor_expressions>`
     :throws std::invalid_argument: if the accessor expression does not refer to a base type \
       or is otherwise not present
   
@@ -54,7 +54,7 @@ The core libsm64 interface.
   
     Gets a constant, returning the specified type in a variant.
     
-    :param std::string name: the name of the constant
+    :param name: the name of the constant
     :return: the requested constant, wrapped in a variant. If the constant is defined with no value,\
       returns ``nullptr``.
   
@@ -79,12 +79,12 @@ The core libsm64 interface.
   
     Saves a savestate buffer.
     
-    :param savestate& st: The savestate to save to.
+    :param st: The savestate to save to.
     :throws std::domain_error: if the passed-in savestate is bound to a different :cpp:class:`sm64`
     
   .. cpp:function:: void load_svst(const savestate& st)
   
     Loads a savestate buffer.
     
-    :param savestate& st: The savestate to load from.
+    :param st: The savestate to load from.
     :throws std::domain_error: if the passed-in savestate is bound to a different :cpp:class:`sm64`

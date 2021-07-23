@@ -7,8 +7,8 @@
  * 
  * @copyright Copyright (c) 2021
  */
-#ifndef _PANCAKE_STRCVT_HPP_
-#define _PANCAKE_STRCVT_HPP_
+#ifndef _PANCAKE_UTILS_STRCVT_HPP_
+#define _PANCAKE_UTILS_STRCVT_HPP_
 
 #include <string>
 #include <locale>

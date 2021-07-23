@@ -25,7 +25,7 @@
 #include <pancake/expr/compile.hpp>
 #include <pancake/macro_defns.hpp>
 #include <pancake/overload.hpp>
-#include <pancake/strcvt.hpp>
+#include <pancake/utils/strcvt.hpp>
 #include <pancake/exception.hpp>
 #include <pancake/dwarf.hpp>
 

@@ -7,7 +7,6 @@
 #include <algorithm>
 #include <sstream>
 #include <stdexcept>
-#include <vcruntime.h>
 
 using namespace dwarf;
 

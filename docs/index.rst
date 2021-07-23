@@ -28,11 +28,10 @@ Indices and tables
 ------------------
 
 * :ref:`genindex`
-* :ref:`modindex`
 * :ref:`search`
 
 Overview
-__________________
+^^^^^^^^^
 
 .. toctree::
   self
