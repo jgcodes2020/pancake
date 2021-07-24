@@ -60,7 +60,9 @@ namespace {
 
 namespace pancake {
 
-  m64::m64(fs::path path) {
+  m64::m64(fs::path path) :
+    m_inputs(1) {
+    std::cerr << "Path is " << fs::absolute(path) << "\n";
     std::ifstream in(fs::absolute(path), ios::in | ios::binary);
     if (!in.good()) {
       stringstream fmt;
@@ -81,57 +83,46 @@ namespace pancake {
     auto read_str = [](const char* p, string& o) {
       o = p;
     };
-    
-    std::unique_ptr<char[]> data = unique_ptr<char[]>(new char[1024]);
-    
-    if (!std::equal(M64_SIG.begin(), M64_SIG.end(), &data[0])) {
-      stringstream fmt;
-      fmt << "File " << path << " isn't a valid M64, signature should be \"M64\\x1A\"";
-      throw invalid_m64(fmt.str());
+    {
+      std::unique_ptr<char[]> data = unique_ptr<char[]>(new char[1024]);
+      in.read(&data[0], 1024);
+      
+      if (!std::equal(M64_SIG.begin(), M64_SIG.end(), &data[0])) {
+        stringstream fmt;
+        fmt << "File " << path << " isn't a valid M64, signature should be \"M64\\x1A\"";
+        throw invalid_m64(fmt.str());
+      }
+      read_int32(&data[M64_OFFSETS::version], metadata.version);
+      read_int32(&data[M64_OFFSETS::timestamp], metadata.timestamp);
+      read_int32(&data[M64_OFFSETS::num_vis], metadata.num_vis);
+      read_int32(&data[M64_OFFSETS::rerecords], metadata.rerecords);
+      metadata.vis_per_s = data[M64_OFFSETS::vis_per_s];
+      metadata.num_controllers = data[M64_OFFSETS::num_controllers];
+      read_int32(&data[M64_OFFSETS::num_input_frames], metadata._num_input_frames);
+      // perform type-punning pointer casts, since underlying types are defined
+      read_int16(&data[M64_OFFSETS::start_type], *reinterpret_cast<uint16_t*>(&metadata.start_type));
+      read_int32(&data[M64_OFFSETS::controllers], *reinterpret_cast<uint32_t*>(&metadata.controllers));
+      
+      read_str(&data[M64_OFFSETS::rom_name], metadata.rom_name);
+      read_int32(&data[M64_OFFSETS::crc], metadata.crc);
+      read_int16(&data[M64_OFFSETS::country_code], metadata.country_code);
+      
+      read_str(&data[M64_OFFSETS::video_plugin], metadata.video_plugin);
+      read_str(&data[M64_OFFSETS::sound_plugin], metadata.sound_plugin);
+      read_str(&data[M64_OFFSETS::input_plugin], metadata.input_plugin);
+      read_str(&data[M64_OFFSETS::rsp_plugin], metadata.rsp_plugin);
+      
+      read_str(&data[M64_OFFSETS::authors], metadata.authors);
+      read_str(&data[M64_OFFSETS::description], metadata.description);
     }
-    read_int32(&data[M64_OFFSETS::version], metadata.version);
-    read_int32(&data[M64_OFFSETS::timestamp], metadata.timestamp);
-    read_int32(&data[M64_OFFSETS::num_vis], metadata.num_vis);
-    read_int32(&data[M64_OFFSETS::rerecords], metadata.rerecords);
-    metadata.vis_per_s = data[M64_OFFSETS::vis_per_s];
-    metadata.num_controllers = data[M64_OFFSETS::num_controllers];
-    read_int32(&data[M64_OFFSETS::num_input_frames], metadata._num_input_frames);
-    // perform type-punning pointer casts, since underlying types are defined
-    read_int16(&data[M64_OFFSETS::start_type], *reinterpret_cast<uint16_t*>(&metadata.start_type));
-    read_int32(&data[M64_OFFSETS::controllers], *reinterpret_cast<uint32_t*>(&metadata.controllers));
     
-    read_str(&data[M64_OFFSETS::rom_name], metadata.rom_name);
-    read_int32(&data[M64_OFFSETS::crc], metadata.crc);
-    read_int16(&data[M64_OFFSETS::country_code], metadata.country_code);
-    
-    read_str(&data[M64_OFFSETS::video_plugin], metadata.video_plugin);
-    read_str(&data[M64_OFFSETS::sound_plugin], metadata.sound_plugin);
-    read_str(&data[M64_OFFSETS::input_plugin], metadata.input_plugin);
-    read_str(&data[M64_OFFSETS::rsp_plugin], metadata.rsp_plugin);
-    
-    read_str(&data[M64_OFFSETS::authors], metadata.authors);
-    read_str(&data[M64_OFFSETS::description], metadata.description);
-    
-    
-    // Read input frames
-    m_inputs.reserve(metadata.num_input_frames);
-    data.reset(new char[4 * metadata.num_input_frames]);
+    // Seems to immediately lag any computer
+    m_inputs = std::vector<frame>(metadata.num_input_frames);
     // seek to inputs at 0x0100
     in.seekg(M64_OFFSETS::start_of_data, ios::beg);
-    in.read(&data[0], 4 * metadata.num_input_frames);
-
-    // 4 bytes per frame
-    for (uint32_t i = 0; i < metadata.num_input_frames; i++) {
-      size_t offset = i * 4;
-      // clang-format off
-      m_inputs.push_back(frame {
-        static_cast<frame::button>(static_cast<uint16_t>(
-          ((uint8_t) data[offset] << 8) | ((uint8_t) data[offset + 1]))),
-        static_cast<int8_t>(data[offset + 2]),
-        static_cast<int8_t>(data[offset + 3])
-      });
-      // clang-format on
-    }
+    system("pause");
+    // x64 is little-endian, so everything lines up
+    in.read(reinterpret_cast<char*>(&m_inputs[0]), 4 * metadata.num_input_frames);
   }
 
   frame& m64::operator[](uint32_t frame) { return m_inputs[frame]; }
