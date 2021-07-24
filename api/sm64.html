@@ -16,6 +16,7 @@
   <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
   <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../_static/graphviz.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/rtd-fix.css" type="text/css" />
 
   
   
@@ -192,7 +193,7 @@
 <dd><p>Loads libsm64 from the DLL at the specified path.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>std::string path</strong> – String with the path to the DLL</p>
+<dd class="field-odd"><p><strong>path</strong> – String with the path to the DLL</p>
 </dd>
 </dl>
 </dd></dl>
@@ -203,7 +204,7 @@
 <dd><p>Loads libsm64 from the DLL at the specified path.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>std::filesystem::path path</strong> – Path to the DLL.</p>
+<dd class="field-odd"><p><strong>path</strong> – Path to the DLL.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -213,17 +214,17 @@
 <dt class="sig sig-object cpp" id="_CPPv4I0EN7pancake4sm643getER1TNSt6stringE">
 <span id="_CPPv3I0EN7pancake4sm643getENSt6stringE"></span><span id="_CPPv2I0EN7pancake4sm643getENSt6stringE"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><a class="reference internal" href="#_CPPv4I0EN7pancake4sm643getER1TNSt6stringE" title="pancake::sm64::get::T"><span class="n"><span class="pre">T</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">get</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">expr</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN7pancake4sm643getER1TNSt6stringE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Gets a reference to a variable from libsm64.</p>
-<div class="admonition caution">
-<p class="admonition-title">Caution</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
 <p>This method is very unsafe. It does not ensure type safety (I have yet to figure out how),
 so know what return type you want from this method beforehand.</p>
 </div>
 <dl class="field-list simple">
-<dt class="field-odd">Type T</dt>
-<dd class="field-odd"><p>The type of the returned reference</p>
+<dt class="field-odd">Template Parameters</dt>
+<dd class="field-odd"><p><strong>T</strong> – The type of the returned reference</p>
 </dd>
 <dt class="field-even">Parameters</dt>
-<dd class="field-even"><p><strong>std::string expr</strong> – A valid <a class="reference internal" href="../index.html#about-accessor-expressions"><span class="std std-ref">accessor expression</span></a></p>
+<dd class="field-even"><p><strong>expr</strong> – A valid <a class="reference internal" href="../index.html#about-accessor-expressions"><span class="std std-ref">accessor expression</span></a></p>
 </dd>
 <dt class="field-odd">Throws</dt>
 <dd class="field-odd"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">std</span><span class="p">::</span><span class="n">invalid_argument</span></span></span> – if the accessor expression does not refer to a base type or is otherwise not present</p>
@@ -237,7 +238,7 @@ so know what return type you want from this method beforehand.</p>
 <dd><p>Gets a constant, returning the specified type in a variant.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>std::string name</strong> – the name of the constant</p>
+<dd class="field-odd"><p><strong>name</strong> – the name of the constant</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>the requested constant, wrapped in a variant. If the constant is defined with no value,returns <code class="docutils literal notranslate"><span class="pre">nullptr</span></code>.</p>
@@ -276,7 +277,7 @@ The implementation is platform-specific and non-extensible.</p>
 <dd><p>Saves a savestate buffer.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>savestate&amp; st</strong> – The savestate to save to.</p>
+<dd class="field-odd"><p><strong>st</strong> – The savestate to save to.</p>
 </dd>
 <dt class="field-even">Throws</dt>
 <dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">std</span><span class="p">::</span><span class="n">domain_error</span></span></span> – if the passed-in savestate is bound to a different <a class="reference internal" href="#_CPPv4N7pancake4sm64E" title="pancake::sm64"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">sm64</span></code></a></p>
@@ -290,7 +291,7 @@ The implementation is platform-specific and non-extensible.</p>
 <dd><p>Loads a savestate buffer.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>savestate&amp; st</strong> – The savestate to load from.</p>
+<dd class="field-odd"><p><strong>st</strong> – The savestate to load from.</p>
 </dd>
 <dt class="field-even">Throws</dt>
 <dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">std</span><span class="p">::</span><span class="n">domain_error</span></span></span> – if the passed-in savestate is bound to a different <a class="reference internal" href="#_CPPv4N7pancake4sm64E" title="pancake::sm64"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">sm64</span></code></a></p>
