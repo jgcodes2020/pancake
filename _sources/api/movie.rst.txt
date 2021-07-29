@@ -222,16 +222,10 @@ Classes to read (write coming soon) data from Mupen64 input files.
     
       The number of controllers used.
       
-    .. cpp:var:: const uint32_t& num_input_frames
+    .. cpp:function:: uint32_t num_input_frames()
     
-      The number of input frames. This refers to an internal member,
-      but prevents modification.
-      
-      .. warning:: 
-      
-        I take no responsibility for anything bad that happens because
-        you did :cpp:expr:`const_cast<uint32_t&>(num_input_frames)` and
-        assigned to it.
+      Returns the number of input frames. This is a function rather than a reference
+      in order to avoid copying issues.
       
     .. cpp:enum-class:: start_flags
     

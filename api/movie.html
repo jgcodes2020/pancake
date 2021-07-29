@@ -533,17 +533,11 @@ I don’t know the specifics of the whole UID thing, ask someone who works on Mu
 <dd><p>The number of controllers used.</p>
 </dd></dl>
 
-<dl class="cpp var">
-<dt class="sig sig-object cpp" id="_CPPv4N7pancake3m6410metadata_s16num_input_framesE">
-<span id="_CPPv3N7pancake3m6410metadata_s16num_input_framesE"></span><span id="_CPPv2N7pancake3m6410metadata_s16num_input_framesE"></span><span id="pancake::m64::metadata_s::num_input_frames__uint32_tCR"></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">num_input_frames</span></span></span><a class="headerlink" href="#_CPPv4N7pancake3m6410metadata_s16num_input_framesE" title="Permalink to this definition">¶</a><br /></dt>
-<dd><p>The number of input frames. This refers to an internal member,
-but prevents modification.</p>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>I take no responsibility for anything bad that happens because
-you did <span class="cpp-expr sig sig-inline cpp"><span class="k">const_cast</span><span class="p">&lt;</span><span class="n">uint32_t</span><span class="p">&amp;</span><span class="p">&gt;</span><span class="p">(</span><a class="reference internal" href="#_CPPv4N7pancake3m6410metadata_s16num_input_framesE" title="pancake::m64::metadata_s::num_input_frames"><span class="n">num_input_frames</span></a><span class="p">)</span></span> and
-assigned to it.</p>
-</div>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N7pancake3m6410metadata_s16num_input_framesEv">
+<span id="_CPPv3N7pancake3m6410metadata_s16num_input_framesEv"></span><span id="_CPPv2N7pancake3m6410metadata_s16num_input_framesEv"></span><span id="pancake::m64::metadata_s::num_input_frames"></span><span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">num_input_frames</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7pancake3m6410metadata_s16num_input_framesEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Returns the number of input frames. This is a function rather than a reference
+in order to avoid copying issues.</p>
 </dd></dl>
 
 <dl class="cpp enum-class">
