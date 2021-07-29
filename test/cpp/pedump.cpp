@@ -19,7 +19,6 @@ I will be changing this file from time to time.
 
 #include <tuple>
 #include <type_traits>
-#include <windows.h>
 
 #include <LIEF/LIEF.hpp>
 
@@ -28,10 +27,7 @@ I will be changing this file from time to time.
 #include <pancake/dwarf.hpp>
 
 using namespace std;
-using namespace pancake;
 using namespace LIEF;
-
-#include <debug.hpp>
 
 const constexpr uint32_t SIZEOF_SYMBOL = 18;
 
@@ -64,7 +60,6 @@ uint32_t chars_to_uint32(CharT bytes[4], bool use_bigendian) {
 
 int main(int argc, char* argv[]) {
   // Register handlers
-  debug_handlers();
   
   unique_ptr<PE::Binary> bin = PE::Parser::parse(argv[1]);
   PE::Header hdr = bin->header();

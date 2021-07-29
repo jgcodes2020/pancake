@@ -13,7 +13,7 @@
 
 #include <string>
 #include <nlohmann/json.hpp>
-#include <pancake_rsrc_sm64_macro_defns.json.hpp>
+#include "pancake_rsrc_sm64_macro_defns.json.hpp"
 
 namespace pancake {
   class sm64_macro_defns {

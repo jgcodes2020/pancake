@@ -1,0 +1,58 @@
+# LIEF dependency
+# ===========================
+set(LIEF_PREFIX       "${CMAKE_CURRENT_BINARY_DIR}/LIEF")
+set(LIEF_INSTALL_DIR  "${LIEF_PREFIX}")
+set(LIEF_INCLUDE_DIRS "${LIEF_PREFIX}/include")
+
+# LIEF static library
+set(LIEF_LIBFILE
+  "${LIEF_PREFIX}/lib/${CMAKE_STATIC_LIBRARY_PREFIX}LIEF${CMAKE_STATIC_LIBRARY_SUFFIX}")
+  
+# Create include dir
+file(MAKE_DIRECTORY ${LIEF_INCLUDE_DIRS})
+
+# URL of the LIEF repo (Can be your fork)
+set(LIEF_GIT_URL "https://github.com/lief-project/LIEF.git")
+
+# LIEF's version to be used (can be 'master')
+set(LIEF_VERSION 0.11.5)
+
+# LIEF compilation config
+set(LIEF_CMAKE_ARGS
+  -DCMAKE_INSTALL_PREFIX=<INSTALL_DIR>
+  -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
+  -DLIEF_DOC=off
+  -DLIEF_PYTHON_API=off
+  -DLIEF_EXAMPLES=off
+  -DLIEF_OAT=off
+  -DLIEF_DEX=off
+  -DLIEF_VDEX=off
+  -DLIEF_ART=off
+  -DCMAKE_CXX_COMPILER=${CMAKE_CXX_COMPILER}
+  -DCMAKE_C_COMPILER=${CMAKE_C_COMPILER}
+)
+
+# Specify MSVCRT on MSVC
+if(MSVC)
+  list(APPEND ${LIEF_CMAKE_ARGS} -DLIEF_USE_CRT_RELEASE=MT)
+  list(APPEND ${LIEF_CMAKE_ARGS} -DLIEF_USE_CRT_DEBUG=MTd)
+endif()
+
+# External project
+ExternalProject_Add(LIEF_extproj
+  PREFIX           "${LIEF_PREFIX}"
+  GIT_REPOSITORY   ${LIEF_GIT_URL}
+  GIT_TAG          ${LIEF_VERSION}
+  INSTALL_DIR      ${LIEF_INSTALL_DIR}
+  CMAKE_ARGS       ${LIEF_CMAKE_ARGS}
+  BUILD_BYPRODUCTS ${LIEF_LIBFILE}
+  UPDATE_COMMAND   ""
+)
+
+# Define target for easier inclusion
+add_library(LIEF::dep STATIC IMPORTED)
+set_target_properties(LIEF::dep PROPERTIES
+  IMPORTED_LOCATION ${LIEF_LIBFILE}
+  INTERFACE_INCLUDE_DIRECTORIES ${LIEF_INCLUDE_DIRS}
+)
+add_dependencies(LIEF::dep LIEF_extproj)

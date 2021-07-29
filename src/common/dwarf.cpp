@@ -10,6 +10,7 @@
 
 #include <libdwarf/libdwarf.h>
 #include <pancake/exception.hpp>
+#include <type_traits>
 
 using namespace std;
 
@@ -429,7 +430,7 @@ namespace dwarf {
     Dwarf_Error err;
     
     uint64_t result;
-    int rcode = dwarf_formudata(m_attr, &result, &err);
+    int rcode = dwarf_formudata(m_attr, reinterpret_cast<Dwarf_Unsigned*>(&result), &err);
     if (rcode == DW_DLV::ERROR) {
       throw dw_error(m_dbg, err);
     }
@@ -441,7 +442,7 @@ namespace dwarf {
     Dwarf_Error err;
     
     int64_t result;
-    int rcode = dwarf_formsdata(m_attr, &result, &err);
+    int rcode = dwarf_formsdata(m_attr, reinterpret_cast<Dwarf_Signed*>(&result), &err);
     if (rcode == DW_DLV::ERROR) {
       throw dw_error(m_dbg, err);
     }

@@ -17,6 +17,7 @@
 #include <vector>
 
 #include <pancake/sm64.hpp>
+#include <pancake/debug/pause.hpp>
 
 using std::ios, std::stringstream, std::fstream;
 using std::numeric_limits;
@@ -117,12 +118,13 @@ namespace pancake {
     }
     
     // Seems to immediately lag any computer
-    m_inputs = std::vector<frame>(metadata.num_input_frames);
+    m_inputs = std::vector<frame>(metadata.num_input_frames());
     // seek to inputs at 0x0100
+    debug::pause("Before vector resize...");
     in.seekg(M64_OFFSETS::start_of_data, ios::beg);
-    system("pause");
+    debug::pause("After vector resize...");
     // x64 is little-endian, so everything lines up
-    in.read(reinterpret_cast<char*>(&m_inputs[0]), 4 * metadata.num_input_frames);
+    in.read(reinterpret_cast<char*>(&m_inputs[0]), 4 * metadata.num_input_frames());
   }
 
   frame& m64::operator[](uint32_t frame) { return m_inputs[frame]; }
@@ -221,7 +223,7 @@ namespace pancake {
     dump_int32(metadata.rerecords, &buffer[M64_OFFSETS::rerecords]);
     buffer[M64_OFFSETS::vis_per_s]       = metadata.vis_per_s;
     buffer[M64_OFFSETS::num_controllers] = metadata.num_controllers;
-    dump_int32(metadata.num_input_frames, &buffer[M64_OFFSETS::num_input_frames]);
+    dump_int32(metadata.num_input_frames(), &buffer[M64_OFFSETS::num_input_frames]);
     
     dump_int16(
       static_cast<uint16_t>(metadata.start_type), &buffer[M64_OFFSETS::start_type]);

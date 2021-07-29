@@ -14,7 +14,6 @@
 #include <type_traits>
 #include <unordered_map>
 #include <variant>
-#include <vcruntime_string.h>
 #include <vector>
 #include <windows.h>
 
@@ -62,26 +61,12 @@ static T get_proc_address(HMODULE handle, string name) {
   }
   return reinterpret_cast<T>(fp);
 }
-static rvaddress_t get_proc_rva(HMODULE handle, string name) {
-  return static_cast<rvaddress_t>(
-    get_proc_address<uint8_t*>(handle, name) - reinterpret_cast<uint8_t*>(handle)
-  );
-}
-template<typename T = void*>
-static T rva_to_pointer(HMODULE handle, rvaddress_t rva) {
-  return reinterpret_cast<T>(
-    reinterpret_cast<uint8_t*>(handle) + rva
-  );
-}
-static rvaddress_t pointer_to_rva(HMODULE handle, void* ptr) {
-  return reinterpret_cast<uint8_t*>(ptr) - reinterpret_cast<uint8_t*>(handle);
-}
 
 
 namespace pancake {
   
   struct sm64::impl {
-    HMODULE dll;
+    HMODULE so;
     dw_debug dbg;
     string path;
     

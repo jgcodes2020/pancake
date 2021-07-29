@@ -11,17 +11,38 @@ using namespace std;
 #ifdef _MSC_VER
 #include <intrin.h>
 // Highest set bit.
-__forceinline uint32_t _intrin_ffs64(uint64_t i) {
+__forceinline inline uint32_t bsr(uint64_t i) {
   unsigned long x;
   if (_BitScanReverse64(&x, i))
     return x;
   else
    return 64;
 }
-#elif defined(__GNUC__) || defined(__MINGW32__)
-// Highest set bit.
-__attribute__((always_inline)) uint32_t _intrin_ffs(uint64_t i) {
-  return __builtin_ffsll(i) - 1;
+#elif defined(__GNUC__)
+__attribute__((always_inline)) inline uint32_t bsr(uint64_t i) {
+  if (i == 0) return 64;
+  return 63 - __builtin_clzll(i);
+}
+#else
+// https://stackoverflow.com/questions/52657851/how-to-bit-scan-forward-and-reverse-a-uint128-t-128bit
+inline uint32_t bsr(uint64_t i) {
+  if (i == 0) return 64;
+  // round up to power of 2 - 1
+  i |= i >> 1;
+  i |= i >> 2;
+  i |= i >> 4;
+  i |= i >> 8;
+  i |= i >> 16;
+  i |= i >> 32;
+  // abuse special number and lookup
+  const constexpr uint64_t magic = 0x03F79D71B4CB0A89ULL;
+  static const std::uint32_t table[] = {
+    0,  47, 1,  56, 48, 27, 2,  60, 57, 49, 41, 37, 28, 16, 3,  61,
+    54, 58, 35, 52, 50, 42, 21, 44, 38, 32, 29, 23, 17, 11, 4,  62,
+    46, 55, 26, 59, 40, 36, 15, 53, 34, 51, 20, 43, 31, 22, 10, 45,
+    25, 39, 14, 33, 19, 30, 9,  24, 13, 18, 8,  12, 7,  6,  5,  63
+  };
+  return table[(i * magic) >> 58];
 }
 #endif
 
@@ -50,7 +71,7 @@ inline string operator*(string str, uint32_t x) {
     array<string, 32> times_p2;
     times_p2[0] = str;
     
-    const uint32_t max_shift = _intrin_ffs64(x);
+    const uint32_t max_shift = bsr(x);
     for (uint32_t i = 1; i <= max_shift; i++) {
       times_p2[i] = times_p2[i - 1] + times_p2[i - 1];
     }

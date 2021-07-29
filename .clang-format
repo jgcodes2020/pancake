@@ -25,6 +25,7 @@ IncludeCategories:
   - Regex: '^<([a-z_])>$'
     Priority: 2
   - Regex: ''
+IndentPPDirectives: BeforeHash
 NamespaceIndentation: All
 PointerAlignment: Left
 SpaceAfterCStyleCast: "true"

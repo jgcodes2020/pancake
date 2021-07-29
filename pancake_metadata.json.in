@@ -1,0 +1,6 @@
+{
+  "version_major": "@CMAKE_PROJECT_VERSION_MAJOR@",
+  "version_minor": "@CMAKE_PROJECT_VERSION_MINOR@",
+  "version_micro": "@CMAKE_PROJECT_VERSION_PATCH@",
+  "full_version": "@CMAKE_PROJECT_VERSION@"
+}

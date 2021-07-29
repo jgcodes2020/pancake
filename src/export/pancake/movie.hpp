@@ -201,11 +201,11 @@ namespace pancake {
       uint8_t num_controllers;
       
       /**
-       * @brief The number of input frames.
-       * @note Any operation that changes the length of the M64's internal vector
-       * updates this value.
+       * @brief Returns the length of this M64.
        */
-      const uint32_t& num_input_frames = _num_input_frames;
+      uint32_t num_input_frames() const {
+        return _num_input_frames;
+      }
       
       /**
        * @brief States that an M64 can be started from.
