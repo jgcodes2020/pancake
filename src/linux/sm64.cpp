@@ -88,7 +88,7 @@ namespace pancake {
       }
       
       uint8_t* ptr = get_proc_address<uint8_t*>(so, eval.global);
-      // cerr << eval << "\n";
+       cerr << eval << "\n";
       for (size_t i = 0; i < eval.steps.size(); i++) {
         visit(overload {
           [&](const expr_eval::offset& step) mutable -> void {

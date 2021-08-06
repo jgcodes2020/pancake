@@ -76,6 +76,7 @@ namespace pancake {
      * @brief Enum representing button inputs.
      */
     enum class button : uint16_t {
+      none = 0,
       /**
        * @brief The A button.
        */
@@ -110,6 +111,9 @@ namespace pancake {
        * @brief The RIGHT key on the D-pad.
        */
       D_RIGHT = 0x0100,
+      
+      U1 = 0x0080,
+      U2 = 0x0040,
 
       /**
        * @brief The L trigger.

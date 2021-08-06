@@ -120,10 +120,17 @@ namespace pancake {
     }
     
     m_inputs = std::vector<frame>(metadata.num_input_frames());
+    unique_ptr<char[]> data = unique_ptr<char[]>(new char[metadata._num_input_frames * 4]);
     // seek to inputs at 0x0100
     in.seekg(M64_OFFSETS::start_of_data, ios::beg);
+    in.read(data.get(), metadata._num_input_frames * 4);
     // x64 is little-endian, so everything lines up
-    in.read(reinterpret_cast<char*>(&m_inputs[0]), 4 * metadata.num_input_frames());
+    for (size_t i = 0; i < m_inputs.size(); i++) {
+      size_t off = i * 4;
+      m_inputs[i].buttons = static_cast<frame::button>((uint8_t(data[off]) << 8) | uint8_t(data[off + 1]));
+      m_inputs[i].stick_x = data[off + 2];
+      m_inputs[i].stick_y = data[off + 3];
+    }
   }
 
   frame& m64::operator[](uint32_t frame) { return m_inputs[frame]; }
