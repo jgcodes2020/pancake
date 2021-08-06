@@ -16,15 +16,12 @@ ContinuationIndentWidth: 2
 Cpp11BracedListStyle: "true"
 IncludeCategories:
   # POSIX
-  - Regex: '^<(aio|libgen|spawn|arpa/inet|cpio|monetary|mqueue|dirent|ndbm|dlfcn|net/if|syslog|netdb|strings|tar|fcntl|\
-            netinet/in|stropts|termios|netinet/tcp|nl_types|fmtmsg|poll|trace|fnmatch|pthread|ulimit|ftw|pwd|unistd|glob|\
-            regex|utime|grp|sched|utmpx|iconv|search|semaphore|wordexp|langinfo|sys\/[a-z]+).h>'
-    Priority: 3
-  - Regex: '^<(c[a-z]+|[a-z]+.h)>$'
+  - Regex: '^<[^.]+\.h>'
     Priority: 1
-  - Regex: '^<([a-z_])>$'
+  - Regex: '^<([^.]+)>$'
     Priority: 2
-  - Regex: ''
+  - Regex: '^<([^.].h(pp|xx|h))>$'
+    Priority: 3
 IndentPPDirectives: BeforeHash
 NamespaceIndentation: All
 PointerAlignment: Left

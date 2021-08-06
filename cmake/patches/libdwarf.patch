@@ -1,0 +1,81 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 71727286..084c8554 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -306,34 +306,36 @@ check_c_source_compiles([=[
+   } ]=]  HAVE_REGEX)
+ 
+ set(CMAKE_REQUIRED_LIBRARIES z)
+-check_c_source_compiles( [=[
+-  #include "zlib.h"
+-  int main()
+-  {
+-      Bytef dest[100];
+-      uLongf destlen = 100;
+-      Bytef *src = 0;
+-      uLong srclen = 3;
+-      int res = uncompress(dest,&destlen,src,srclen);
+-      if (res == Z_OK) {
+-           /* ALL IS WELL */
+-      }
+-      return 0;
+-  } ]=]  HAVE_ZLIB )
+-check_c_source_compiles( [=[
+-  #include "zlib.h"
+-  int main()
+-  {
+-      Bytef dest[100];
+-      uLongf destlen = 100;
+-      Bytef *src = 0;
+-      uLong srclen = 3;
+-      int res = uncompress(dest,&destlen,src,srclen);
+-      if (res == Z_OK) {
+-           /* ALL IS WELL */
+-      }
+-      return 0;
+-  } ]=]  HAVE_ZLIB_H )
++# check_c_source_compiles( [=[
++#   #include "zlib.h"
++#   int main()
++#   {
++#       Bytef dest[100];
++#       uLongf destlen = 100;
++#       Bytef *src = 0;
++#       uLong srclen = 3;
++#       int res = uncompress(dest,&destlen,src,srclen);
++#       if (res == Z_OK) {
++#            /* ALL IS WELL */
++#       }
++#       return 0;
++#   } ]=]  HAVE_ZLIB )
++# check_c_source_compiles( [=[
++#   #include "zlib.h"
++#   int main()
++#   {
++#       Bytef dest[100];
++#       uLongf destlen = 100;
++#       Bytef *src = 0;
++#       uLong srclen = 3;
++#       int res = uncompress(dest,&destlen,src,srclen);
++#       if (res == Z_OK) {
++#            /* ALL IS WELL */
++#       }
++#       return 0;
++#   } ]=]  HAVE_ZLIB_H )
++set(HAVE_ZLIB no)
++set(HAVE_ZLIB_H no)
+ set(CMAKE_REQUIRED_LIBRARIES)
+ if (HAVE_ZLIB) 
+   # For linking in libz
+diff --git a/src/lib/libdwarf/CMakeLists.txt b/src/lib/libdwarf/CMakeLists.txt
+index f1763436..ef6867b4 100644
+--- a/src/lib/libdwarf/CMakeLists.txt
++++ b/src/lib/libdwarf/CMakeLists.txt
+@@ -120,3 +120,6 @@ install(DIRECTORY libdwarf DESTINATION include/
+ install(
+     FILES ${CMAKE_CURRENT_SOURCE_DIR}/libdwarf.h
+     DESTINATION include/libdwarf)
++install(
++  FILES ${CMAKE_CURRENT_SOURCE_DIR}/dwarf.h
++  DESTINATION include/libdwarf)
+\ No newline at end of file

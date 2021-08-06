@@ -1,19 +1,24 @@
+#include "pancake/dwarf/memory.hpp"
 #include <pancake/expr/compile.hpp>
 
-#include <pancake/dwarf.hpp>
+#include <pancake/dwarf/functions.hpp>
 #include <pancake/expr/parse.hpp>
 #include <pancake/overload.hpp>
 #include <iostream>
 #include <algorithm>
+#include <limits>
+#include <memory>
+#include <string>
 #include <sstream>
 #include <stdexcept>
 
-using namespace dwarf;
-
 using std::stringstream, std::invalid_argument, std::cerr;
+using std::unique_ptr, std::shared_ptr, std::string;
+
+using pdwarf::dw_signed, pdwarf::attr_type, pdwarf::die_tag;
 
 namespace {
-  void print_ast(std::ostream& out, const pancake::expr::expr_ast& ast, size_t limit) {
+  void print_ast(std::ostream& out, const pancake::expr::expr_ast& ast, size_t limit = std::numeric_limits<size_t>::max()) {
     out << ast.global;
     for (size_t i = 0; i < std::min(ast.steps.size(), limit); i++) {
       std::visit(overload {
@@ -29,30 +34,51 @@ namespace {
 }
 
 namespace pancake::expr {
-  const expr_eval compile(const expr_ast& ast, dw_debug& dbg) {
+  const expr_eval compile(const expr_ast& ast, shared_ptr<Dwarf_Debug_s>& dbg) {
     expr_eval result;
     
     result.global = ast.global;
+    std::unique_ptr<Dwarf_Die_s, pdwarf::dwarf_deleter<Dwarf_Die>> die;
+    {
+      dw_signed size;
+      Dwarf_Global* globals_r = pdwarf::get_globals(dbg, size);
+      bool found_global = false;
+      auto globals = pdwarf::dwarf_make_unique<Dwarf_Global[]>(
+        globals_r, dbg, size
+      );
+      for (int i = 0; i < size; i++) {
+        if (pdwarf::global_name(globals[i], dbg) == ast.global) {
+          die.reset(pdwarf::global_die(globals[i], dbg));
+          found_global = true;
+          break;
+        }
+      }
+      if (!found_global) {
+        stringstream fmt;
+        fmt << "Global " << ast.global << " is nonexistent";
+        throw std::invalid_argument(fmt.str());
+      }
+    }
     
-    dw_die die = dbg.list_globals()[ast.global].as_die();
     // resolve incomplete DIE
-    if (die.has_attr(DW_AT::specification))
-      die = die.attr(DW_AT::specification).as_linked_die();
+    if (pdwarf::has_attr(die, attr_type::specification, dbg))
+      die.reset(pdwarf::attr<Dwarf_Die>(die, attr_type::specification, dbg));
     // find DIE type
-    die = die.attr(DW_AT::type).as_linked_die();
+    die.reset(pdwarf::attr<Dwarf_Die>(die, attr_type::type, dbg));
     
-    if (die.tag() == DW_TAG::typedef_)
-      die = die.attr(DW_AT::type).as_linked_die();
+    if (pdwarf::tag(die, dbg) == pdwarf::die_tag::typedef_)
+      die.reset(pdwarf::attr<Dwarf_Die>(die, attr_type::type, dbg));
     // struct deref flag
     bool deref_struct_ptr = false;
     
     for (size_t i = 0; i < ast.steps.size(); i++) {
-      if (die.tag() == DW_TAG::typedef_)
-        die = die.attr(DW_AT::type).as_linked_die();
+      //cerr << "Processing \"" << ast.steps[i] << "\"\n";
+      if (pdwarf::tag(die, dbg) == pdwarf::die_tag::typedef_)
+        die.reset(pdwarf::attr<Dwarf_Die>(die, attr_type::type, dbg));
       visit(overload {
         [&](const expr_ast::member& step) mutable -> void {
-          if (die.tag() == DW_TAG::pointer_type) {
-            die = die.attr(DW_AT::type).as_linked_die();
+          if (pdwarf::tag(die, dbg) == pdwarf::die_tag::pointer_type) {
+            die.reset(pdwarf::attr<Dwarf_Die>(die, attr_type::type, dbg));
             if (!deref_struct_ptr) {
               deref_struct_ptr = true;
             }
@@ -60,9 +86,9 @@ namespace pancake::expr {
               result.steps.push_back(expr_eval::step(expr_eval::indirect()));
             }
           }
-          DW_TAG tag = die.tag();
+          die_tag tag = pdwarf::tag(die, dbg);
           // make sure it is a struct or union
-          if (tag != DW_TAG::structure_type && tag != DW_TAG::union_type) {
+          if (tag != die_tag::structure_type && tag != die_tag::union_type) {
             stringstream fmt;
             fmt << "Expected \033[0;38;5;202m";
             print_ast(fmt, ast, i);
@@ -71,13 +97,21 @@ namespace pancake::expr {
             throw invalid_argument(fmt.str());
           }
           
-          dw_die child = die.first_child();
+          auto child = pdwarf::dwarf_make_unique<Dwarf_Die>(
+            pdwarf::child(die, dbg));
+          auto set_die = [](decltype(child)& ptr, Dwarf_Die next) {
+            if (next == nullptr) return false;
+            else {
+              ptr.reset(next);
+              return true;
+            }
+          };
           do {
-            if (child.attr(DW_AT::name).as_string() == step.name)
+            if (pdwarf::attr<string>(child, attr_type::name, dbg) == step.name)
               break;
-          } while ((child = child.sibling()));
+          } while (set_die(child, pdwarf::siblingof(child, dbg)));
           // make sure there is a child
-          if (child.is_null()) {
+          if (child.get() == nullptr) {
             stringstream fmt;
             fmt << "\033[0;38;5;202m" << step.name;
             fmt << "\033[0m is not a member of \033[0;38;5;38m";
@@ -85,21 +119,21 @@ namespace pancake::expr {
             fmt << "\033[0m";
             throw invalid_argument(fmt.str());
           }
-          cerr << "Member name: " << child.attr(DW_AT::name).as_string() << "\n";
-          die = child.attr(DW_AT::type).as_linked_die();
-          if (tag == DW_TAG::structure_type) {
+          //cerr << "Found member: " << pdwarf::attr<string>(child, attr_type::name, dbg) << "\n";
+          die.reset(pdwarf::attr<Dwarf_Die>(child, attr_type::type, dbg));
+          if (tag == die_tag::structure_type) {
             // offset by address of struct member
-            intptr_t off = static_cast<intptr_t>(child.attr(DW_AT::data_member_location).as_unsigned_int());
+            intptr_t off = static_cast<intptr_t>(pdwarf::attr<Dwarf_Unsigned>(child, attr_type::data_member_location, dbg));
             if (off != 0) {
               result.steps.push_back(expr_eval::step(expr_eval::offset {off}));
             }
           }
-          if (die.tag() == DW_TAG::typedef_)
-            die = die.attr(DW_AT::type).as_linked_die();
+          if (pdwarf::tag(die, dbg) == pdwarf::die_tag::typedef_)
+            die.reset(pdwarf::attr<Dwarf_Die>(die, attr_type::type, dbg));
         },
         [&](const expr_ast::subscript& step) mutable -> void {
-          DW_TAG tag = die.tag();
-          if (tag != DW_TAG::pointer_type && tag != DW_TAG::array_type) {
+          die_tag tag = pdwarf::tag(die, dbg);
+          if (tag != die_tag::pointer_type && tag != die_tag::array_type) {
             stringstream fmt;
             fmt << "Expected \033[0;38;5;202m";
             print_ast(fmt, ast, i);
@@ -107,60 +141,55 @@ namespace pancake::expr {
             fmt << tag;
             throw invalid_argument(fmt.str());
           }
-          if (die.has_attr(DW_AT::byte_stride)) {
+          if (pdwarf::has_attr(die, attr_type::byte_stride, dbg)) {
             // use byte stride if available
             result.steps.push_back(
               expr_eval::step(expr_eval::offset {static_cast<intptr_t>(
-                die.attr(DW_AT::byte_stride).as_unsigned_int() * step.index
+                pdwarf::attr<Dwarf_Unsigned>(die, attr_type::byte_stride, dbg) * step.index
               )})
             );
           }
           else {
             // size of member otherwise
-            dw_die type_die = die.attr(DW_AT::type).as_linked_die();
-            if (type_die.tag() == DW_TAG::typedef_)
-              type_die = type_die.attr(DW_AT::type).as_linked_die();
+            auto type_die = pdwarf::dwarf_make_unique<Dwarf_Die>(pdwarf::attr<Dwarf_Die>(die, attr_type::type, dbg));
+            if (pdwarf::tag(type_die, dbg) == pdwarf::die_tag::typedef_)
+              type_die.reset(pdwarf::attr<Dwarf_Die>(type_die, attr_type::type, dbg));
+              
+            auto size = pdwarf::attr<Dwarf_Unsigned>(type_die, attr_type::byte_size, dbg);
+            //cerr << "Size value is " << size << "\n";
             result.steps.push_back(
               expr_eval::step(expr_eval::offset {static_cast<intptr_t>(
-                type_die.attr(DW_AT::byte_size).as_unsigned_int() * step.index
+                size * step.index
               )})
             );
           }
-          die = die.attr(DW_AT::type).as_linked_die();
-          if (die.tag() == DW_TAG::typedef_)
-            die = die.attr(DW_AT::type).as_linked_die();
+          die.reset(pdwarf::attr<Dwarf_Die>(die, attr_type::type, dbg));
+          if (pdwarf::tag(die, dbg) == pdwarf::die_tag::typedef_)
+            die.reset(pdwarf::attr<Dwarf_Die>(die, attr_type::type, dbg));
         }
       }, ast.steps[i]);
     }
-    if (die.tag() == DW_TAG::typedef_)
-      die = die.attr(DW_AT::type).as_linked_die();
+    if (pdwarf::tag(die, dbg) == pdwarf::die_tag::typedef_)
+      die.reset(pdwarf::attr<Dwarf_Die>(die, attr_type::type, dbg));
     
-    DW_TAG tag = die.tag();
+    die_tag tag = pdwarf::tag(die, dbg);
     
     // Throw if not base type or pointer type
     switch (tag) {
-      case DW_TAG::base_type:
-      case DW_TAG::pointer_type: 
+      case die_tag::base_type:
+      case die_tag::pointer_type: 
       break;
       default: {
         stringstream fmt;
-        fmt << "Expression \033[0;38;5;202" << ast.global;
-        for (size_t i = 0; i < ast.steps.size(); i++) {
-          visit(overload {
-            [&](const expr_ast::member& step) {
-              fmt << "." << step.name;
-            },
-            [&](const expr_ast::subscript& step) {
-              fmt << "[" << step.index << "]";
-            }
-          }, ast.steps[i]);
-        }
+        fmt << "Expression \033[0;38;5;202";
+        print_ast(fmt, ast);
         fmt << "\033[0m does not refer to a base type or pointer. "
         "\033[0;1mstruct\033[0ms and \033[0;1munion\033[0ms are currently unsupported.";
         throw std::domain_error(fmt.str());
       }
     }
     
+    //cerr << result << "\n";
     return result;
   }
 }

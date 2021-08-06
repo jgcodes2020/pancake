@@ -71,17 +71,18 @@ namespace pancake {
       throw invalid_m64(fmt.str());
     }
     
-    auto read_int32 = [](const char* p, uint32_t& o) {
+    static void (*read_int32)(const char*, uint32_t&) = 
+      [](const char* p, uint32_t& o) {
       o = static_cast<uint8_t>(p[0]);
-      o <<= 8; o |= static_cast<uint8_t>(p[1]);
-      o <<= 8; o |= static_cast<uint8_t>(p[2]);
-      o <<= 8; o |= static_cast<uint8_t>(p[3]);
+      o |= static_cast<uint8_t>(p[1]) << 8;
+      o |= static_cast<uint8_t>(p[2]) << 16;
+      o |= static_cast<uint8_t>(p[3]) << 24;
     };
-    auto read_int16 = [](const char* p, uint16_t& o) {
+    static void(*read_int16)(const char*, uint16_t&) = [](const char* p, uint16_t& o) {
       o = static_cast<uint8_t>(p[0]);
-      o <<= 8; o |= static_cast<uint8_t>(p[1]);
+      o |= static_cast<uint8_t>(p[1]) << 8;
     };
-    auto read_str = [](const char* p, string& o) {
+    static void(*read_str)(const char*, string&) = [](const char* p, string& o) {
       o = p;
     };
     {
@@ -100,6 +101,7 @@ namespace pancake {
       metadata.vis_per_s = data[M64_OFFSETS::vis_per_s];
       metadata.num_controllers = data[M64_OFFSETS::num_controllers];
       read_int32(&data[M64_OFFSETS::num_input_frames], metadata._num_input_frames);
+      std::cerr << "Input frame len is: " << metadata._num_input_frames << "\n";
       // perform type-punning pointer casts, since underlying types are defined
       read_int16(&data[M64_OFFSETS::start_type], *reinterpret_cast<uint16_t*>(&metadata.start_type));
       read_int32(&data[M64_OFFSETS::controllers], *reinterpret_cast<uint32_t*>(&metadata.controllers));
@@ -117,12 +119,9 @@ namespace pancake {
       read_str(&data[M64_OFFSETS::description], metadata.description);
     }
     
-    // Seems to immediately lag any computer
     m_inputs = std::vector<frame>(metadata.num_input_frames());
     // seek to inputs at 0x0100
-    debug::pause("Before vector resize...");
     in.seekg(M64_OFFSETS::start_of_data, ios::beg);
-    debug::pause("After vector resize...");
     // x64 is little-endian, so everything lines up
     in.read(reinterpret_cast<char*>(&m_inputs[0]), 4 * metadata.num_input_frames());
   }

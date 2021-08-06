@@ -66,7 +66,7 @@ static T get_proc_address(HMODULE handle, string name) {
 namespace pancake {
   
   struct sm64::impl {
-    HMODULE so;
+    HMODULE dll;
     dw_debug dbg;
     string path;
     

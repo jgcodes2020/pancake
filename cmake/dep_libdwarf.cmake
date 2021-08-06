@@ -31,15 +31,20 @@ if(MSVC)
 endif()
 
 # External project
-# libdwarf simply checks if zlib is linked
+# Patch disables linking zlib, installs dwarf.h
 ExternalProject_Add(LIBDWARF_extproj
   PREFIX           "${LIBDWARF_PREFIX}"
   GIT_REPOSITORY   ${LIBDWARF_GIT_URL}
   GIT_TAG          ${LIBDWARF_VERSION}
-  PATCH_COMMAND    git apply "${CMAKE_CURRENT_LIST_DIR}/patches/libdwarf_no_zlib.patch"
+  PATCH_COMMAND    git apply "${CMAKE_CURRENT_LIST_DIR}/patches/libdwarf.patch" || echo "Patch is already applied...?"
   INSTALL_DIR      ${LIBDWARF_INSTALL_DIR}
   CMAKE_ARGS       ${LIBDWARF_CMAKE_ARGS}
   BUILD_BYPRODUCTS ${LIBDWARF_LIBFILE}
+  USES_TERMINAL_DOWNLOAD on
+  USES_TERMINAL_UPDATE on
+  USES_TERMINAL_CONFIGURE on
+  USES_TERMINAL_BUILD on
+  USES_TERMINAL_INSTALL on
 )
 
 # Define target for easier inclusion

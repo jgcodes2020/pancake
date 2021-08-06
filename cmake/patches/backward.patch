@@ -1,0 +1,17 @@
+diff --git a/backward.hpp b/backward.hpp
+index 93037d5..806bae8 100644
+--- a/backward.hpp
++++ b/backward.hpp
+@@ -242,9 +242,9 @@
+ 
+ #if BACKWARD_HAS_DWARF == 1
+ #include <algorithm>
+-#include <dwarf.h>
+-#include <libdwarf.h>
+-#include <libelf.h>
++#include <libdwarf/dwarf.h>
++#include <libdwarf/libdwarf.h>
++// #include <libelf.h>
+ #include <map>
+ #ifndef _GNU_SOURCE
+ #define _GNU_SOURCE

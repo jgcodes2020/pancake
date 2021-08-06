@@ -159,8 +159,6 @@ namespace pancake {
   class m64 {
   private:
     std::vector<frame> m_inputs;
-    uint32_t m_inputs_len;
-
   public:
     using iterator       = decltype(m_inputs)::iterator;
     using const_iterator = decltype(m_inputs)::const_iterator;

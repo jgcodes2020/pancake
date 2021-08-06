@@ -11,16 +11,16 @@ function(pancake_rsrc_gen var_outputs src_name)
   add_custom_command(
     OUTPUT ${gen_src} ${gen_inc}
     MAIN_DEPENDENCY ${abs_path}
-    COMMAND python3 "${PROJECT_SOURCE_DIR}/scripts/rsrc_gen.py" -C "${gen_src}" -H "${gen_inc}" "${abs_path}"
+    COMMAND python3 "${PROJECT_SOURCE_DIR}/scripts/rsrc_gen_v2.py" -C "${gen_src}" -H "${gen_inc}" "${abs_path}"
   )
 endfunction()
 
 # Sources
 set(pancake_sources 
-  "common/movie.cpp" 
-  "common/dwarf.cpp" 
+  "common/movie.cpp"
   "common/expr/compile.cpp" 
   "common/expr/parse.cpp" 
+  "common/dwarf/error.cpp"
 )
 if(${CMAKE_SYSTEM_NAME} STREQUAL "Windows")
   list(APPEND pancake_sources
@@ -59,8 +59,8 @@ endif()
 # Include both public/private headers
 target_include_directories(pancake 
   PUBLIC ${pancake_export} 
-  PRIVATE ${pancake_private}
-  PRIVATE ${pancake_genhdrs}
+  PUBLIC ${pancake_private}
+  PUBLIC ${pancake_genhdrs}
 )
 
 if(${CMAKE_SYSTEM_NAME} STREQUAL "Windows")

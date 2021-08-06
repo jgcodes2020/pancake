@@ -286,7 +286,7 @@ namespace dwarf {
     }
   }
   
-  dw_attribute dw_die::attr(DW_AT name) {
+  dw_attribute dw_die::attr(attr_name name) {
     check_not_null(m_die, "Contained DIE was null");
     Dwarf_Error err;
     int rcode;
@@ -300,7 +300,7 @@ namespace dwarf {
     return dw_attribute(m_dbg, attr);
   }
   
-  bool dw_die::has_attr(DW_AT name) {
+  bool dw_die::has_attr(attr_name name) {
     check_not_null(m_die, "Contained DIE was null");
     Dwarf_Bool x;
     Dwarf_Error err;
@@ -312,7 +312,7 @@ namespace dwarf {
     return x;
   }
   
-  DW_TAG dw_die::tag() {
+  tag dw_die::tag() {
     check_not_null(m_die, "Contained DIE was null");
     Dwarf_Half c_tag;
     Dwarf_Error err;
@@ -320,7 +320,7 @@ namespace dwarf {
     if (rcode == DW_DLV::ERROR) {
       throw dw_error(m_dbg, err);
     }
-    return static_cast<DW_TAG>(c_tag);
+    return static_cast<tag>(c_tag);
   }
   
   dw_attribute_list dw_die::list_attrs() {
@@ -369,7 +369,7 @@ namespace dwarf {
   
   // dw_attribute
   
-  DW_FORM dw_attribute::form() {
+  attr_form dw_attribute::form() {
     
     
     Dwarf_Error err;
@@ -380,10 +380,10 @@ namespace dwarf {
       throw dw_error(m_dbg, err);
     }
     
-    return static_cast<DW_FORM>(form);
+    return static_cast<attr_form>(form);
   }
   
-  DW_AT dw_attribute::name() {
+  attr_name dw_attribute::name() {
     Dwarf_Error err;
     
     uint16_t form;
@@ -391,7 +391,7 @@ namespace dwarf {
     if (rcode == DW_DLV::ERROR) {
       throw dw_error(m_dbg, err);
     }
-    return static_cast<DW_AT>(form);
+    return static_cast<attr_name>(form);
   }
   
   string dw_attribute::as_string() {

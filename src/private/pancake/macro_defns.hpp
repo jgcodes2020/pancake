@@ -13,7 +13,7 @@
 
 #include <string>
 #include <nlohmann/json.hpp>
-#include "pancake_rsrc_sm64_macro_defns.json.hpp"
+#include <pancake_rsrc_sm64_macro_defns.json.hpp>
 
 namespace pancake {
   class sm64_macro_defns {
@@ -21,7 +21,7 @@ namespace pancake {
     nlohmann::json json;
     sm64_macro_defns() {
       json = nlohmann::json::parse(
-        std::string(resources::sm64_macro_defns__json.begin(), resources::sm64_macro_defns__json.end())
+        resources::sm64_macro_defns__json
       );
     }
   public:

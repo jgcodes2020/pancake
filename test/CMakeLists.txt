@@ -1,4 +1,4 @@
-add_executable(experiment "cpp/experiment.cpp")
+add_executable(experiment "cpp/m64_test.cpp")
 
 set_target_properties(experiment PROPERTIES
   # Require C++17

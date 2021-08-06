@@ -11,6 +11,7 @@
 #define _PANCAKE_SM64_HPP_
 
 #include <any>
+#include <cstddef>
 #include <filesystem>
 #include <memory>
 #include <sstream>
@@ -23,6 +24,8 @@
 
 #include <pancake/exception.hpp>
 #include <pancake/movie.hpp>
+
+using std::nullptr_t;
 
 namespace pancake {
 

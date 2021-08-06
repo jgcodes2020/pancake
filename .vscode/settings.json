@@ -19,5 +19,6 @@
   "mesonbuild.configureOnOpen": true,
   "editor.renderIndentGuides": true,
   "files.eol": "\n",
-  "clangd.arguments": ["--compile-commands-dir=./build"]
+  // for clangd
+  "clangd.arguments": ["--compile-commands-dir=./build"],
 }

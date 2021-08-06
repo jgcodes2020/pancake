@@ -11,13 +11,15 @@
 #ifndef _PANCAKE_EXPR_COMPILE_HPP_
 #define _PANCAKE_EXPR_COMPILE_HPP_
 #include <cstdint>
+#include <memory>
 #include <string>
 #include <variant>
 #include <vector>
 #include <iostream>
 
-#include <pancake/dwarf.hpp>
+#include <libdwarf/libdwarf.h>
 #include <pancake/expr/parse.hpp>
+#include <pancake/dwarf/functions.hpp>
 #include <pancake/overload.hpp>
 
 namespace pancake::expr {
@@ -40,6 +42,18 @@ namespace pancake::expr {
     std::vector<step> steps;
   };
   
+  inline std::ostream& operator<<(std::ostream& out, const expr_eval::step& s) {
+    visit(overload {
+        [&](expr_eval::offset step) mutable -> void {
+          out << " -> offset by " << step.off;
+        },
+        [&](expr_eval::indirect step) mutable -> void {
+          out << " -> indirect";
+        }
+      }, s);
+    return out;
+  }
+  
   inline std::ostream& operator<<(std::ostream& out, const expr_eval& e) {
     out << "get " << e.global;
     for (auto& i : e.steps) {
@@ -61,6 +75,6 @@ namespace pancake::expr {
    * @param ast an AST to compile
    * @return const compiled_expr the offsets
    */
-  const expr_eval compile(const expr_ast& ast, dwarf::dw_debug& dbg);
+  const expr_eval compile(const expr_ast& ast, std::shared_ptr<Dwarf_Debug_s>& dbg);
 }
 #endif

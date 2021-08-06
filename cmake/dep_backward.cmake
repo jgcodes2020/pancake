@@ -28,7 +28,13 @@ ExternalProject_Add(BACKWARD_extproj
   GIT_REPOSITORY    ${BACKWARD_GIT_URL}
   GIT_TAG           ${BACKWARD_VERSION}
   INSTALL_DIR       ${BACKWARD_INSTALL_DIR}
+  PATCH_COMMAND     git apply "${CMAKE_CURRENT_LIST_DIR}/patches/backward.patch" || echo "Patch is already applied...?"
   CMAKE_ARGS        ${BACKWARD_CMAKE_ARGS}
+  USES_TERMINAL_DOWNLOAD on
+  USES_TERMINAL_UPDATE on
+  USES_TERMINAL_CONFIGURE on
+  USES_TERMINAL_BUILD on
+  USES_TERMINAL_INSTALL on
 )
 
 # Dependency

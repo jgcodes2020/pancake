@@ -21,72 +21,8 @@ using namespace std;
 
 // DEBUG PRINTER
 
-#ifdef _WIN32
-#include <windows.h>
-#include <DbgHelp.h>
 inline void stack_trace() {
-  void*          stack[50];
-  uint16_t       frames;
-  SYMBOL_INFO*   symbol;
-  IMAGEHLP_LINE* line;
-  unsigned long  line_dspl;
-  HANDLE         proc;
-  
-  proc = GetCurrentProcess();
-  SymInitialize(proc, nullptr, true);
-  
-  frames               = CaptureStackBackTrace(0, 100, stack, nullptr);
-  symbol               = reinterpret_cast<SYMBOL_INFO*>(calloc(sizeof(SYMBOL_INFO) + 256*sizeof(char), 1));
-  symbol->MaxNameLen   = 50;
-  symbol->SizeOfStruct = sizeof(SYMBOL_INFO);
-  line                 = reinterpret_cast<IMAGEHLP_LINE*>(calloc(sizeof(IMAGEHLP_LINE), 1));
-  
-  // Find line maximums first
-  unsigned max_name_len = 0;
-  unsigned max_src_len = 0;
-  for (size_t i = 0; i < frames; i++) {
-    SymFromAddr(proc, (uint64_t) (stack[i]), 0, symbol);
-    SymGetLineFromAddr(proc, (uint64_t) (stack[i]), &line_dspl, line);
-    // Max name length
-    if (symbol->NameLen > max_name_len) max_name_len = symbol->NameLen; 
-    // Max source len
-    string src = line->FileName;
-    src = src.substr(src.rfind('\\') + 1);
-    unsigned src_len = src.length() + 2 + (fast_ilog10(line->LineNumber) + 1);
-    if (src_len > max_src_len) max_src_len = src_len;
-  }
-  uint16_t max_digits = fast_ilog10(frames) + 1;
-  
-  clog << "━"_s * (max_digits + 1) << "┯" << "━"_s * ((max_name_len + 4) + (max_src_len + 1) + 1) << "┑\n";
-  
-  for (size_t i = 0; i < frames; i++) {
-    SymFromAddr(proc, (uint64_t) (stack[i]), 0, symbol);
-    SymGetLineFromAddr(proc, (uint64_t) (stack[i]), &line_dspl, line);
-    auto f = clog.flags();
-    // Stack pos
-    clog << setfill(' ') << setw(max_digits) << right << (frames - i - 1) << " │ ";
-    // Symbol name
-    clog << setw(max_name_len) << left << symbol->Name << " in ";
-    // Source file and line
-    string fname = line->FileName;
-    fname = fname.substr(fname.rfind('\\') + 1);
-    stringstream fmt;
-    fmt << fname << ":" << line->LineNumber;
-    clog << setw(max_src_len) << left << fmt.str() << " │\n";
-    clog.flags(f);
-  }
-  clog << "━"_s * (max_digits + 1) << "┷" << "━"_s * ((max_name_len + 4) + (max_src_len + 1) + 1) << "┙\n";
-  
-  free(symbol);
-  free(line);
 }
-#elif __has_include(<execinfo.h>)
-#include <execinfo.h>
-inline void stack_trace() {
-  void* stack[50];
-  
-}
-#endif
 
 inline void on_signal(int sig) {
   switch (sig) {

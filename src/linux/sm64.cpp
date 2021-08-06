@@ -27,10 +27,9 @@
 #include <pancake/overload.hpp>
 #include <pancake/utils/strcvt.hpp>
 #include <pancake/exception.hpp>
-#include <pancake/dwarf.hpp>
+#include <pancake/dwarf/functions.hpp>
 
 using namespace std;
-using namespace dwarf;
 using namespace LIEF;
 using namespace nlohmann;
 
@@ -58,14 +57,14 @@ namespace pancake {
   
   struct sm64::impl {
     void* so;
-    dw_debug dbg;
+    std::shared_ptr<Dwarf_Debug_s> dbg;
     string path;
     
     std::unordered_map<string, expr_eval> cache;
     
     impl(string path) : 
       so(dlopen(path.c_str(), RTLD_LAZY)),
-      dbg(dw_debug(path)),
+      dbg(pdwarf::dwarf_make_shared<Dwarf_Debug>(pdwarf::init_path(path))),
       path(path) {
       get_proc_address<void(*)(void)>(so, "sm64_init")();
     }
@@ -83,13 +82,13 @@ namespace pancake {
       }
       else {
         eval = compile(
-          parse(preprocess(expr)),
+          parse(expr),
         dbg);
         cache.insert(pair<string, expr_eval>(expr, eval));
       }
       
       uint8_t* ptr = get_proc_address<uint8_t*>(so, eval.global);
-      cerr << eval << "\n";
+      // cerr << eval << "\n";
       for (size_t i = 0; i < eval.steps.size(); i++) {
         visit(overload {
           [&](const expr_eval::offset& step) mutable -> void {
