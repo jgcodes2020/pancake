@@ -8,3 +8,5 @@ subprojects/*
 install
 # build cache
 build/**
+# log files
+*.log
