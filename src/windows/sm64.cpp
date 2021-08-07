@@ -1,3 +1,5 @@
+#include "pancake/dwarf/functions.hpp"
+#include "pancake/dwarf/memory.hpp"
 #include <pancake/sm64.hpp>
 
 #include <any>
@@ -26,10 +28,8 @@
 #include <pancake/overload.hpp>
 #include <pancake/utils/strcvt.hpp>
 #include <pancake/exception.hpp>
-#include <pancake/dwarf.hpp>
 
 using namespace std;
-using namespace dwarf;
 using namespace LIEF;
 using namespace nlohmann;
 
@@ -67,14 +67,14 @@ namespace pancake {
   
   struct sm64::impl {
     HMODULE dll;
-    dw_debug dbg;
+    std::shared_ptr<Dwarf_Debug_s> dbg;
     string path;
     
     std::unordered_map<string, expr_eval> cache;
     
     impl(string path) : 
       dll(LoadLibraryW(strcvt::to_utf16(path).c_str())),
-      dbg(dw_debug(path)),
+      dbg(pdwarf::dwarf_make_shared<Dwarf_Debug>(pdwarf::init_path(path))),
       path(path) {
       get_proc_address<void(*)(void)>(dll, "sm64_init")();
     }
@@ -92,7 +92,7 @@ namespace pancake {
       }
       else {
         eval = compile(
-          parse(preprocess(expr)),
+          parse(expr),
         dbg);
         cache.insert(pair<string, expr_eval>(expr, eval));
       }
