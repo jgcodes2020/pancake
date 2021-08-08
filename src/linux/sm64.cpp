@@ -40,7 +40,7 @@ using namespace pancake::expr;
 using rvaddress_t = uintptr_t;
 
 template<typename T = void*>
-static T get_proc_address(void* handle, string name) {
+static T get_proc_address(void* handle, const string& name) {
   static_assert(std::is_pointer<T>::value, "OOOF");
   
   void* fp = dlsym(handle, name.c_str());
@@ -60,7 +60,7 @@ namespace pancake {
     std::shared_ptr<Dwarf_Debug_s> dbg;
     string path;
     
-    std::unordered_map<string, expr_eval> cache;
+    std::unordered_map<string, void*> cache;
     
     impl(string path) : 
       so(dlopen(path.c_str(), RTLD_LAZY)),
@@ -78,13 +78,12 @@ namespace pancake {
       expr_eval eval;
       auto search = cache.find(expr);
       if (search != cache.end()) {
-        eval = search->second;
+        return search->second;
       }
       else {
         eval = compile(
           parse(expr),
         dbg);
-        cache.insert(pair<string, expr_eval>(expr, eval));
       }
       
       uint8_t* ptr = get_proc_address<uint8_t*>(so, eval.global);
@@ -106,6 +105,7 @@ namespace pancake {
           }
         }, eval.steps[i]);
       }
+      cache.emplace(expr, ptr);
       return ptr;
     }
     
