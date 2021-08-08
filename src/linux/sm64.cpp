@@ -40,7 +40,7 @@ using namespace pancake::expr;
 using rvaddress_t = uintptr_t;
 
 template<typename T = void*>
-static T get_proc_address(void* handle, string name) {
+static T get_proc_address(void* handle, const string& name) {
   static_assert(std::is_pointer<T>::value, "OOOF");
   
   void* fp = dlsym(handle, name.c_str());
