@@ -59,8 +59,8 @@ endif()
 # Include both public/private headers
 target_include_directories(pancake 
   PUBLIC ${pancake_export} 
-  PUBLIC ${pancake_private}
-  PUBLIC ${pancake_genhdrs}
+  PRIVATE ${pancake_private}
+  PRIVATE ${pancake_genhdrs}
 )
 
 if(${CMAKE_SYSTEM_NAME} STREQUAL "Windows")
