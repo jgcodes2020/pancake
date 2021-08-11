@@ -20,7 +20,7 @@
 #include <libdwarf/libdwarf.h>
 #include <pancake/expr/parse.hpp>
 #include <pancake/dwarf/functions.hpp>
-#include <pancake/overload.hpp>
+#include <pancake/stx/overload.hpp>
 
 namespace pancake::expr {
   /**

@@ -25,7 +25,7 @@
 #include <pancake/expr/parse.hpp>
 #include <pancake/expr/compile.hpp>
 #include <pancake/macro_defns.hpp>
-#include <pancake/overload.hpp>
+#include <pancake/stx/overload.hpp>
 #include <pancake/utils/strcvt.hpp>
 #include <pancake/exception.hpp>
 
@@ -100,7 +100,7 @@ namespace pancake {
       uint8_t* ptr = get_proc_address<uint8_t*>(dll, eval.global);
       cerr << eval << "\n";
       for (size_t i = 0; i < eval.steps.size(); i++) {
-        visit(overload {
+        visit(stx::overload {
           [&](const expr_eval::offset& step) mutable -> void {
             ptr += step.off;
           },

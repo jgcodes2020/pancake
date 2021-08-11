@@ -3,7 +3,7 @@
 
 #include <pancake/dwarf/functions.hpp>
 #include <pancake/expr/parse.hpp>
-#include <pancake/overload.hpp>
+#include <pancake/stx/overload.hpp>
 #include <iostream>
 #include <algorithm>
 #include <limits>
@@ -21,7 +21,7 @@ namespace {
   void print_ast(std::ostream& out, const pancake::expr::expr_ast& ast, size_t limit = std::numeric_limits<size_t>::max()) {
     out << ast.global;
     for (size_t i = 0; i < std::min(ast.steps.size(), limit); i++) {
-      std::visit(overload {
+      std::visit(stx::overload {
         [&](const pancake::expr::expr_ast::member& step) {
           out << "." << step.name;
         },
@@ -75,7 +75,7 @@ namespace pancake::expr {
       //cerr << "Processing \"" << ast.steps[i] << "\"\n";
       if (pdwarf::tag(die, dbg) == pdwarf::die_tag::typedef_)
         die.reset(pdwarf::attr<Dwarf_Die>(die, attr_type::type, dbg));
-      visit(overload {
+      visit(stx::overload {
         [&](const expr_ast::member& step) mutable -> void {
           if (pdwarf::tag(die, dbg) == pdwarf::die_tag::pointer_type) {
             die.reset(pdwarf::attr<Dwarf_Die>(die, attr_type::type, dbg));

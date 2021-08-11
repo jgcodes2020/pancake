@@ -24,7 +24,6 @@ I will be changing this file from time to time.
 
 #include <pancake/sm64.hpp>
 #include <pancake/movie.hpp>
-#include <pancake/dwarf.hpp>
 
 using namespace std;
 using namespace LIEF;
