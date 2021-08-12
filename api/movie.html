@@ -13,8 +13,6 @@
   
   <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../_static/graphviz.css" type="text/css" />
   <link rel="stylesheet" href="../_static/css/rtd-fix.css" type="text/css" />
 
@@ -33,10 +31,10 @@
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-        <script src="../_static/jquery.js"></script>
-        <script src="../_static/underscore.js"></script>
-        <script src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
     
     <script type="text/javascript" src="../_static/js/theme.js"></script>
 
@@ -44,7 +42,7 @@
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="sm64.hpp" href="sm64.html" />
-    <link rel="prev" title="API" href="index.html" /> 
+    <link rel="prev" title="exception.hpp" href="exception.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -92,6 +90,7 @@
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../index.html">Welcome to Pancake’s documentation!</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="index.html">API</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="exception.html">exception.hpp</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">movie.hpp</a></li>
 <li class="toctree-l2"><a class="reference internal" href="sm64.html">sm64.hpp</a></li>
 </ul>
@@ -167,126 +166,126 @@
             
   <div class="section" id="movie-hpp">
 <span id="api-movie"></span><h1>movie.hpp<a class="headerlink" href="#movie-hpp" title="Permalink to this headline">¶</a></h1>
-<p>Classes to read (write coming soon) data from Mupen64 input files.</p>
-<dl class="cpp struct">
-<dt class="sig sig-object cpp" id="_CPPv4N7pancake5frameE">
-<span id="_CPPv3N7pancake5frameE"></span><span id="_CPPv2N7pancake5frameE"></span><span id="pancake::frame"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">frame</span></span></span><a class="headerlink" href="#_CPPv4N7pancake5frameE" title="Permalink to this definition">¶</a><br /></dt>
+<p>Classes to read and write data from Mupen64 input files.</p>
+<dl class="struct">
+<dt id="_CPPv4N7pancake5frameE">
+<span id="_CPPv3N7pancake5frameE"></span><span id="_CPPv2N7pancake5frameE"></span><span id="pancake::frame"></span><em class="property">struct </em><code class="sig-name descname">frame</code><a class="headerlink" href="#_CPPv4N7pancake5frameE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Represents a frame of input.</p>
-<dl class="cpp enum-class">
-<dt class="sig sig-object cpp" id="_CPPv4N7pancake5frame6buttonE">
-<span id="_CPPv3N7pancake5frame6buttonE"></span><span id="_CPPv2N7pancake5frame6buttonE"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">button</span></span></span><span class="w"> </span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">uint16_t</span></span><a class="headerlink" href="#_CPPv4N7pancake5frame6buttonE" title="Permalink to this definition">¶</a><br /></dt>
+<dl class="enum-class">
+<dt id="_CPPv4N7pancake5frame6buttonE">
+<span id="_CPPv3N7pancake5frame6buttonE"></span><span id="_CPPv2N7pancake5frame6buttonE"></span><em class="property">enum class </em><code class="sig-name descname">button</code> : uint16_t<a class="headerlink" href="#_CPPv4N7pancake5frame6buttonE" title="Permalink to this definition">¶</a><br /></dt>
 <dd></dd></dl>
 
 <p>An enum representing the button bitmask.
 One can apply bitwise operators to it.</p>
 <blockquote>
-<div><dl class="cpp enumerator">
-<dt class="sig sig-object cpp" id="_CPPv4N7pancake5frame1AE">
-<span id="_CPPv3N7pancake5frame1AE"></span><span id="_CPPv2N7pancake5frame1AE"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">A</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0x8000</span></span><a class="headerlink" href="#_CPPv4N7pancake5frame1AE" title="Permalink to this definition">¶</a><br /></dt>
+<div><dl class="enumerator">
+<dt id="_CPPv4N7pancake5frame1AE">
+<span id="_CPPv3N7pancake5frame1AE"></span><span id="_CPPv2N7pancake5frame1AE"></span><em class="property">enumerator </em><code class="sig-name descname">A</code> = 0x8000<a class="headerlink" href="#_CPPv4N7pancake5frame1AE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>The A button.</p>
 </dd></dl>
 
-<dl class="cpp enumerator">
-<dt class="sig sig-object cpp" id="_CPPv4N7pancake5frame1BE">
-<span id="_CPPv3N7pancake5frame1BE"></span><span id="_CPPv2N7pancake5frame1BE"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">B</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0x4000</span></span><a class="headerlink" href="#_CPPv4N7pancake5frame1BE" title="Permalink to this definition">¶</a><br /></dt>
+<dl class="enumerator">
+<dt id="_CPPv4N7pancake5frame1BE">
+<span id="_CPPv3N7pancake5frame1BE"></span><span id="_CPPv2N7pancake5frame1BE"></span><em class="property">enumerator </em><code class="sig-name descname">B</code> = 0x4000<a class="headerlink" href="#_CPPv4N7pancake5frame1BE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>The B button.</p>
 </dd></dl>
 
-<dl class="cpp enumerator">
-<dt class="sig sig-object cpp" id="_CPPv4N7pancake5frame1ZE">
-<span id="_CPPv3N7pancake5frame1ZE"></span><span id="_CPPv2N7pancake5frame1ZE"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Z</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0x2000</span></span><a class="headerlink" href="#_CPPv4N7pancake5frame1ZE" title="Permalink to this definition">¶</a><br /></dt>
+<dl class="enumerator">
+<dt id="_CPPv4N7pancake5frame1ZE">
+<span id="_CPPv3N7pancake5frame1ZE"></span><span id="_CPPv2N7pancake5frame1ZE"></span><em class="property">enumerator </em><code class="sig-name descname">Z</code> = 0x2000<a class="headerlink" href="#_CPPv4N7pancake5frame1ZE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>The Z button.</p>
 </dd></dl>
 
-<dl class="cpp enumerator">
-<dt class="sig sig-object cpp" id="_CPPv4N7pancake5frame5STARTE">
-<span id="_CPPv3N7pancake5frame5STARTE"></span><span id="_CPPv2N7pancake5frame5STARTE"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">START</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0x1000</span></span><a class="headerlink" href="#_CPPv4N7pancake5frame5STARTE" title="Permalink to this definition">¶</a><br /></dt>
+<dl class="enumerator">
+<dt id="_CPPv4N7pancake5frame5STARTE">
+<span id="_CPPv3N7pancake5frame5STARTE"></span><span id="_CPPv2N7pancake5frame5STARTE"></span><em class="property">enumerator </em><code class="sig-name descname">START</code> = 0x1000<a class="headerlink" href="#_CPPv4N7pancake5frame5STARTE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>The START button.</p>
 </dd></dl>
 
-<dl class="cpp enumerator">
-<dt class="sig sig-object cpp" id="_CPPv4N7pancake5frame4D_UPE">
-<span id="_CPPv3N7pancake5frame4D_UPE"></span><span id="_CPPv2N7pancake5frame4D_UPE"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">D_UP</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0x0800</span></span><a class="headerlink" href="#_CPPv4N7pancake5frame4D_UPE" title="Permalink to this definition">¶</a><br /></dt>
+<dl class="enumerator">
+<dt id="_CPPv4N7pancake5frame4D_UPE">
+<span id="_CPPv3N7pancake5frame4D_UPE"></span><span id="_CPPv2N7pancake5frame4D_UPE"></span><em class="property">enumerator </em><code class="sig-name descname">D_UP</code> = 0x0800<a class="headerlink" href="#_CPPv4N7pancake5frame4D_UPE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>The up button on the D-pad.</p>
 </dd></dl>
 
-<dl class="cpp enumerator">
-<dt class="sig sig-object cpp" id="_CPPv4N7pancake5frame6D_DOWNE">
-<span id="_CPPv3N7pancake5frame6D_DOWNE"></span><span id="_CPPv2N7pancake5frame6D_DOWNE"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">D_DOWN</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0x0400</span></span><a class="headerlink" href="#_CPPv4N7pancake5frame6D_DOWNE" title="Permalink to this definition">¶</a><br /></dt>
+<dl class="enumerator">
+<dt id="_CPPv4N7pancake5frame6D_DOWNE">
+<span id="_CPPv3N7pancake5frame6D_DOWNE"></span><span id="_CPPv2N7pancake5frame6D_DOWNE"></span><em class="property">enumerator </em><code class="sig-name descname">D_DOWN</code> = 0x0400<a class="headerlink" href="#_CPPv4N7pancake5frame6D_DOWNE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>The down button on the D-pad.</p>
 </dd></dl>
 
-<dl class="cpp enumerator">
-<dt class="sig sig-object cpp" id="_CPPv4N7pancake5frame6D_LEFTE">
-<span id="_CPPv3N7pancake5frame6D_LEFTE"></span><span id="_CPPv2N7pancake5frame6D_LEFTE"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">D_LEFT</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0x0200</span></span><a class="headerlink" href="#_CPPv4N7pancake5frame6D_LEFTE" title="Permalink to this definition">¶</a><br /></dt>
+<dl class="enumerator">
+<dt id="_CPPv4N7pancake5frame6D_LEFTE">
+<span id="_CPPv3N7pancake5frame6D_LEFTE"></span><span id="_CPPv2N7pancake5frame6D_LEFTE"></span><em class="property">enumerator </em><code class="sig-name descname">D_LEFT</code> = 0x0200<a class="headerlink" href="#_CPPv4N7pancake5frame6D_LEFTE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>The left button on the D-pad.</p>
 </dd></dl>
 
-<dl class="cpp enumerator">
-<dt class="sig sig-object cpp" id="_CPPv4N7pancake5frame7D_RIGHTE">
-<span id="_CPPv3N7pancake5frame7D_RIGHTE"></span><span id="_CPPv2N7pancake5frame7D_RIGHTE"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">D_RIGHT</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0x0100</span></span><a class="headerlink" href="#_CPPv4N7pancake5frame7D_RIGHTE" title="Permalink to this definition">¶</a><br /></dt>
+<dl class="enumerator">
+<dt id="_CPPv4N7pancake5frame7D_RIGHTE">
+<span id="_CPPv3N7pancake5frame7D_RIGHTE"></span><span id="_CPPv2N7pancake5frame7D_RIGHTE"></span><em class="property">enumerator </em><code class="sig-name descname">D_RIGHT</code> = 0x0100<a class="headerlink" href="#_CPPv4N7pancake5frame7D_RIGHTE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>The right button on the D-pad.</p>
 </dd></dl>
 
-<dl class="cpp enumerator">
-<dt class="sig sig-object cpp" id="_CPPv4N7pancake5frame1LE">
-<span id="_CPPv3N7pancake5frame1LE"></span><span id="_CPPv2N7pancake5frame1LE"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">L</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0x0020</span></span><a class="headerlink" href="#_CPPv4N7pancake5frame1LE" title="Permalink to this definition">¶</a><br /></dt>
+<dl class="enumerator">
+<dt id="_CPPv4N7pancake5frame1LE">
+<span id="_CPPv3N7pancake5frame1LE"></span><span id="_CPPv2N7pancake5frame1LE"></span><em class="property">enumerator </em><code class="sig-name descname">L</code> = 0x0020<a class="headerlink" href="#_CPPv4N7pancake5frame1LE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>The L button.</p>
 </dd></dl>
 
-<dl class="cpp enumerator">
-<dt class="sig sig-object cpp" id="_CPPv4N7pancake5frame1RE">
-<span id="_CPPv3N7pancake5frame1RE"></span><span id="_CPPv2N7pancake5frame1RE"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">R</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0x0010</span></span><a class="headerlink" href="#_CPPv4N7pancake5frame1RE" title="Permalink to this definition">¶</a><br /></dt>
+<dl class="enumerator">
+<dt id="_CPPv4N7pancake5frame1RE">
+<span id="_CPPv3N7pancake5frame1RE"></span><span id="_CPPv2N7pancake5frame1RE"></span><em class="property">enumerator </em><code class="sig-name descname">R</code> = 0x0010<a class="headerlink" href="#_CPPv4N7pancake5frame1RE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>The R button.</p>
 </dd></dl>
 
-<dl class="cpp enumerator">
-<dt class="sig sig-object cpp" id="_CPPv4N7pancake5frame4C_UPE">
-<span id="_CPPv3N7pancake5frame4C_UPE"></span><span id="_CPPv2N7pancake5frame4C_UPE"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">C_UP</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0x0008</span></span><a class="headerlink" href="#_CPPv4N7pancake5frame4C_UPE" title="Permalink to this definition">¶</a><br /></dt>
+<dl class="enumerator">
+<dt id="_CPPv4N7pancake5frame4C_UPE">
+<span id="_CPPv3N7pancake5frame4C_UPE"></span><span id="_CPPv2N7pancake5frame4C_UPE"></span><em class="property">enumerator </em><code class="sig-name descname">C_UP</code> = 0x0008<a class="headerlink" href="#_CPPv4N7pancake5frame4C_UPE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>The C-up (also written C^) button.</p>
 </dd></dl>
 
-<dl class="cpp enumerator">
-<dt class="sig sig-object cpp" id="_CPPv4N7pancake5frame6C_DOWNE">
-<span id="_CPPv3N7pancake5frame6C_DOWNE"></span><span id="_CPPv2N7pancake5frame6C_DOWNE"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">C_DOWN</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0x0004</span></span><a class="headerlink" href="#_CPPv4N7pancake5frame6C_DOWNE" title="Permalink to this definition">¶</a><br /></dt>
+<dl class="enumerator">
+<dt id="_CPPv4N7pancake5frame6C_DOWNE">
+<span id="_CPPv3N7pancake5frame6C_DOWNE"></span><span id="_CPPv2N7pancake5frame6C_DOWNE"></span><em class="property">enumerator </em><code class="sig-name descname">C_DOWN</code> = 0x0004<a class="headerlink" href="#_CPPv4N7pancake5frame6C_DOWNE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>The C-down (also written Cv) button.</p>
 </dd></dl>
 
-<dl class="cpp enumerator">
-<dt class="sig sig-object cpp" id="_CPPv4N7pancake5frame6C_LEFTE">
-<span id="_CPPv3N7pancake5frame6C_LEFTE"></span><span id="_CPPv2N7pancake5frame6C_LEFTE"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">C_LEFT</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0x0002</span></span><a class="headerlink" href="#_CPPv4N7pancake5frame6C_LEFTE" title="Permalink to this definition">¶</a><br /></dt>
+<dl class="enumerator">
+<dt id="_CPPv4N7pancake5frame6C_LEFTE">
+<span id="_CPPv3N7pancake5frame6C_LEFTE"></span><span id="_CPPv2N7pancake5frame6C_LEFTE"></span><em class="property">enumerator </em><code class="sig-name descname">C_LEFT</code> = 0x0002<a class="headerlink" href="#_CPPv4N7pancake5frame6C_LEFTE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>The C-left (also written C&lt; or in TASInput as C) button.</p>
 </dd></dl>
 
-<dl class="cpp enumerator">
-<dt class="sig sig-object cpp" id="_CPPv4N7pancake5frame7C_RIGHTE">
-<span id="_CPPv3N7pancake5frame7C_RIGHTE"></span><span id="_CPPv2N7pancake5frame7C_RIGHTE"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">C_RIGHT</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0x0001</span></span><a class="headerlink" href="#_CPPv4N7pancake5frame7C_RIGHTE" title="Permalink to this definition">¶</a><br /></dt>
+<dl class="enumerator">
+<dt id="_CPPv4N7pancake5frame7C_RIGHTE">
+<span id="_CPPv3N7pancake5frame7C_RIGHTE"></span><span id="_CPPv2N7pancake5frame7C_RIGHTE"></span><em class="property">enumerator </em><code class="sig-name descname">C_RIGHT</code> = 0x0001<a class="headerlink" href="#_CPPv4N7pancake5frame7C_RIGHTE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>The C-right (also written C&gt;) button.</p>
 </dd></dl>
 
 </div></blockquote>
 <p>A single input frame.</p>
-<dl class="cpp member">
-<dt class="sig sig-object cpp" id="_CPPv4N7pancake5frame7buttonsE">
-<span id="_CPPv3N7pancake5frame7buttonsE"></span><span id="_CPPv2N7pancake5frame7buttonsE"></span><span id="pancake::frame::buttons__m64::button"></span><a class="reference internal" href="#_CPPv4N7pancake3m64E" title="pancake::m64"><span class="n"><span class="pre">m64</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">button</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">buttons</span></span></span><a class="headerlink" href="#_CPPv4N7pancake5frame7buttonsE" title="Permalink to this definition">¶</a><br /></dt>
+<dl class="member">
+<dt id="_CPPv4N7pancake5frame7buttonsE">
+<span id="_CPPv3N7pancake5frame7buttonsE"></span><span id="_CPPv2N7pancake5frame7buttonsE"></span><span id="pancake::frame::buttons__m64::button"></span><a class="reference internal" href="#_CPPv4N7pancake3m64E" title="pancake::m64">m64</a>::button <code class="sig-name descname">buttons</code><a class="headerlink" href="#_CPPv4N7pancake5frame7buttonsE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>A bitmask representing buttons.</p>
 </dd></dl>
 
-<dl class="cpp member">
-<dt class="sig sig-object cpp" id="_CPPv4N7pancake5frame7stick_xE">
-<span id="_CPPv3N7pancake5frame7stick_xE"></span><span id="_CPPv2N7pancake5frame7stick_xE"></span><span id="pancake::frame::stick_x__int8_t"></span><span class="n"><span class="pre">int8_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">stick_x</span></span></span><a class="headerlink" href="#_CPPv4N7pancake5frame7stick_xE" title="Permalink to this definition">¶</a><br /></dt>
+<dl class="member">
+<dt id="_CPPv4N7pancake5frame7stick_xE">
+<span id="_CPPv3N7pancake5frame7stick_xE"></span><span id="_CPPv2N7pancake5frame7stick_xE"></span><span id="pancake::frame::stick_x__int8_t"></span>int8_t <code class="sig-name descname">stick_x</code><a class="headerlink" href="#_CPPv4N7pancake5frame7stick_xE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>The joystick’s X-value as a signed byte.</p>
 </dd></dl>
 
-<dl class="cpp member">
-<dt class="sig sig-object cpp" id="_CPPv4N7pancake5frame7stick_yE">
-<span id="_CPPv3N7pancake5frame7stick_yE"></span><span id="_CPPv2N7pancake5frame7stick_yE"></span><span id="pancake::frame::stick_y__int8_t"></span><span class="n"><span class="pre">int8_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">stick_y</span></span></span><a class="headerlink" href="#_CPPv4N7pancake5frame7stick_yE" title="Permalink to this definition">¶</a><br /></dt>
+<dl class="member">
+<dt id="_CPPv4N7pancake5frame7stick_yE">
+<span id="_CPPv3N7pancake5frame7stick_yE"></span><span id="_CPPv2N7pancake5frame7stick_yE"></span><span id="pancake::frame::stick_y__int8_t"></span>int8_t <code class="sig-name descname">stick_y</code><a class="headerlink" href="#_CPPv4N7pancake5frame7stick_yE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>The joystick’s Y-value as a signed byte.</p>
 </dd></dl>
 
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N7pancake5frame5applyER4sm64">
-<span id="_CPPv3N7pancake5frame5applyER4sm64"></span><span id="_CPPv2N7pancake5frame5applyER4sm64"></span><span id="pancake::frame::apply__sm64R"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">apply</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="sm64.html#_CPPv4N7pancake4sm64E" title="pancake::sm64"><span class="n"><span class="pre">sm64</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">game</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7pancake5frame5applyER4sm64" title="Permalink to this definition">¶</a><br /></dt>
+<dl class="function">
+<dt id="_CPPv4N7pancake5frame5applyER4sm64">
+<span id="_CPPv3N7pancake5frame5applyER4sm64"></span><span id="_CPPv2N7pancake5frame5applyER4sm64"></span><span id="pancake::frame::apply__sm64R"></span>void <code class="sig-name descname">apply</code><span class="sig-paren">(</span><a class="reference internal" href="sm64.html#_CPPv4N7pancake4sm64E" title="pancake::sm64">sm64</a> &amp;<em>game</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7pancake5frame5applyER4sm64" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Sets the input variables on the libsm64 instance to the inputs of this frame.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -297,39 +296,39 @@ One can apply bitwise operators to it.</p>
 
 </dd></dl>
 
-<dl class="cpp class">
-<dt class="sig sig-object cpp" id="_CPPv4N7pancake3m64E">
-<span id="_CPPv3N7pancake3m64E"></span><span id="_CPPv2N7pancake3m64E"></span><span id="pancake::m64"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">m64</span></span></span><span class="w"> </span><span class="k"><span class="pre">final</span></span><a class="headerlink" href="#_CPPv4N7pancake3m64E" title="Permalink to this definition">¶</a><br /></dt>
+<dl class="class">
+<dt id="_CPPv4N7pancake3m64E">
+<span id="_CPPv3N7pancake3m64E"></span><span id="_CPPv2N7pancake3m64E"></span><span id="pancake::m64"></span><em class="property">class </em><code class="sig-name descname">m64</code> <em class="property">final</em><a class="headerlink" href="#_CPPv4N7pancake3m64E" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>A Mupen64 input movie.
 I plan to add metadata access and saving soon, stay tuned!</p>
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N7pancake3m643m64ENSt10filesystem4pathE">
-<span id="_CPPv3N7pancake3m643m64ENSt10filesystem4pathE"></span><span id="_CPPv2N7pancake3m643m64ENSt10filesystem4pathE"></span><span id="pancake::m64::m64__std::filesystem::path"></span><span class="sig-name descname"><span class="n"><span class="pre">m64</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">filesystem</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">path</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">path</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7pancake3m643m64ENSt10filesystem4pathE" title="Permalink to this definition">¶</a><br /></dt>
+<dl class="function">
+<dt id="_CPPv4N7pancake3m643m64ENSt10filesystem4pathE">
+<span id="_CPPv3N7pancake3m643m64ENSt10filesystem4pathE"></span><span id="_CPPv2N7pancake3m643m64ENSt10filesystem4pathE"></span><span id="pancake::m64::m64__std::filesystem::path"></span><code class="sig-name descname">m64</code><span class="sig-paren">(</span>std::filesystem::path <em>path</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7pancake3m643m64ENSt10filesystem4pathE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Loads an .m64 from a file path.</p>
 </dd></dl>
 
 <p><strong>Frame list operations</strong></p>
-<dl class="cpp type">
-<dt class="sig sig-object cpp" id="_CPPv4N7pancake3m648iteratorE">
-<span id="_CPPv3N7pancake3m648iteratorE"></span><span id="_CPPv2N7pancake3m648iteratorE"></span><span id="pancake::m64::iterator"></span><span class="k"><span class="pre">type</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iterator</span></span></span><a class="headerlink" href="#_CPPv4N7pancake3m648iteratorE" title="Permalink to this definition">¶</a><br /></dt>
+<dl class="type">
+<dt id="_CPPv4N7pancake3m648iteratorE">
+<span id="_CPPv3N7pancake3m648iteratorE"></span><span id="_CPPv2N7pancake3m648iteratorE"></span><span id="pancake::m64::iterator"></span><em class="property">type </em><code class="sig-name descname">iterator</code><a class="headerlink" href="#_CPPv4N7pancake3m648iteratorE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>An iterator over the frames of this M64.</p>
 </dd></dl>
 
-<dl class="cpp type">
-<dt class="sig sig-object cpp" id="_CPPv4N7pancake3m6414const_iteratorE">
-<span id="_CPPv3N7pancake3m6414const_iteratorE"></span><span id="_CPPv2N7pancake3m6414const_iteratorE"></span><span id="pancake::m64::const_iterator"></span><span class="k"><span class="pre">type</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">const_iterator</span></span></span><a class="headerlink" href="#_CPPv4N7pancake3m6414const_iteratorE" title="Permalink to this definition">¶</a><br /></dt>
+<dl class="type">
+<dt id="_CPPv4N7pancake3m6414const_iteratorE">
+<span id="_CPPv3N7pancake3m6414const_iteratorE"></span><span id="_CPPv2N7pancake3m6414const_iteratorE"></span><span id="pancake::m64::const_iterator"></span><em class="property">type </em><code class="sig-name descname">const_iterator</code><a class="headerlink" href="#_CPPv4N7pancake3m6414const_iteratorE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>A const iterator over the frames of this M64.</p>
 </dd></dl>
 
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N7pancake3m64ixE8uint32_t">
-<span id="_CPPv3N7pancake3m64ixE8uint32_t"></span><span id="_CPPv2N7pancake3m64ixE8uint32_t"></span><span id="pancake::m64::subscript-operator__uint32_t"></span><a class="reference internal" href="#_CPPv4N7pancake3m64E" title="pancake::m64"><span class="n"><span class="pre">m64</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">frame</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">[]</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">index</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7pancake3m64ixE8uint32_t" title="Permalink to this definition">¶</a><br /></dt>
+<dl class="function">
+<dt id="_CPPv4N7pancake3m64ixE8uint32_t">
+<span id="_CPPv3N7pancake3m64ixE8uint32_t"></span><span id="_CPPv2N7pancake3m64ixE8uint32_t"></span><span id="pancake::m64::subscript-operator__uint32_t"></span><a class="reference internal" href="#_CPPv4N7pancake3m64E" title="pancake::m64">m64</a>::frame &amp;<code class="sig-name descname">operator[]</code><span class="sig-paren">(</span>uint32_t <em>index</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7pancake3m64ixE8uint32_t" title="Permalink to this definition">¶</a><br /></dt>
 <dd></dd></dl>
 
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4NK7pancake3m64ixE8uint32_t">
-<span id="_CPPv3NK7pancake3m64ixE8uint32_t"></span><span id="_CPPv2NK7pancake3m64ixE8uint32_t"></span><span id="pancake::m64::subscript-operator__uint32_tC"></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N7pancake3m64E" title="pancake::m64"><span class="n"><span class="pre">m64</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">frame</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">[]</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">index</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK7pancake3m64ixE8uint32_t" title="Permalink to this definition">¶</a><br /></dt>
-<dd><p>Returns a reference to the <span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="#_CPPv4NK7pancake3m64ixE8uint32_t" title="pancake::m64::operator[]::index"><span class="n">index</span></a></span>th input frame of this M64.
+<dl class="function">
+<dt id="_CPPv4NK7pancake3m64ixE8uint32_t">
+<span id="_CPPv3NK7pancake3m64ixE8uint32_t"></span><span id="_CPPv2NK7pancake3m64ixE8uint32_t"></span><span id="pancake::m64::subscript-operator__uint32_tC"></span><em class="property">const</em> <a class="reference internal" href="#_CPPv4N7pancake3m64E" title="pancake::m64">m64</a>::frame &amp;<code class="sig-name descname">operator[]</code><span class="sig-paren">(</span>uint32_t <em>index</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK7pancake3m64ixE8uint32_t" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Returns a reference to the <code class="xref cpp cpp-expr docutils literal notranslate"><a class="reference internal" href="#_CPPv4N7pancake3m64ixE8uint32_t" title="pancake::m64::operator[]::index"><span class="pre">index</span></a></code>th input frame of this M64.
 Does not check input bounds.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -341,16 +340,16 @@ Does not check input bounds.</p>
 </dl>
 </dd></dl>
 
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N7pancake3m642atE8uint32_t">
-<span id="_CPPv3N7pancake3m642atE8uint32_t"></span><span id="_CPPv2N7pancake3m642atE8uint32_t"></span><span id="pancake::m64::at__uint32_t"></span><a class="reference internal" href="#_CPPv4N7pancake3m64E" title="pancake::m64"><span class="n"><span class="pre">m64</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">frame</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">at</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">index</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7pancake3m642atE8uint32_t" title="Permalink to this definition">¶</a><br /></dt>
+<dl class="function">
+<dt id="_CPPv4N7pancake3m642atE8uint32_t">
+<span id="_CPPv3N7pancake3m642atE8uint32_t"></span><span id="_CPPv2N7pancake3m642atE8uint32_t"></span><span id="pancake::m64::at__uint32_t"></span><a class="reference internal" href="#_CPPv4N7pancake3m64E" title="pancake::m64">m64</a>::frame &amp;<code class="sig-name descname">at</code><span class="sig-paren">(</span>uint32_t <em>index</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7pancake3m642atE8uint32_t" title="Permalink to this definition">¶</a><br /></dt>
 <dd></dd></dl>
 
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4NK7pancake3m642atE8uint32_t">
-<span id="_CPPv3NK7pancake3m642atE8uint32_t"></span><span id="_CPPv2NK7pancake3m642atE8uint32_t"></span><span id="pancake::m64::at__uint32_tC"></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N7pancake3m64E" title="pancake::m64"><span class="n"><span class="pre">m64</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">frame</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">at</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">index</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK7pancake3m642atE8uint32_t" title="Permalink to this definition">¶</a><br /></dt>
-<dd><p>Returns a reference to the <span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="#_CPPv4NK7pancake3m642atE8uint32_t" title="pancake::m64::at::index"><span class="n">index</span></a></span>th input frame of this M64.
-Unlike <a class="reference internal" href="#_CPPv4N7pancake3m64ixE8uint32_t" title="pancake::m64::operator[]"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">m64::operator[]()</span></code></a>, <span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="#_CPPv4NK7pancake3m642atE8uint32_t" title="pancake::m64::at"><span class="n">at</span></a><span class="p">(</span><span class="p">)</span></span> checks input bounds.</p>
+<dl class="function">
+<dt id="_CPPv4NK7pancake3m642atE8uint32_t">
+<span id="_CPPv3NK7pancake3m642atE8uint32_t"></span><span id="_CPPv2NK7pancake3m642atE8uint32_t"></span><span id="pancake::m64::at__uint32_tC"></span><em class="property">const</em> <a class="reference internal" href="#_CPPv4N7pancake3m64E" title="pancake::m64">m64</a>::frame &amp;<code class="sig-name descname">at</code><span class="sig-paren">(</span>uint32_t <em>index</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK7pancake3m642atE8uint32_t" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Returns a reference to the <code class="xref cpp cpp-expr docutils literal notranslate"><a class="reference internal" href="#_CPPv4N7pancake3m642atE8uint32_t" title="pancake::m64::at::index"><span class="pre">index</span></a></code>th input frame of this M64.
+Unlike <a class="reference internal" href="#_CPPv4N7pancake3m64ixE8uint32_t" title="pancake::m64::operator[]"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">m64::operator[]()</span></code></a>, <code class="xref cpp cpp-expr docutils literal notranslate"><a class="reference internal" href="#_CPPv4N7pancake3m642atE8uint32_t" title="pancake::m64::at"><span class="pre">at</span></a><span class="pre">(</span><span class="pre">)</span></code> checks input bounds.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>index</strong> – The index of the frame to get</p>
@@ -359,21 +358,21 @@ Unlike <a class="reference internal" href="#_CPPv4N7pancake3m64ixE8uint32_t" tit
 <dd class="field-even"><p>the requested frame</p>
 </dd>
 <dt class="field-odd">Throws</dt>
-<dd class="field-odd"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">std</span><span class="p">::</span><span class="n">out_of_range</span></span></span> – if <span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="#_CPPv4NK7pancake3m642atE8uint32_t" title="pancake::m64::at::index"><span class="n">index</span></a><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="k">this</span><span class="o">-&gt;</span><span class="n">size</span><span class="p">(</span><span class="p">)</span></span></p>
+<dd class="field-odd"><p><strong>std::out_of_range</strong> – if <code class="xref cpp cpp-expr docutils literal notranslate"><a class="reference internal" href="#_CPPv4N7pancake3m642atE8uint32_t" title="pancake::m64::at::index"><span class="pre">index</span></a> <span class="pre">&gt;=</span> <span class="pre">this</span><span class="pre">-&gt;</span><span class="pre">size</span><span class="pre">(</span><span class="pre">)</span></code></p>
 </dd>
 </dl>
 </dd></dl>
 
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N7pancake3m645frontEv">
-<span id="_CPPv3N7pancake3m645frontEv"></span><span id="_CPPv2N7pancake3m645frontEv"></span><span id="pancake::m64::front"></span><a class="reference internal" href="#_CPPv4N7pancake3m64E" title="pancake::m64"><span class="n"><span class="pre">m64</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">frame</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">front</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7pancake3m645frontEv" title="Permalink to this definition">¶</a><br /></dt>
+<dl class="function">
+<dt id="_CPPv4N7pancake3m645frontEv">
+<span id="_CPPv3N7pancake3m645frontEv"></span><span id="_CPPv2N7pancake3m645frontEv"></span><span id="pancake::m64::front"></span><a class="reference internal" href="#_CPPv4N7pancake3m64E" title="pancake::m64">m64</a>::frame &amp;<code class="sig-name descname">front</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7pancake3m645frontEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd></dd></dl>
 
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4NK7pancake3m645frontEv">
-<span id="_CPPv3NK7pancake3m645frontEv"></span><span id="_CPPv2NK7pancake3m645frontEv"></span><span id="pancake::m64::frontC"></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N7pancake3m64E" title="pancake::m64"><span class="n"><span class="pre">m64</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">frame</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">front</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK7pancake3m645frontEv" title="Permalink to this definition">¶</a><br /></dt>
+<dl class="function">
+<dt id="_CPPv4NK7pancake3m645frontEv">
+<span id="_CPPv3NK7pancake3m645frontEv"></span><span id="_CPPv2NK7pancake3m645frontEv"></span><span id="pancake::m64::frontC"></span><em class="property">const</em> <a class="reference internal" href="#_CPPv4N7pancake3m64E" title="pancake::m64">m64</a>::frame &amp;<code class="sig-name descname">front</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK7pancake3m645frontEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Returns a reference to the first frame of this M64.
-Equivalent to <span class="cpp-expr sig sig-inline cpp"><span class="p">(</span><span class="o">*</span><span class="k">this</span><span class="p">)</span><span class="p">[</span><span class="m">0</span><span class="p">]</span></span> or <span class="cpp-expr sig sig-inline cpp"><span class="o">*</span><span class="p">(</span><span class="k">this</span><span class="o">-&gt;</span><span class="n">begin</span><span class="p">(</span><span class="p">)</span><span class="p">)</span></span>.</p>
+Equivalent to <code class="xref cpp cpp-expr docutils literal notranslate"><span class="pre">(</span><span class="pre">*</span><span class="pre">this</span><span class="pre">)</span><span class="pre">[</span><span class="pre">0</span><span class="pre">]</span></code> or <code class="xref cpp cpp-expr docutils literal notranslate"><span class="pre">*</span><span class="pre">(</span><span class="pre">this</span><span class="pre">-&gt;</span><span class="pre">begin</span><span class="pre">(</span><span class="pre">)</span><span class="pre">)</span></code>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>the first frame of this M64</p>
@@ -381,16 +380,16 @@ Equivalent to <span class="cpp-expr sig sig-inline cpp"><span class="p">(</span>
 </dl>
 </dd></dl>
 
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N7pancake3m644backEv">
-<span id="_CPPv3N7pancake3m644backEv"></span><span id="_CPPv2N7pancake3m644backEv"></span><span id="pancake::m64::back"></span><a class="reference internal" href="#_CPPv4N7pancake3m64E" title="pancake::m64"><span class="n"><span class="pre">m64</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">frame</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">back</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7pancake3m644backEv" title="Permalink to this definition">¶</a><br /></dt>
+<dl class="function">
+<dt id="_CPPv4N7pancake3m644backEv">
+<span id="_CPPv3N7pancake3m644backEv"></span><span id="_CPPv2N7pancake3m644backEv"></span><span id="pancake::m64::back"></span><a class="reference internal" href="#_CPPv4N7pancake3m64E" title="pancake::m64">m64</a>::frame &amp;<code class="sig-name descname">back</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7pancake3m644backEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd></dd></dl>
 
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4NK7pancake3m644backEv">
-<span id="_CPPv3NK7pancake3m644backEv"></span><span id="_CPPv2NK7pancake3m644backEv"></span><span id="pancake::m64::backC"></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N7pancake3m64E" title="pancake::m64"><span class="n"><span class="pre">m64</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">frame</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">back</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK7pancake3m644backEv" title="Permalink to this definition">¶</a><br /></dt>
+<dl class="function">
+<dt id="_CPPv4NK7pancake3m644backEv">
+<span id="_CPPv3NK7pancake3m644backEv"></span><span id="_CPPv2NK7pancake3m644backEv"></span><span id="pancake::m64::backC"></span><em class="property">const</em> <a class="reference internal" href="#_CPPv4N7pancake3m64E" title="pancake::m64">m64</a>::frame &amp;<code class="sig-name descname">back</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK7pancake3m644backEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Returns a reference to the last frame of this M64.
-Equivalent to <span class="cpp-expr sig sig-inline cpp"><span class="p">(</span><span class="o">*</span><span class="k">this</span><span class="p">)</span><span class="p">[</span><span class="k">this</span><span class="o">-&gt;</span><span class="n">size</span><span class="p">(</span><span class="p">)</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="m">1</span><span class="p">]</span></span> or <span class="cpp-expr sig sig-inline cpp"><span class="o">*</span><span class="p">(</span><span class="k">this</span><span class="o">-&gt;</span><span class="n">end</span><span class="p">(</span><span class="p">)</span><span class="p">)</span></span>.</p>
+Equivalent to <code class="xref cpp cpp-expr docutils literal notranslate"><span class="pre">(</span><span class="pre">*</span><span class="pre">this</span><span class="pre">)</span><span class="pre">[</span><span class="pre">this</span><span class="pre">-&gt;</span><span class="pre">size</span><span class="pre">(</span><span class="pre">)</span> <span class="pre">-</span> <span class="pre">1</span><span class="pre">]</span></code> or <code class="xref cpp cpp-expr docutils literal notranslate"><span class="pre">*</span><span class="pre">(</span><span class="pre">this</span><span class="pre">-&gt;</span><span class="pre">end</span><span class="pre">(</span><span class="pre">)</span><span class="pre">)</span></code>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>the first frame of this M64</p>
@@ -398,9 +397,9 @@ Equivalent to <span class="cpp-expr sig sig-inline cpp"><span class="p">(</span>
 </dl>
 </dd></dl>
 
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4NK7pancake3m644sizeEv">
-<span id="_CPPv3NK7pancake3m644sizeEv"></span><span id="_CPPv2NK7pancake3m644sizeEv"></span><span id="pancake::m64::sizeC"></span><span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">size</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK7pancake3m644sizeEv" title="Permalink to this definition">¶</a><br /></dt>
+<dl class="function">
+<dt id="_CPPv4NK7pancake3m644sizeEv">
+<span id="_CPPv3NK7pancake3m644sizeEv"></span><span id="_CPPv2NK7pancake3m644sizeEv"></span><span id="pancake::m64::sizeC"></span>uint32_t <code class="sig-name descname">size</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK7pancake3m644sizeEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Returns the number of frames in this M64.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
@@ -409,14 +408,14 @@ Equivalent to <span class="cpp-expr sig sig-inline cpp"><span class="p">(</span>
 </dl>
 </dd></dl>
 
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N7pancake3m645beginEv">
-<span id="_CPPv3N7pancake3m645beginEv"></span><span id="_CPPv2N7pancake3m645beginEv"></span><span id="pancake::m64::begin"></span><a class="reference internal" href="#_CPPv4N7pancake3m648iteratorE" title="pancake::m64::iterator"><span class="n"><span class="pre">iterator</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">begin</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7pancake3m645beginEv" title="Permalink to this definition">¶</a><br /></dt>
+<dl class="function">
+<dt id="_CPPv4N7pancake3m645beginEv">
+<span id="_CPPv3N7pancake3m645beginEv"></span><span id="_CPPv2N7pancake3m645beginEv"></span><span id="pancake::m64::begin"></span><a class="reference internal" href="#_CPPv4N7pancake3m648iteratorE" title="pancake::m64::iterator">iterator</a> <code class="sig-name descname">begin</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7pancake3m645beginEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd></dd></dl>
 
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4NK7pancake3m645beginEv">
-<span id="_CPPv3NK7pancake3m645beginEv"></span><span id="_CPPv2NK7pancake3m645beginEv"></span><span id="pancake::m64::beginC"></span><a class="reference internal" href="#_CPPv4N7pancake3m6414const_iteratorE" title="pancake::m64::const_iterator"><span class="n"><span class="pre">const_iterator</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">begin</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK7pancake3m645beginEv" title="Permalink to this definition">¶</a><br /></dt>
+<dl class="function">
+<dt id="_CPPv4NK7pancake3m645beginEv">
+<span id="_CPPv3NK7pancake3m645beginEv"></span><span id="_CPPv2NK7pancake3m645beginEv"></span><span id="pancake::m64::beginC"></span><a class="reference internal" href="#_CPPv4N7pancake3m6414const_iteratorE" title="pancake::m64::const_iterator">const_iterator</a> <code class="sig-name descname">begin</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK7pancake3m645beginEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Returns an iterator at the start of this M64.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
@@ -425,14 +424,14 @@ Equivalent to <span class="cpp-expr sig sig-inline cpp"><span class="p">(</span>
 </dl>
 </dd></dl>
 
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N7pancake3m643endEv">
-<span id="_CPPv3N7pancake3m643endEv"></span><span id="_CPPv2N7pancake3m643endEv"></span><span id="pancake::m64::end"></span><a class="reference internal" href="#_CPPv4N7pancake3m648iteratorE" title="pancake::m64::iterator"><span class="n"><span class="pre">iterator</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">end</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7pancake3m643endEv" title="Permalink to this definition">¶</a><br /></dt>
+<dl class="function">
+<dt id="_CPPv4N7pancake3m643endEv">
+<span id="_CPPv3N7pancake3m643endEv"></span><span id="_CPPv2N7pancake3m643endEv"></span><span id="pancake::m64::end"></span><a class="reference internal" href="#_CPPv4N7pancake3m648iteratorE" title="pancake::m64::iterator">iterator</a> <code class="sig-name descname">end</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7pancake3m643endEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd></dd></dl>
 
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4NK7pancake3m643endEv">
-<span id="_CPPv3NK7pancake3m643endEv"></span><span id="_CPPv2NK7pancake3m643endEv"></span><span id="pancake::m64::endC"></span><a class="reference internal" href="#_CPPv4N7pancake3m6414const_iteratorE" title="pancake::m64::const_iterator"><span class="n"><span class="pre">const_iterator</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">end</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK7pancake3m643endEv" title="Permalink to this definition">¶</a><br /></dt>
+<dl class="function">
+<dt id="_CPPv4NK7pancake3m643endEv">
+<span id="_CPPv3NK7pancake3m643endEv"></span><span id="_CPPv2NK7pancake3m643endEv"></span><span id="pancake::m64::endC"></span><a class="reference internal" href="#_CPPv4N7pancake3m6414const_iteratorE" title="pancake::m64::const_iterator">const_iterator</a> <code class="sig-name descname">end</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK7pancake3m643endEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Returns an iterator at the end of this M64.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
@@ -441,9 +440,9 @@ Equivalent to <span class="cpp-expr sig sig-inline cpp"><span class="p">(</span>
 </dl>
 </dd></dl>
 
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4NK7pancake3m646cbeginEv">
-<span id="_CPPv3NK7pancake3m646cbeginEv"></span><span id="_CPPv2NK7pancake3m646cbeginEv"></span><span id="pancake::m64::cbeginC"></span><a class="reference internal" href="#_CPPv4N7pancake3m6414const_iteratorE" title="pancake::m64::const_iterator"><span class="n"><span class="pre">const_iterator</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">cbegin</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK7pancake3m646cbeginEv" title="Permalink to this definition">¶</a><br /></dt>
+<dl class="function">
+<dt id="_CPPv4NK7pancake3m646cbeginEv">
+<span id="_CPPv3NK7pancake3m646cbeginEv"></span><span id="_CPPv2NK7pancake3m646cbeginEv"></span><span id="pancake::m64::cbeginC"></span><a class="reference internal" href="#_CPPv4N7pancake3m6414const_iteratorE" title="pancake::m64::const_iterator">const_iterator</a> <code class="sig-name descname">cbegin</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK7pancake3m646cbeginEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Returns a const iterator at the start of this M64.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
@@ -452,9 +451,9 @@ Equivalent to <span class="cpp-expr sig sig-inline cpp"><span class="p">(</span>
 </dl>
 </dd></dl>
 
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4NK7pancake3m644cendEv">
-<span id="_CPPv3NK7pancake3m644cendEv"></span><span id="_CPPv2NK7pancake3m644cendEv"></span><span id="pancake::m64::cendC"></span><a class="reference internal" href="#_CPPv4N7pancake3m6414const_iteratorE" title="pancake::m64::const_iterator"><span class="n"><span class="pre">const_iterator</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">cend</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK7pancake3m644cendEv" title="Permalink to this definition">¶</a><br /></dt>
+<dl class="function">
+<dt id="_CPPv4NK7pancake3m644cendEv">
+<span id="_CPPv3NK7pancake3m644cendEv"></span><span id="_CPPv2NK7pancake3m644cendEv"></span><span id="pancake::m64::cendC"></span><a class="reference internal" href="#_CPPv4N7pancake3m6414const_iteratorE" title="pancake::m64::const_iterator">const_iterator</a> <code class="sig-name descname">cend</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK7pancake3m644cendEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Returns a const iterator at the end of this M64.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
@@ -463,9 +462,9 @@ Equivalent to <span class="cpp-expr sig sig-inline cpp"><span class="p">(</span>
 </dl>
 </dd></dl>
 
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N7pancake3m649push_backERKN3m645frameE">
-<span id="_CPPv3N7pancake3m649push_backERKN3m645frameE"></span><span id="_CPPv2N7pancake3m649push_backERKN3m645frameE"></span><span id="pancake::m64::push_back__m64::frameCR"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">push_back</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N7pancake3m64E" title="pancake::m64"><span class="n"><span class="pre">m64</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">frame</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">frame</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7pancake3m649push_backERKN3m645frameE" title="Permalink to this definition">¶</a><br /></dt>
+<dl class="function">
+<dt id="_CPPv4N7pancake3m649push_backERKN3m645frameE">
+<span id="_CPPv3N7pancake3m649push_backERKN3m645frameE"></span><span id="_CPPv2N7pancake3m649push_backERKN3m645frameE"></span><span id="pancake::m64::push_back__m64::frameCR"></span>void <code class="sig-name descname">push_back</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="#_CPPv4N7pancake3m64E" title="pancake::m64">m64</a>::frame &amp;<em>frame</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7pancake3m649push_backERKN3m645frameE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Appends a frame onto the end of this M64.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -474,9 +473,9 @@ Equivalent to <span class="cpp-expr sig sig-inline cpp"><span class="p">(</span>
 </dl>
 </dd></dl>
 
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N7pancake3m649push_backERRN3m645frameE">
-<span id="_CPPv3N7pancake3m649push_backERRN3m645frameE"></span><span id="_CPPv2N7pancake3m649push_backERRN3m645frameE"></span><span id="pancake::m64::push_back__m64::frameRR"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">push_back</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4N7pancake3m64E" title="pancake::m64"><span class="n"><span class="pre">m64</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">frame</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">frame</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7pancake3m649push_backERRN3m645frameE" title="Permalink to this definition">¶</a><br /></dt>
+<dl class="function">
+<dt id="_CPPv4N7pancake3m649push_backERRN3m645frameE">
+<span id="_CPPv3N7pancake3m649push_backERRN3m645frameE"></span><span id="_CPPv2N7pancake3m649push_backERRN3m645frameE"></span><span id="pancake::m64::push_back__m64::frameRR"></span>void <code class="sig-name descname">push_back</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4N7pancake3m64E" title="pancake::m64">m64</a>::frame &amp;&amp;<em>frame</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7pancake3m649push_backERRN3m645frameE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Appends a frame onto the end of this M64.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -485,169 +484,169 @@ Equivalent to <span class="cpp-expr sig sig-inline cpp"><span class="p">(</span>
 </dl>
 </dd></dl>
 
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N7pancake3m648pop_backEv">
-<span id="_CPPv3N7pancake3m648pop_backEv"></span><span id="_CPPv2N7pancake3m648pop_backEv"></span><span id="pancake::m64::pop_back"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">pop_back</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7pancake3m648pop_backEv" title="Permalink to this definition">¶</a><br /></dt>
+<dl class="function">
+<dt id="_CPPv4N7pancake3m648pop_backEv">
+<span id="_CPPv3N7pancake3m648pop_backEv"></span><span id="_CPPv2N7pancake3m648pop_backEv"></span><span id="pancake::m64::pop_back"></span>void <code class="sig-name descname">pop_back</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7pancake3m648pop_backEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Removes the last frame of this M64.</p>
 </dd></dl>
 
 <p><strong>Metadata and serialization</strong></p>
-<dl class="cpp struct">
-<dt class="sig sig-object cpp" id="_CPPv4N7pancake3m6410metadata_sE">
-<span id="_CPPv3N7pancake3m6410metadata_sE"></span><span id="_CPPv2N7pancake3m6410metadata_sE"></span><span id="pancake::m64::metadata_s"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">metadata_s</span></span></span><a class="headerlink" href="#_CPPv4N7pancake3m6410metadata_sE" title="Permalink to this definition">¶</a><br /></dt>
+<dl class="struct">
+<dt id="_CPPv4N7pancake3m6410metadata_sE">
+<span id="_CPPv3N7pancake3m6410metadata_sE"></span><span id="_CPPv2N7pancake3m6410metadata_sE"></span><span id="pancake::m64::metadata_s"></span><em class="property">struct </em><code class="sig-name descname">metadata_s</code><a class="headerlink" href="#_CPPv4N7pancake3m6410metadata_sE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>A struct holding metadata about the M64.</p>
-<dl class="cpp var">
-<dt class="sig sig-object cpp" id="_CPPv4N7pancake3m6410metadata_s7versionE">
-<span id="_CPPv3N7pancake3m6410metadata_s7versionE"></span><span id="_CPPv2N7pancake3m6410metadata_s7versionE"></span><span id="pancake::m64::metadata_s::version__uint32_t"></span><span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">version</span></span></span><a class="headerlink" href="#_CPPv4N7pancake3m6410metadata_s7versionE" title="Permalink to this definition">¶</a><br /></dt>
+<dl class="var">
+<dt id="_CPPv4N7pancake3m6410metadata_s7versionE">
+<span id="_CPPv3N7pancake3m6410metadata_s7versionE"></span><span id="_CPPv2N7pancake3m6410metadata_s7versionE"></span><span id="pancake::m64::metadata_s::version__uint32_t"></span>uint32_t <code class="sig-name descname">version</code><a class="headerlink" href="#_CPPv4N7pancake3m6410metadata_s7versionE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>The version of this M64. Should be 3, otherwise you have a REALLY old file.</p>
 </dd></dl>
 
-<dl class="cpp var">
-<dt class="sig sig-object cpp" id="_CPPv4N7pancake3m6410metadata_s9timestampE">
-<span id="_CPPv3N7pancake3m6410metadata_s9timestampE"></span><span id="_CPPv2N7pancake3m6410metadata_s9timestampE"></span><span id="pancake::m64::metadata_s::timestamp__uint32_t"></span><span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">timestamp</span></span></span><a class="headerlink" href="#_CPPv4N7pancake3m6410metadata_s9timestampE" title="Permalink to this definition">¶</a><br /></dt>
+<dl class="var">
+<dt id="_CPPv4N7pancake3m6410metadata_s9timestampE">
+<span id="_CPPv3N7pancake3m6410metadata_s9timestampE"></span><span id="_CPPv2N7pancake3m6410metadata_s9timestampE"></span><span id="pancake::m64::metadata_s::timestamp__uint32_t"></span>uint32_t <code class="sig-name descname">timestamp</code><a class="headerlink" href="#_CPPv4N7pancake3m6410metadata_s9timestampE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>The recording timestamp. Used as a UID of sorts for linking to savestates.
 I don’t know the specifics of the whole UID thing, ask someone who works on Mupen64.</p>
 </dd></dl>
 
-<dl class="cpp var">
-<dt class="sig sig-object cpp" id="_CPPv4N7pancake3m6410metadata_s7num_visE">
-<span id="_CPPv3N7pancake3m6410metadata_s7num_visE"></span><span id="_CPPv2N7pancake3m6410metadata_s7num_visE"></span><span id="pancake::m64::metadata_s::num_vis__uint32_t"></span><span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">num_vis</span></span></span><a class="headerlink" href="#_CPPv4N7pancake3m6410metadata_s7num_visE" title="Permalink to this definition">¶</a><br /></dt>
+<dl class="var">
+<dt id="_CPPv4N7pancake3m6410metadata_s7num_visE">
+<span id="_CPPv3N7pancake3m6410metadata_s7num_visE"></span><span id="_CPPv2N7pancake3m6410metadata_s7num_visE"></span><span id="pancake::m64::metadata_s::num_vis__uint32_t"></span>uint32_t <code class="sig-name descname">num_vis</code><a class="headerlink" href="#_CPPv4N7pancake3m6410metadata_s7num_visE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>The length of this M64 in VIs (visual frames). Hex editing tools will usually max this value out.</p>
 </dd></dl>
 
-<dl class="cpp var">
-<dt class="sig sig-object cpp" id="_CPPv4N7pancake3m6410metadata_s9rerecordsE">
-<span id="_CPPv3N7pancake3m6410metadata_s9rerecordsE"></span><span id="_CPPv2N7pancake3m6410metadata_s9rerecordsE"></span><span id="pancake::m64::metadata_s::rerecords__uint32_t"></span><span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">rerecords</span></span></span><a class="headerlink" href="#_CPPv4N7pancake3m6410metadata_s9rerecordsE" title="Permalink to this definition">¶</a><br /></dt>
+<dl class="var">
+<dt id="_CPPv4N7pancake3m6410metadata_s9rerecordsE">
+<span id="_CPPv3N7pancake3m6410metadata_s9rerecordsE"></span><span id="_CPPv2N7pancake3m6410metadata_s9rerecordsE"></span><span id="pancake::m64::metadata_s::rerecords__uint32_t"></span>uint32_t <code class="sig-name descname">rerecords</code><a class="headerlink" href="#_CPPv4N7pancake3m6410metadata_s9rerecordsE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>The number of rerecords (times that a savestate was used).</p>
 </dd></dl>
 
-<dl class="cpp var">
-<dt class="sig sig-object cpp" id="_CPPv4N7pancake3m6410metadata_s9vis_per_sE">
-<span id="_CPPv3N7pancake3m6410metadata_s9vis_per_sE"></span><span id="_CPPv2N7pancake3m6410metadata_s9vis_per_sE"></span><span id="pancake::m64::metadata_s::vis_per_s__uint8_t"></span><span class="n"><span class="pre">uint8_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">vis_per_s</span></span></span><a class="headerlink" href="#_CPPv4N7pancake3m6410metadata_s9vis_per_sE" title="Permalink to this definition">¶</a><br /></dt>
+<dl class="var">
+<dt id="_CPPv4N7pancake3m6410metadata_s9vis_per_sE">
+<span id="_CPPv3N7pancake3m6410metadata_s9vis_per_sE"></span><span id="_CPPv2N7pancake3m6410metadata_s9vis_per_sE"></span><span id="pancake::m64::metadata_s::vis_per_s__uint8_t"></span>uint8_t <code class="sig-name descname">vis_per_s</code><a class="headerlink" href="#_CPPv4N7pancake3m6410metadata_s9vis_per_sE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Essentially amounts to frames per second.</p>
 </dd></dl>
 
-<dl class="cpp var">
-<dt class="sig sig-object cpp" id="_CPPv4N7pancake3m6410metadata_s15num_controllersE">
-<span id="_CPPv3N7pancake3m6410metadata_s15num_controllersE"></span><span id="_CPPv2N7pancake3m6410metadata_s15num_controllersE"></span><span id="pancake::m64::metadata_s::num_controllers__uint8_t"></span><span class="n"><span class="pre">uint8_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">num_controllers</span></span></span><a class="headerlink" href="#_CPPv4N7pancake3m6410metadata_s15num_controllersE" title="Permalink to this definition">¶</a><br /></dt>
+<dl class="var">
+<dt id="_CPPv4N7pancake3m6410metadata_s15num_controllersE">
+<span id="_CPPv3N7pancake3m6410metadata_s15num_controllersE"></span><span id="_CPPv2N7pancake3m6410metadata_s15num_controllersE"></span><span id="pancake::m64::metadata_s::num_controllers__uint8_t"></span>uint8_t <code class="sig-name descname">num_controllers</code><a class="headerlink" href="#_CPPv4N7pancake3m6410metadata_s15num_controllersE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>The number of controllers used.</p>
 </dd></dl>
 
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N7pancake3m6410metadata_s16num_input_framesEv">
-<span id="_CPPv3N7pancake3m6410metadata_s16num_input_framesEv"></span><span id="_CPPv2N7pancake3m6410metadata_s16num_input_framesEv"></span><span id="pancake::m64::metadata_s::num_input_frames"></span><span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">num_input_frames</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7pancake3m6410metadata_s16num_input_framesEv" title="Permalink to this definition">¶</a><br /></dt>
+<dl class="function">
+<dt id="_CPPv4N7pancake3m6410metadata_s16num_input_framesEv">
+<span id="_CPPv3N7pancake3m6410metadata_s16num_input_framesEv"></span><span id="_CPPv2N7pancake3m6410metadata_s16num_input_framesEv"></span><span id="pancake::m64::metadata_s::num_input_frames"></span>uint32_t <code class="sig-name descname">num_input_frames</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7pancake3m6410metadata_s16num_input_framesEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Returns the number of input frames. This is a function rather than a reference
 in order to avoid copying issues.</p>
 </dd></dl>
 
-<dl class="cpp enum-class">
-<dt class="sig sig-object cpp" id="_CPPv4N7pancake3m6410metadata_s11start_flagsE">
-<span id="_CPPv3N7pancake3m6410metadata_s11start_flagsE"></span><span id="_CPPv2N7pancake3m6410metadata_s11start_flagsE"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">start_flags</span></span></span><a class="headerlink" href="#_CPPv4N7pancake3m6410metadata_s11start_flagsE" title="Permalink to this definition">¶</a><br /></dt>
+<dl class="enum-class">
+<dt id="_CPPv4N7pancake3m6410metadata_s11start_flagsE">
+<span id="_CPPv3N7pancake3m6410metadata_s11start_flagsE"></span><span id="_CPPv2N7pancake3m6410metadata_s11start_flagsE"></span><em class="property">enum class </em><code class="sig-name descname">start_flags</code><a class="headerlink" href="#_CPPv4N7pancake3m6410metadata_s11start_flagsE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>A flag deciding how to start this M64.</p>
-<dl class="cpp enumerator">
-<dt class="sig sig-object cpp" id="_CPPv4N7pancake3m6410metadata_s11start_flags13FROM_SNAPSHOTE">
-<span id="_CPPv3N7pancake3m6410metadata_s11start_flags13FROM_SNAPSHOTE"></span><span id="_CPPv2N7pancake3m6410metadata_s11start_flags13FROM_SNAPSHOTE"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">FROM_SNAPSHOT</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0x01</span></span><a class="headerlink" href="#_CPPv4N7pancake3m6410metadata_s11start_flags13FROM_SNAPSHOTE" title="Permalink to this definition">¶</a><br /></dt>
+<dl class="enumerator">
+<dt id="_CPPv4N7pancake3m6410metadata_s11start_flags13FROM_SNAPSHOTE">
+<span id="_CPPv3N7pancake3m6410metadata_s11start_flags13FROM_SNAPSHOTE"></span><span id="_CPPv2N7pancake3m6410metadata_s11start_flags13FROM_SNAPSHOTE"></span><em class="property">enumerator </em><code class="sig-name descname">FROM_SNAPSHOT</code> = 0x01<a class="headerlink" href="#_CPPv4N7pancake3m6410metadata_s11start_flags13FROM_SNAPSHOTE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Starts this M64 from a savestate of the same name.</p>
 </dd></dl>
 
-<dl class="cpp enumerator">
-<dt class="sig sig-object cpp" id="_CPPv4N7pancake3m6410metadata_s11start_flags10FROM_STARTE">
-<span id="_CPPv3N7pancake3m6410metadata_s11start_flags10FROM_STARTE"></span><span id="_CPPv2N7pancake3m6410metadata_s11start_flags10FROM_STARTE"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">FROM_START</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0x02</span></span><a class="headerlink" href="#_CPPv4N7pancake3m6410metadata_s11start_flags10FROM_STARTE" title="Permalink to this definition">¶</a><br /></dt>
+<dl class="enumerator">
+<dt id="_CPPv4N7pancake3m6410metadata_s11start_flags10FROM_STARTE">
+<span id="_CPPv3N7pancake3m6410metadata_s11start_flags10FROM_STARTE"></span><span id="_CPPv2N7pancake3m6410metadata_s11start_flags10FROM_STARTE"></span><em class="property">enumerator </em><code class="sig-name descname">FROM_START</code> = 0x02<a class="headerlink" href="#_CPPv4N7pancake3m6410metadata_s11start_flags10FROM_STARTE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Starts this M64 from reset.</p>
 </dd></dl>
 
-<dl class="cpp enumerator">
-<dt class="sig sig-object cpp" id="_CPPv4N7pancake3m6410metadata_s11start_flags11FROM_EEPROME">
-<span id="_CPPv3N7pancake3m6410metadata_s11start_flags11FROM_EEPROME"></span><span id="_CPPv2N7pancake3m6410metadata_s11start_flags11FROM_EEPROME"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">FROM_EEPROM</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0x04</span></span><a class="headerlink" href="#_CPPv4N7pancake3m6410metadata_s11start_flags11FROM_EEPROME" title="Permalink to this definition">¶</a><br /></dt>
+<dl class="enumerator">
+<dt id="_CPPv4N7pancake3m6410metadata_s11start_flags11FROM_EEPROME">
+<span id="_CPPv3N7pancake3m6410metadata_s11start_flags11FROM_EEPROME"></span><span id="_CPPv2N7pancake3m6410metadata_s11start_flags11FROM_EEPROME"></span><em class="property">enumerator </em><code class="sig-name descname">FROM_EEPROM</code> = 0x04<a class="headerlink" href="#_CPPv4N7pancake3m6410metadata_s11start_flags11FROM_EEPROME" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Not sure what this does, I just know that this is a thing in new Mupen.</p>
 </dd></dl>
 
 </dd></dl>
 
-<dl class="cpp var">
-<dt class="sig sig-object cpp" id="_CPPv4N7pancake3m6410metadata_s10start_typeE">
-<span id="_CPPv3N7pancake3m6410metadata_s10start_typeE"></span><span id="_CPPv2N7pancake3m6410metadata_s10start_typeE"></span><span id="pancake::m64::metadata_s::start_type__start_flags"></span><a class="reference internal" href="#_CPPv4N7pancake3m6410metadata_s11start_flagsE" title="pancake::m64::metadata_s::start_flags"><span class="n"><span class="pre">start_flags</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">start_type</span></span></span><a class="headerlink" href="#_CPPv4N7pancake3m6410metadata_s10start_typeE" title="Permalink to this definition">¶</a><br /></dt>
+<dl class="var">
+<dt id="_CPPv4N7pancake3m6410metadata_s10start_typeE">
+<span id="_CPPv3N7pancake3m6410metadata_s10start_typeE"></span><span id="_CPPv2N7pancake3m6410metadata_s10start_typeE"></span><span id="pancake::m64::metadata_s::start_type__start_flags"></span><a class="reference internal" href="#_CPPv4N7pancake3m6410metadata_s11start_flagsE" title="pancake::m64::metadata_s::start_flags">start_flags</a> <code class="sig-name descname">start_type</code><a class="headerlink" href="#_CPPv4N7pancake3m6410metadata_s10start_typeE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>The start flag used by this M64.</p>
 </dd></dl>
 
-<dl class="cpp enum-class">
-<dt class="sig sig-object cpp" id="_CPPv4N7pancake3m6410metadata_s12ctrler_flagsE">
-<span id="_CPPv3N7pancake3m6410metadata_s12ctrler_flagsE"></span><span id="_CPPv2N7pancake3m6410metadata_s12ctrler_flagsE"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ctrler_flags</span></span></span><a class="headerlink" href="#_CPPv4N7pancake3m6410metadata_s12ctrler_flagsE" title="Permalink to this definition">¶</a><br /></dt>
+<dl class="enum-class">
+<dt id="_CPPv4N7pancake3m6410metadata_s12ctrler_flagsE">
+<span id="_CPPv3N7pancake3m6410metadata_s12ctrler_flagsE"></span><span id="_CPPv2N7pancake3m6410metadata_s12ctrler_flagsE"></span><em class="property">enum class </em><code class="sig-name descname">ctrler_flags</code><a class="headerlink" href="#_CPPv4N7pancake3m6410metadata_s12ctrler_flagsE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>A bitfield for controller info. One can perform bitwise operations on it.</p>
-<dl class="cpp enumerator">
-<dt class="sig sig-object cpp" id="_CPPv4N7pancake3m6410metadata_s12ctrler_flags19CONTROLLER1_PRESENTE">
-<span id="_CPPv3N7pancake3m6410metadata_s12ctrler_flags19CONTROLLER1_PRESENTE"></span><span id="_CPPv2N7pancake3m6410metadata_s12ctrler_flags19CONTROLLER1_PRESENTE"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">CONTROLLER1_PRESENT</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0x0001</span></span><a class="headerlink" href="#_CPPv4N7pancake3m6410metadata_s12ctrler_flags19CONTROLLER1_PRESENTE" title="Permalink to this definition">¶</a><br /></dt>
+<dl class="enumerator">
+<dt id="_CPPv4N7pancake3m6410metadata_s12ctrler_flags19CONTROLLER1_PRESENTE">
+<span id="_CPPv3N7pancake3m6410metadata_s12ctrler_flags19CONTROLLER1_PRESENTE"></span><span id="_CPPv2N7pancake3m6410metadata_s12ctrler_flags19CONTROLLER1_PRESENTE"></span><em class="property">enumerator </em><code class="sig-name descname">CONTROLLER1_PRESENT</code> = 0x0001<a class="headerlink" href="#_CPPv4N7pancake3m6410metadata_s12ctrler_flags19CONTROLLER1_PRESENTE" title="Permalink to this definition">¶</a><br /></dt>
 <dd></dd></dl>
 
-<dl class="cpp enumerator">
-<dt class="sig sig-object cpp" id="_CPPv4N7pancake3m6410metadata_s12ctrler_flags19CONTROLLER2_PRESENTE">
-<span id="_CPPv3N7pancake3m6410metadata_s12ctrler_flags19CONTROLLER2_PRESENTE"></span><span id="_CPPv2N7pancake3m6410metadata_s12ctrler_flags19CONTROLLER2_PRESENTE"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">CONTROLLER2_PRESENT</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0x0002</span></span><a class="headerlink" href="#_CPPv4N7pancake3m6410metadata_s12ctrler_flags19CONTROLLER2_PRESENTE" title="Permalink to this definition">¶</a><br /></dt>
+<dl class="enumerator">
+<dt id="_CPPv4N7pancake3m6410metadata_s12ctrler_flags19CONTROLLER2_PRESENTE">
+<span id="_CPPv3N7pancake3m6410metadata_s12ctrler_flags19CONTROLLER2_PRESENTE"></span><span id="_CPPv2N7pancake3m6410metadata_s12ctrler_flags19CONTROLLER2_PRESENTE"></span><em class="property">enumerator </em><code class="sig-name descname">CONTROLLER2_PRESENT</code> = 0x0002<a class="headerlink" href="#_CPPv4N7pancake3m6410metadata_s12ctrler_flags19CONTROLLER2_PRESENTE" title="Permalink to this definition">¶</a><br /></dt>
 <dd></dd></dl>
 
-<dl class="cpp enumerator">
-<dt class="sig sig-object cpp" id="_CPPv4N7pancake3m6410metadata_s12ctrler_flags19CONTROLLER3_PRESENTE">
-<span id="_CPPv3N7pancake3m6410metadata_s12ctrler_flags19CONTROLLER3_PRESENTE"></span><span id="_CPPv2N7pancake3m6410metadata_s12ctrler_flags19CONTROLLER3_PRESENTE"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">CONTROLLER3_PRESENT</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0x0004</span></span><a class="headerlink" href="#_CPPv4N7pancake3m6410metadata_s12ctrler_flags19CONTROLLER3_PRESENTE" title="Permalink to this definition">¶</a><br /></dt>
+<dl class="enumerator">
+<dt id="_CPPv4N7pancake3m6410metadata_s12ctrler_flags19CONTROLLER3_PRESENTE">
+<span id="_CPPv3N7pancake3m6410metadata_s12ctrler_flags19CONTROLLER3_PRESENTE"></span><span id="_CPPv2N7pancake3m6410metadata_s12ctrler_flags19CONTROLLER3_PRESENTE"></span><em class="property">enumerator </em><code class="sig-name descname">CONTROLLER3_PRESENT</code> = 0x0004<a class="headerlink" href="#_CPPv4N7pancake3m6410metadata_s12ctrler_flags19CONTROLLER3_PRESENTE" title="Permalink to this definition">¶</a><br /></dt>
 <dd></dd></dl>
 
-<dl class="cpp enumerator">
-<dt class="sig sig-object cpp" id="_CPPv4N7pancake3m6410metadata_s12ctrler_flags19CONTROLLER4_PRESENTE">
-<span id="_CPPv3N7pancake3m6410metadata_s12ctrler_flags19CONTROLLER4_PRESENTE"></span><span id="_CPPv2N7pancake3m6410metadata_s12ctrler_flags19CONTROLLER4_PRESENTE"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">CONTROLLER4_PRESENT</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0x0008</span></span><a class="headerlink" href="#_CPPv4N7pancake3m6410metadata_s12ctrler_flags19CONTROLLER4_PRESENTE" title="Permalink to this definition">¶</a><br /></dt>
+<dl class="enumerator">
+<dt id="_CPPv4N7pancake3m6410metadata_s12ctrler_flags19CONTROLLER4_PRESENTE">
+<span id="_CPPv3N7pancake3m6410metadata_s12ctrler_flags19CONTROLLER4_PRESENTE"></span><span id="_CPPv2N7pancake3m6410metadata_s12ctrler_flags19CONTROLLER4_PRESENTE"></span><em class="property">enumerator </em><code class="sig-name descname">CONTROLLER4_PRESENT</code> = 0x0008<a class="headerlink" href="#_CPPv4N7pancake3m6410metadata_s12ctrler_flags19CONTROLLER4_PRESENTE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Indicates the presence of a controller.</p>
 </dd></dl>
 
-<dl class="cpp enumerator">
-<dt class="sig sig-object cpp" id="_CPPv4N7pancake3m6410metadata_s12ctrler_flags18CONTROLLER1_MEMORYE">
-<span id="_CPPv3N7pancake3m6410metadata_s12ctrler_flags18CONTROLLER1_MEMORYE"></span><span id="_CPPv2N7pancake3m6410metadata_s12ctrler_flags18CONTROLLER1_MEMORYE"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">CONTROLLER1_MEMORY</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0x0010</span></span><a class="headerlink" href="#_CPPv4N7pancake3m6410metadata_s12ctrler_flags18CONTROLLER1_MEMORYE" title="Permalink to this definition">¶</a><br /></dt>
+<dl class="enumerator">
+<dt id="_CPPv4N7pancake3m6410metadata_s12ctrler_flags18CONTROLLER1_MEMORYE">
+<span id="_CPPv3N7pancake3m6410metadata_s12ctrler_flags18CONTROLLER1_MEMORYE"></span><span id="_CPPv2N7pancake3m6410metadata_s12ctrler_flags18CONTROLLER1_MEMORYE"></span><em class="property">enumerator </em><code class="sig-name descname">CONTROLLER1_MEMORY</code> = 0x0010<a class="headerlink" href="#_CPPv4N7pancake3m6410metadata_s12ctrler_flags18CONTROLLER1_MEMORYE" title="Permalink to this definition">¶</a><br /></dt>
 <dd></dd></dl>
 
-<dl class="cpp enumerator">
-<dt class="sig sig-object cpp" id="_CPPv4N7pancake3m6410metadata_s12ctrler_flags18CONTROLLER2_MEMORYE">
-<span id="_CPPv3N7pancake3m6410metadata_s12ctrler_flags18CONTROLLER2_MEMORYE"></span><span id="_CPPv2N7pancake3m6410metadata_s12ctrler_flags18CONTROLLER2_MEMORYE"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">CONTROLLER2_MEMORY</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0x0020</span></span><a class="headerlink" href="#_CPPv4N7pancake3m6410metadata_s12ctrler_flags18CONTROLLER2_MEMORYE" title="Permalink to this definition">¶</a><br /></dt>
+<dl class="enumerator">
+<dt id="_CPPv4N7pancake3m6410metadata_s12ctrler_flags18CONTROLLER2_MEMORYE">
+<span id="_CPPv3N7pancake3m6410metadata_s12ctrler_flags18CONTROLLER2_MEMORYE"></span><span id="_CPPv2N7pancake3m6410metadata_s12ctrler_flags18CONTROLLER2_MEMORYE"></span><em class="property">enumerator </em><code class="sig-name descname">CONTROLLER2_MEMORY</code> = 0x0020<a class="headerlink" href="#_CPPv4N7pancake3m6410metadata_s12ctrler_flags18CONTROLLER2_MEMORYE" title="Permalink to this definition">¶</a><br /></dt>
 <dd></dd></dl>
 
-<dl class="cpp enumerator">
-<dt class="sig sig-object cpp" id="_CPPv4N7pancake3m6410metadata_s12ctrler_flags18CONTROLLER3_MEMORYE">
-<span id="_CPPv3N7pancake3m6410metadata_s12ctrler_flags18CONTROLLER3_MEMORYE"></span><span id="_CPPv2N7pancake3m6410metadata_s12ctrler_flags18CONTROLLER3_MEMORYE"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">CONTROLLER3_MEMORY</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0x0040</span></span><a class="headerlink" href="#_CPPv4N7pancake3m6410metadata_s12ctrler_flags18CONTROLLER3_MEMORYE" title="Permalink to this definition">¶</a><br /></dt>
+<dl class="enumerator">
+<dt id="_CPPv4N7pancake3m6410metadata_s12ctrler_flags18CONTROLLER3_MEMORYE">
+<span id="_CPPv3N7pancake3m6410metadata_s12ctrler_flags18CONTROLLER3_MEMORYE"></span><span id="_CPPv2N7pancake3m6410metadata_s12ctrler_flags18CONTROLLER3_MEMORYE"></span><em class="property">enumerator </em><code class="sig-name descname">CONTROLLER3_MEMORY</code> = 0x0040<a class="headerlink" href="#_CPPv4N7pancake3m6410metadata_s12ctrler_flags18CONTROLLER3_MEMORYE" title="Permalink to this definition">¶</a><br /></dt>
 <dd></dd></dl>
 
-<dl class="cpp enumerator">
-<dt class="sig sig-object cpp" id="_CPPv4N7pancake3m6410metadata_s12ctrler_flags18CONTROLLER4_MEMORYE">
-<span id="_CPPv3N7pancake3m6410metadata_s12ctrler_flags18CONTROLLER4_MEMORYE"></span><span id="_CPPv2N7pancake3m6410metadata_s12ctrler_flags18CONTROLLER4_MEMORYE"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">CONTROLLER4_MEMORY</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0x0080</span></span><a class="headerlink" href="#_CPPv4N7pancake3m6410metadata_s12ctrler_flags18CONTROLLER4_MEMORYE" title="Permalink to this definition">¶</a><br /></dt>
+<dl class="enumerator">
+<dt id="_CPPv4N7pancake3m6410metadata_s12ctrler_flags18CONTROLLER4_MEMORYE">
+<span id="_CPPv3N7pancake3m6410metadata_s12ctrler_flags18CONTROLLER4_MEMORYE"></span><span id="_CPPv2N7pancake3m6410metadata_s12ctrler_flags18CONTROLLER4_MEMORYE"></span><em class="property">enumerator </em><code class="sig-name descname">CONTROLLER4_MEMORY</code> = 0x0080<a class="headerlink" href="#_CPPv4N7pancake3m6410metadata_s12ctrler_flags18CONTROLLER4_MEMORYE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Indicates the presence of a controller’s Memory Pak.</p>
 </dd></dl>
 
-<dl class="cpp enumerator">
-<dt class="sig sig-object cpp" id="_CPPv4N7pancake3m6410metadata_s12ctrler_flags18CONTROLLER1_RUMBLEE">
-<span id="_CPPv3N7pancake3m6410metadata_s12ctrler_flags18CONTROLLER1_RUMBLEE"></span><span id="_CPPv2N7pancake3m6410metadata_s12ctrler_flags18CONTROLLER1_RUMBLEE"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">CONTROLLER1_RUMBLE</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0x0100</span></span><a class="headerlink" href="#_CPPv4N7pancake3m6410metadata_s12ctrler_flags18CONTROLLER1_RUMBLEE" title="Permalink to this definition">¶</a><br /></dt>
+<dl class="enumerator">
+<dt id="_CPPv4N7pancake3m6410metadata_s12ctrler_flags18CONTROLLER1_RUMBLEE">
+<span id="_CPPv3N7pancake3m6410metadata_s12ctrler_flags18CONTROLLER1_RUMBLEE"></span><span id="_CPPv2N7pancake3m6410metadata_s12ctrler_flags18CONTROLLER1_RUMBLEE"></span><em class="property">enumerator </em><code class="sig-name descname">CONTROLLER1_RUMBLE</code> = 0x0100<a class="headerlink" href="#_CPPv4N7pancake3m6410metadata_s12ctrler_flags18CONTROLLER1_RUMBLEE" title="Permalink to this definition">¶</a><br /></dt>
 <dd></dd></dl>
 
-<dl class="cpp enumerator">
-<dt class="sig sig-object cpp" id="_CPPv4N7pancake3m6410metadata_s12ctrler_flags18CONTROLLER2_RUMBLEE">
-<span id="_CPPv3N7pancake3m6410metadata_s12ctrler_flags18CONTROLLER2_RUMBLEE"></span><span id="_CPPv2N7pancake3m6410metadata_s12ctrler_flags18CONTROLLER2_RUMBLEE"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">CONTROLLER2_RUMBLE</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0x0200</span></span><a class="headerlink" href="#_CPPv4N7pancake3m6410metadata_s12ctrler_flags18CONTROLLER2_RUMBLEE" title="Permalink to this definition">¶</a><br /></dt>
+<dl class="enumerator">
+<dt id="_CPPv4N7pancake3m6410metadata_s12ctrler_flags18CONTROLLER2_RUMBLEE">
+<span id="_CPPv3N7pancake3m6410metadata_s12ctrler_flags18CONTROLLER2_RUMBLEE"></span><span id="_CPPv2N7pancake3m6410metadata_s12ctrler_flags18CONTROLLER2_RUMBLEE"></span><em class="property">enumerator </em><code class="sig-name descname">CONTROLLER2_RUMBLE</code> = 0x0200<a class="headerlink" href="#_CPPv4N7pancake3m6410metadata_s12ctrler_flags18CONTROLLER2_RUMBLEE" title="Permalink to this definition">¶</a><br /></dt>
 <dd></dd></dl>
 
-<dl class="cpp enumerator">
-<dt class="sig sig-object cpp" id="_CPPv4N7pancake3m6410metadata_s12ctrler_flags18CONTROLLER3_RUMBLEE">
-<span id="_CPPv3N7pancake3m6410metadata_s12ctrler_flags18CONTROLLER3_RUMBLEE"></span><span id="_CPPv2N7pancake3m6410metadata_s12ctrler_flags18CONTROLLER3_RUMBLEE"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">CONTROLLER3_RUMBLE</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0x0400</span></span><a class="headerlink" href="#_CPPv4N7pancake3m6410metadata_s12ctrler_flags18CONTROLLER3_RUMBLEE" title="Permalink to this definition">¶</a><br /></dt>
+<dl class="enumerator">
+<dt id="_CPPv4N7pancake3m6410metadata_s12ctrler_flags18CONTROLLER3_RUMBLEE">
+<span id="_CPPv3N7pancake3m6410metadata_s12ctrler_flags18CONTROLLER3_RUMBLEE"></span><span id="_CPPv2N7pancake3m6410metadata_s12ctrler_flags18CONTROLLER3_RUMBLEE"></span><em class="property">enumerator </em><code class="sig-name descname">CONTROLLER3_RUMBLE</code> = 0x0400<a class="headerlink" href="#_CPPv4N7pancake3m6410metadata_s12ctrler_flags18CONTROLLER3_RUMBLEE" title="Permalink to this definition">¶</a><br /></dt>
 <dd></dd></dl>
 
-<dl class="cpp enumerator">
-<dt class="sig sig-object cpp" id="_CPPv4N7pancake3m6410metadata_s12ctrler_flags18CONTROLLER4_RUMBLEE">
-<span id="_CPPv3N7pancake3m6410metadata_s12ctrler_flags18CONTROLLER4_RUMBLEE"></span><span id="_CPPv2N7pancake3m6410metadata_s12ctrler_flags18CONTROLLER4_RUMBLEE"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">CONTROLLER4_RUMBLE</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0x0800</span></span><a class="headerlink" href="#_CPPv4N7pancake3m6410metadata_s12ctrler_flags18CONTROLLER4_RUMBLEE" title="Permalink to this definition">¶</a><br /></dt>
+<dl class="enumerator">
+<dt id="_CPPv4N7pancake3m6410metadata_s12ctrler_flags18CONTROLLER4_RUMBLEE">
+<span id="_CPPv3N7pancake3m6410metadata_s12ctrler_flags18CONTROLLER4_RUMBLEE"></span><span id="_CPPv2N7pancake3m6410metadata_s12ctrler_flags18CONTROLLER4_RUMBLEE"></span><em class="property">enumerator </em><code class="sig-name descname">CONTROLLER4_RUMBLE</code> = 0x0800<a class="headerlink" href="#_CPPv4N7pancake3m6410metadata_s12ctrler_flags18CONTROLLER4_RUMBLEE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Indicates the presence of a controller’s Rumble Pak.</p>
 </dd></dl>
 
 </dd></dl>
 
-<dl class="cpp var">
-<dt class="sig sig-object cpp" id="_CPPv4N7pancake3m6410metadata_s11controllersE">
-<span id="_CPPv3N7pancake3m6410metadata_s11controllersE"></span><span id="_CPPv2N7pancake3m6410metadata_s11controllersE"></span><span id="pancake::m64::metadata_s::controllers__ctrler_flags"></span><a class="reference internal" href="#_CPPv4N7pancake3m6410metadata_s12ctrler_flagsE" title="pancake::m64::metadata_s::ctrler_flags"><span class="n"><span class="pre">ctrler_flags</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">controllers</span></span></span><a class="headerlink" href="#_CPPv4N7pancake3m6410metadata_s11controllersE" title="Permalink to this definition">¶</a><br /></dt>
+<dl class="var">
+<dt id="_CPPv4N7pancake3m6410metadata_s11controllersE">
+<span id="_CPPv3N7pancake3m6410metadata_s11controllersE"></span><span id="_CPPv2N7pancake3m6410metadata_s11controllersE"></span><span id="pancake::m64::metadata_s::controllers__ctrler_flags"></span><a class="reference internal" href="#_CPPv4N7pancake3m6410metadata_s12ctrler_flagsE" title="pancake::m64::metadata_s::ctrler_flags">ctrler_flags</a> <code class="sig-name descname">controllers</code><a class="headerlink" href="#_CPPv4N7pancake3m6410metadata_s11controllersE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>The controller flags for this controller.</p>
 </dd></dl>
 
-<dl class="cpp var">
-<dt class="sig sig-object cpp" id="_CPPv4N7pancake3m6410metadata_s8rom_nameE">
-<span id="_CPPv3N7pancake3m6410metadata_s8rom_nameE"></span><span id="_CPPv2N7pancake3m6410metadata_s8rom_nameE"></span><span id="pancake::m64::metadata_s::rom_name__ss"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">rom_name</span></span></span><a class="headerlink" href="#_CPPv4N7pancake3m6410metadata_s8rom_nameE" title="Permalink to this definition">¶</a><br /></dt>
+<dl class="var">
+<dt id="_CPPv4N7pancake3m6410metadata_s8rom_nameE">
+<span id="_CPPv3N7pancake3m6410metadata_s8rom_nameE"></span><span id="_CPPv2N7pancake3m6410metadata_s8rom_nameE"></span><span id="pancake::m64::metadata_s::rom_name__ss"></span>std::string <code class="sig-name descname">rom_name</code><a class="headerlink" href="#_CPPv4N7pancake3m6410metadata_s8rom_nameE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>The internal ROM name, in ASCII.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
@@ -655,38 +654,38 @@ in order to avoid copying issues.</p>
 </div>
 </dd></dl>
 
-<dl class="cpp var">
-<dt class="sig sig-object cpp" id="_CPPv4N7pancake3m6410metadata_s3crcE">
-<span id="_CPPv3N7pancake3m6410metadata_s3crcE"></span><span id="_CPPv2N7pancake3m6410metadata_s3crcE"></span><span id="pancake::m64::metadata_s::crc__uint32_t"></span><span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">crc</span></span></span><a class="headerlink" href="#_CPPv4N7pancake3m6410metadata_s3crcE" title="Permalink to this definition">¶</a><br /></dt>
+<dl class="var">
+<dt id="_CPPv4N7pancake3m6410metadata_s3crcE">
+<span id="_CPPv3N7pancake3m6410metadata_s3crcE"></span><span id="_CPPv2N7pancake3m6410metadata_s3crcE"></span><span id="pancake::m64::metadata_s::crc__uint32_t"></span>uint32_t <code class="sig-name descname">crc</code><a class="headerlink" href="#_CPPv4N7pancake3m6410metadata_s3crcE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>The CRC of the ROM, taken directly from the ROM file. The field is read as little-endian during
 deserialization.</p>
 </dd></dl>
 
-<dl class="cpp var">
-<dt class="sig sig-object cpp" id="_CPPv4N7pancake3m6410metadata_s12country_codeE">
-<span id="_CPPv3N7pancake3m6410metadata_s12country_codeE"></span><span id="_CPPv2N7pancake3m6410metadata_s12country_codeE"></span><span id="pancake::m64::metadata_s::country_code__uint32_t"></span><span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">country_code</span></span></span><a class="headerlink" href="#_CPPv4N7pancake3m6410metadata_s12country_codeE" title="Permalink to this definition">¶</a><br /></dt>
+<dl class="var">
+<dt id="_CPPv4N7pancake3m6410metadata_s12country_codeE">
+<span id="_CPPv3N7pancake3m6410metadata_s12country_codeE"></span><span id="_CPPv2N7pancake3m6410metadata_s12country_codeE"></span><span id="pancake::m64::metadata_s::country_code__uint32_t"></span>uint32_t <code class="sig-name descname">country_code</code><a class="headerlink" href="#_CPPv4N7pancake3m6410metadata_s12country_codeE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>The country code of the ROM, taken directly from the ROM file. THe field is read as little-endian during
 deserialization.</p>
 </dd></dl>
 
-<dl class="cpp var">
-<dt class="sig sig-object cpp" id="_CPPv4N7pancake3m6410metadata_s12video_pluginE">
-<span id="_CPPv3N7pancake3m6410metadata_s12video_pluginE"></span><span id="_CPPv2N7pancake3m6410metadata_s12video_pluginE"></span><span id="pancake::m64::metadata_s::video_plugin__ss"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">video_plugin</span></span></span><a class="headerlink" href="#_CPPv4N7pancake3m6410metadata_s12video_pluginE" title="Permalink to this definition">¶</a><br /></dt>
+<dl class="var">
+<dt id="_CPPv4N7pancake3m6410metadata_s12video_pluginE">
+<span id="_CPPv3N7pancake3m6410metadata_s12video_pluginE"></span><span id="_CPPv2N7pancake3m6410metadata_s12video_pluginE"></span><span id="pancake::m64::metadata_s::video_plugin__ss"></span>std::string <code class="sig-name descname">video_plugin</code><a class="headerlink" href="#_CPPv4N7pancake3m6410metadata_s12video_pluginE" title="Permalink to this definition">¶</a><br /></dt>
 <dd></dd></dl>
 
-<dl class="cpp var">
-<dt class="sig sig-object cpp" id="_CPPv4N7pancake3m6410metadata_s12input_pluginE">
-<span id="_CPPv3N7pancake3m6410metadata_s12input_pluginE"></span><span id="_CPPv2N7pancake3m6410metadata_s12input_pluginE"></span><span id="pancake::m64::metadata_s::input_plugin__ss"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">input_plugin</span></span></span><a class="headerlink" href="#_CPPv4N7pancake3m6410metadata_s12input_pluginE" title="Permalink to this definition">¶</a><br /></dt>
+<dl class="var">
+<dt id="_CPPv4N7pancake3m6410metadata_s12input_pluginE">
+<span id="_CPPv3N7pancake3m6410metadata_s12input_pluginE"></span><span id="_CPPv2N7pancake3m6410metadata_s12input_pluginE"></span><span id="pancake::m64::metadata_s::input_plugin__ss"></span>std::string <code class="sig-name descname">input_plugin</code><a class="headerlink" href="#_CPPv4N7pancake3m6410metadata_s12input_pluginE" title="Permalink to this definition">¶</a><br /></dt>
 <dd></dd></dl>
 
-<dl class="cpp var">
-<dt class="sig sig-object cpp" id="_CPPv4N7pancake3m6410metadata_s12sound_pluginE">
-<span id="_CPPv3N7pancake3m6410metadata_s12sound_pluginE"></span><span id="_CPPv2N7pancake3m6410metadata_s12sound_pluginE"></span><span id="pancake::m64::metadata_s::sound_plugin__ss"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">sound_plugin</span></span></span><a class="headerlink" href="#_CPPv4N7pancake3m6410metadata_s12sound_pluginE" title="Permalink to this definition">¶</a><br /></dt>
+<dl class="var">
+<dt id="_CPPv4N7pancake3m6410metadata_s12sound_pluginE">
+<span id="_CPPv3N7pancake3m6410metadata_s12sound_pluginE"></span><span id="_CPPv2N7pancake3m6410metadata_s12sound_pluginE"></span><span id="pancake::m64::metadata_s::sound_plugin__ss"></span>std::string <code class="sig-name descname">sound_plugin</code><a class="headerlink" href="#_CPPv4N7pancake3m6410metadata_s12sound_pluginE" title="Permalink to this definition">¶</a><br /></dt>
 <dd></dd></dl>
 
-<dl class="cpp var">
-<dt class="sig sig-object cpp" id="_CPPv4N7pancake3m6410metadata_s10rsp_pluginE">
-<span id="_CPPv3N7pancake3m6410metadata_s10rsp_pluginE"></span><span id="_CPPv2N7pancake3m6410metadata_s10rsp_pluginE"></span><span id="pancake::m64::metadata_s::rsp_plugin__ss"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">rsp_plugin</span></span></span><a class="headerlink" href="#_CPPv4N7pancake3m6410metadata_s10rsp_pluginE" title="Permalink to this definition">¶</a><br /></dt>
+<dl class="var">
+<dt id="_CPPv4N7pancake3m6410metadata_s10rsp_pluginE">
+<span id="_CPPv3N7pancake3m6410metadata_s10rsp_pluginE"></span><span id="_CPPv2N7pancake3m6410metadata_s10rsp_pluginE"></span><span id="pancake::m64::metadata_s::rsp_plugin__ss"></span>std::string <code class="sig-name descname">rsp_plugin</code><a class="headerlink" href="#_CPPv4N7pancake3m6410metadata_s10rsp_pluginE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>The emulator plugins used (as ASCII strings).</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
@@ -695,9 +694,9 @@ exceed that length.</p>
 </div>
 </dd></dl>
 
-<dl class="cpp var">
-<dt class="sig sig-object cpp" id="_CPPv4N7pancake3m6410metadata_s7authorsE">
-<span id="_CPPv3N7pancake3m6410metadata_s7authorsE"></span><span id="_CPPv2N7pancake3m6410metadata_s7authorsE"></span><span id="pancake::m64::metadata_s::authors__ss"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">authors</span></span></span><a class="headerlink" href="#_CPPv4N7pancake3m6410metadata_s7authorsE" title="Permalink to this definition">¶</a><br /></dt>
+<dl class="var">
+<dt id="_CPPv4N7pancake3m6410metadata_s7authorsE">
+<span id="_CPPv3N7pancake3m6410metadata_s7authorsE"></span><span id="_CPPv2N7pancake3m6410metadata_s7authorsE"></span><span id="pancake::m64::metadata_s::authors__ss"></span>std::string <code class="sig-name descname">authors</code><a class="headerlink" href="#_CPPv4N7pancake3m6410metadata_s7authorsE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>The authors of this M64.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
@@ -705,9 +704,9 @@ exceed that length.</p>
 </div>
 </dd></dl>
 
-<dl class="cpp var">
-<dt class="sig sig-object cpp" id="_CPPv4N7pancake3m6410metadata_s11descriptionE">
-<span id="_CPPv3N7pancake3m6410metadata_s11descriptionE"></span><span id="_CPPv2N7pancake3m6410metadata_s11descriptionE"></span><span id="pancake::m64::metadata_s::description__ss"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">description</span></span></span><a class="headerlink" href="#_CPPv4N7pancake3m6410metadata_s11descriptionE" title="Permalink to this definition">¶</a><br /></dt>
+<dl class="var">
+<dt id="_CPPv4N7pancake3m6410metadata_s11descriptionE">
+<span id="_CPPv3N7pancake3m6410metadata_s11descriptionE"></span><span id="_CPPv2N7pancake3m6410metadata_s11descriptionE"></span><span id="pancake::m64::metadata_s::description__ss"></span>std::string <code class="sig-name descname">description</code><a class="headerlink" href="#_CPPv4N7pancake3m6410metadata_s11descriptionE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>The description of this M64.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
@@ -728,7 +727,7 @@ exceed that length.</p>
           <footer>
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
         <a href="sm64.html" class="btn btn-neutral float-right" title="sm64.hpp" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
-        <a href="index.html" class="btn btn-neutral float-left" title="API" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="exception.html" class="btn btn-neutral float-left" title="exception.hpp" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
     </div>
 
   <hr/>

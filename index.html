@@ -13,8 +13,6 @@
   
   <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="_static/graphviz.css" type="text/css" />
   <link rel="stylesheet" href="_static/css/rtd-fix.css" type="text/css" />
 
@@ -33,10 +31,10 @@
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
-        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-        <script src="_static/jquery.js"></script>
-        <script src="_static/underscore.js"></script>
-        <script src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
     
     <script type="text/javascript" src="_static/js/theme.js"></script>
 
@@ -172,6 +170,7 @@ I aim to support the same syntax as Wafel API’s data paths at some point, but 
 <li><p>Use <code class="docutils literal notranslate"><span class="pre">mytype.y</span></code>/<code class="docutils literal notranslate"><span class="pre">mytype-&gt;y</span></code> to get member <code class="docutils literal notranslate"><span class="pre">y</span></code> of struct/union <code class="docutils literal notranslate"><span class="pre">mytype</span></code></p></li>
 <li><p>There is no difference between <code class="docutils literal notranslate"><span class="pre">.</span></code> and <code class="docutils literal notranslate"><span class="pre">-&gt;</span></code>, Pancake auto-detects struct pointers and dereferences them</p></li>
 <li><p>Current limitations only allow base types to be retrieved this way, no struct/array/union support just yet</p></li>
+<li><p>Macro constants and object fields are macro’d in like they would be in C/C++, unlike Wafel. This is done to simplify the parser.</p></li>
 </ul>
 </div>
 <div class="section" id="indices-and-tables">
@@ -186,6 +185,7 @@ I aim to support the same syntax as Wafel API’s data paths at some point, but 
 <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Welcome to Pancake’s documentation!</a></li>
 <li class="toctree-l1"><a class="reference internal" href="api/index.html">API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="api/exception.html">exception.hpp</a></li>
 <li class="toctree-l2"><a class="reference internal" href="api/movie.html">movie.hpp</a></li>
 <li class="toctree-l2"><a class="reference internal" href="api/sm64.html">sm64.hpp</a></li>
 </ul>
