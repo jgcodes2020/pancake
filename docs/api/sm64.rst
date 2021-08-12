@@ -20,7 +20,7 @@ The core libsm64 interface.
     
     Loads libsm64 from the DLL at the specified path.
     
-    :param const char* path: C string with the path to the DLL
+    :param path: C string with the path to the DLL
     
   .. cpp:function:: sm64(std::string path)
   
@@ -36,19 +36,30 @@ The core libsm64 interface.
   
   **Access functions**
     
-  .. cpp:function:: template<typename T> \
-    T& get(std::string expr)
+  .. cpp:function:: template<typename T> T& get(std::string expr)
     
     Gets a reference to a variable from libsm64.
     
-    .. warning::
-      This method is very unsafe. It does not ensure type safety (I have yet to figure out how),
-      so know what return type you want from this method beforehand.
+    .. note::
+      This method performs type checking. If you don't like that, use :cpp:func:`get_unsafe()` instead.
     
     :tparam T: The type of the returned reference
     :param expr: A valid :ref:`accessor expression <about_accessor_expressions>`
-    :throws std::invalid_argument: if the accessor expression does not refer to a base type \
-      or is otherwise not present
+    :throws std::domain_error: if the accessor expression does not refer to a base type
+    :throws pancake::type_error: if the accessor expression's type doesn't match ``T``
+    :throws std::invalid_argument: if the accessor expression is somehow invalid
+    
+  .. cpp:function:: void* get_unsafe(std::string expr)
+    
+    Gets a void pointer to a variable from libsm64.
+    
+    .. warning::
+      This method doesn't perform type checking. If you care about type safety, use :cpp:func:`get()` instead.
+    
+    :tparam T: The type of the returned reference
+    :param expr: A valid :ref:`accessor expression <about_accessor_expressions>`
+    :throws std::domain_error: if the accessor expression does not refer to a base type
+    :throws std::invalid_argument: if the accessor expression is somehow invalid
   
   .. cpp:function:: const std::variant<double, int64_t, nullptr_t> constant(std::string name) const
   

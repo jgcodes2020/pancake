@@ -869,5 +869,26 @@ namespace pdwarf {
     }
     return out;
   }
+  
+  enum class encoding {
+    address = 0x01,
+    boolean = 0x02,
+    complex_float = 0x03,
+    floating_point = 0x04,
+    signed_int = 0x05,
+    signed_char = 0x06,
+    unsigned_int = 0x07,
+    unsigned_char = 0x08,
+    imaginary_float = 0x09,  /* DWARF3 */
+    packed_decimal = 0x0a,  /* DWARF3f */
+    numeric_string = 0x0b,  /* DWARF3f */
+    edited = 0x0c,  /* DWARF3f */
+    signed_fixed = 0x0d,  /* DWARF3f */
+    unsigned_fixed = 0x0e,  /* DWARF3f */
+    decimal_float = 0x0f,  /* DWARF3f */
+    UTF = 0x10,  /* DWARF4 */
+    UCS = 0x11,  /* DWARF5 */
+    ASCII = 0x12,  /* DWARF5 */
+  };
 }
 #endif

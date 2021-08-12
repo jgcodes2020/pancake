@@ -13,6 +13,7 @@
 
 #include <type_traits>
 #include <unordered_map>
+#include <utility>
 #include <variant>
 #include <vector>
 
@@ -60,7 +61,7 @@ namespace pancake {
     std::shared_ptr<Dwarf_Debug_s> dbg;
     string path;
     
-    std::unordered_map<string, void*> cache;
+    std::unordered_map<string, pair<void*, const type_info&>> cache;
     
     impl(string path) : 
       so(dlopen(path.c_str(), RTLD_LAZY)),
@@ -73,18 +74,18 @@ namespace pancake {
       dlclose(so);
     }
     
-    void* const get(string expr) {
-      
-      expr_eval eval;
+    void* const get(string expr, const type_info* provided) {
       auto search = cache.find(expr);
       if (search != cache.end()) {
-        return search->second;
+        auto type = search->second;
+        if (provided != nullptr && type.second != *provided) {
+          stringstream fmt;
+          fmt << "Expected type " << type.second.name() << ", got " << provided->name();
+          throw type_error(fmt.str());
+        }
       }
-      else {
-        eval = compile(
-          parse(expr),
-        dbg);
-      }
+      auto [eval, type] = compile(
+        parse(expr), dbg);
       
       uint8_t* ptr = get_proc_address<uint8_t*>(so, eval.global);
        cerr << eval << "\n";
@@ -185,8 +186,8 @@ namespace pancake {
   sm64::sm64(const char* path) :
     sm64(string(path)) {}
   
-  void* const sm64::_impl_get(string expr) {
-    return pimpl->get(expr);
+  void* const sm64::_impl_get(string expr, const type_info* type) {
+    return pimpl->get(expr, type);
   }
   
   sm64::savestate sm64::alloc_svst() const {
@@ -200,7 +201,6 @@ namespace pancake {
   void sm64::load_svst(const savestate& st) {
     st.load(*this);
   }
-  
   void sm64::advance() {
     pimpl->advance();
   }

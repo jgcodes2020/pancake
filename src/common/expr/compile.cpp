@@ -1,4 +1,6 @@
+#include <libdwarf/libdwarf.h>
 #include "pancake/dwarf/memory.hpp"
+#include "pancake/dwarf/type_lookup.hpp"
 #include <pancake/expr/compile.hpp>
 
 #include <pancake/dwarf/functions.hpp>
@@ -11,6 +13,8 @@
 #include <string>
 #include <sstream>
 #include <stdexcept>
+#include <typeinfo>
+#include <utility>
 
 using std::stringstream, std::invalid_argument, std::cerr;
 using std::unique_ptr, std::shared_ptr, std::string;
@@ -34,7 +38,7 @@ namespace {
 }
 
 namespace pancake::expr {
-  const expr_eval compile(const expr_ast& ast, shared_ptr<Dwarf_Debug_s>& dbg) {
+  const std::pair<expr_eval, const std::type_info&> compile(const expr_ast& ast, shared_ptr<Dwarf_Debug_s>& dbg) {
     expr_eval result;
     
     result.global = ast.global;
@@ -177,19 +181,24 @@ namespace pancake::expr {
     // Throw if not base type or pointer type
     switch (tag) {
       case die_tag::base_type:
-      case die_tag::pointer_type: 
       break;
       default: {
         stringstream fmt;
         fmt << "Expression \033[0;38;5;202";
         print_ast(fmt, ast);
-        fmt << "\033[0m does not refer to a base type or pointer. "
+        fmt << "\033[0m does not refer to a base type. "
         "\033[0;1mstruct\033[0ms and \033[0;1munion\033[0ms are currently unsupported.";
         throw std::domain_error(fmt.str());
       }
     }
     
     //cerr << result << "\n";
-    return result;
+    return std::pair<expr_eval, const std::type_info&> {
+      result, 
+      pdwarf::lookup_type(
+        static_cast<pdwarf::encoding>(pdwarf::attr<Dwarf_Unsigned>(die, attr_type::encoding, dbg)), 
+        pdwarf::attr<Dwarf_Unsigned>(die, attr_type::byte_size, dbg)
+      )
+    };
   }
 }

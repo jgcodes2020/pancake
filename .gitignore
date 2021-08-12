@@ -10,3 +10,5 @@ install
 build/**
 # log files
 *.log
+# Python VEnv
+.venv/**

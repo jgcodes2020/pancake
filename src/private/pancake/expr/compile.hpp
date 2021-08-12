@@ -43,7 +43,7 @@ namespace pancake::expr {
   };
   
   inline std::ostream& operator<<(std::ostream& out, const expr_eval::step& s) {
-    visit(overload {
+    visit(stx::overload {
         [&](expr_eval::offset step) mutable -> void {
           out << " -> offset by " << step.off;
         },
@@ -57,7 +57,7 @@ namespace pancake::expr {
   inline std::ostream& operator<<(std::ostream& out, const expr_eval& e) {
     out << "get " << e.global;
     for (auto& i : e.steps) {
-      visit(overload {
+      visit(stx::overload {
         [&](expr_eval::offset step) mutable -> void {
           out << " -> offset by " << step.off;
         },
@@ -75,6 +75,6 @@ namespace pancake::expr {
    * @param ast an AST to compile
    * @return const compiled_expr the offsets
    */
-  const expr_eval compile(const expr_ast& ast, std::shared_ptr<Dwarf_Debug_s>& dbg);
+  const std::pair<expr_eval, const std::type_info&> compile(const expr_ast& ast, std::shared_ptr<Dwarf_Debug_s>& dbg);
 }
 #endif

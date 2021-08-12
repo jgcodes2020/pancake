@@ -23,6 +23,7 @@ I aim to support the same syntax as Wafel API's data paths at some point, but fo
 - Use ``mytype.y``/``mytype->y`` to get member ``y`` of struct/union ``mytype``
 - There is no difference between ``.`` and ``->``, Pancake auto-detects struct pointers and dereferences them
 - Current limitations only allow base types to be retrieved this way, no struct/array/union support just yet
+- Macro constants and object fields are macro'd in like they would be in C/C++, unlike Wafel. This is done to simplify the parser.
 
 Indices and tables
 ------------------

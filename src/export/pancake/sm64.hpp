@@ -21,7 +21,6 @@
 #include <unordered_map>
 #include <variant>
 
-
 #include <pancake/exception.hpp>
 #include <pancake/movie.hpp>
 
@@ -36,17 +35,17 @@ namespace pancake {
   class sm64 {
     friend struct frame;
 
-   private:
+  private:
     struct impl;
     std::shared_ptr<impl> pimpl;
 
-    void* const _impl_get(std::string expr);
+    void* const _impl_get(std::string expr, const std::type_info* type = nullptr);
 
-   public:
+  public:
     class savestate final {
       friend class sm64;
 
-     private:
+    private:
       struct impl;
       std::unique_ptr<impl> pimpl;
 
@@ -77,9 +76,8 @@ namespace pancake {
     sm64(const char* path);
 
     /**
-     * @brief Returns a pointer to a specific field.
-     * @note This method is inherently unsafe as you CAN cast to the wrong type
-     * and ruin your code.
+     * @brief Returns a reference to a specific field.
+     * @note This method does type checking. You can use `get_unsafe()` if you favour performance over safety.
      *
      * @tparam T Must be an integer or floating-point type that is not `long
      * double`
@@ -87,18 +85,28 @@ namespace pancake {
      * @return T& the value from the accessor expression
      * @exception std::domain_error if the resulting field is not a fundamental
      * type
+     * @exception pancake::type_error if the resulting field does not match `T`
      */
     template <typename T>
     [[nodiscard]] T& get(std::string expr) {
-      static_assert(
-        std::disjunction_v<
-          std::conjunction<std::is_arithmetic<T>,
-                           std::negation<std::is_same<T, long double>>>,
-          std::is_same<T, void*>>,
+      static_assert(std::is_arithmetic_v<T> && !std::is_same_v<T, long double>,
         "T should be any integer, or float or double or void pointer");
 
       // unsafe cast back to correct type
-      return *reinterpret_cast<T*>(_impl_get(expr));
+      return *reinterpret_cast<T*>(_impl_get(expr, &typeid(T)));
+    }
+    
+    /**
+     * @brief Returns a pointer to a specific field.
+     * @note This method does not do type checking. You can use `template<typename T> get()` if you favour safety over performance.
+     * 
+     * @param expr an accessor expression.
+     * @return void* a pointer to the value from the accessor expression
+     * @exception std::domain_error if the resulting field is not a fundamental
+     * type
+     */
+    void* get_unsafe(std::string expr) {
+      return _impl_get(expr);
     }
 
     /**
