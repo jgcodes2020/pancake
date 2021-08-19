@@ -12,6 +12,7 @@
 #include <string>
 #include <locale>
 #include <regex>
+#include <filesystem>
 
 #include <type_traits>
 #include <unordered_map>
@@ -83,22 +84,21 @@ namespace pancake {
       FreeLibrary(dll);
     }
     
-    void* const get(string expr) {
-      
-      expr_eval eval;
+    void* const get(string expr, const type_info* provided) {
       auto search = cache.find(expr);
       if (search != cache.end()) {
-        eval = search->second;
+        auto type = search->second;
+        if (provided != nullptr && type.second != *provided) {
+          stringstream fmt;
+          fmt << "Expected type " << type.second.name() << ", got " << provided->name();
+          throw type_error(fmt.str());
+        }
       }
-      else {
-        eval = compile(
-          parse(expr),
-        dbg);
-        cache.insert(pair<string, expr_eval>(expr, eval));
-      }
+      auto [eval, type] = compile(
+        parse(expr), dbg);
       
-      uint8_t* ptr = get_proc_address<uint8_t*>(dll, eval.global);
-      cerr << eval << "\n";
+      uint8_t* ptr = get_proc_address<uint8_t*>(so, eval.global);
+       cerr << eval << "\n";
       for (size_t i = 0; i < eval.steps.size(); i++) {
         visit(stx::overload {
           [&](const expr_eval::offset& step) mutable -> void {
@@ -116,13 +116,9 @@ namespace pancake {
           }
         }, eval.steps[i]);
       }
+      cache.emplace(expr, ptr);
       return ptr;
     }
-    
-    void advance() {
-      get_proc_address<void(*)(void)>(dll, "sm64_update")();
-    }
-  };
   
   struct sm64::savestate::impl {
     HMODULE game_ptr;

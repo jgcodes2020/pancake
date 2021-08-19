@@ -1,0 +1,81 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 75cae4c9..385a617a 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -1,7 +1,9 @@
+ cmake_minimum_required(VERSION 3.3)
+-
+ project(libdwarf C CXX)
+ 
++include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
++conan_basic_setup(TARGETS)
++
+ list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
+ include_directories( ${CMAKE_BINARY_DIR} )
+ 
+@@ -305,40 +307,8 @@ check_c_source_compiles([=[
+       return 0;
+   } ]=]  HAVE_REGEX)
+ 
+-set(CMAKE_REQUIRED_LIBRARIES z)
+-check_c_source_compiles( [=[
+-  #include "zlib.h"
+-  int main()
+-  {
+-      Bytef dest[100];
+-      uLongf destlen = 100;
+-      Bytef *src = 0;
+-      uLong srclen = 3;
+-      int res = uncompress(dest,&destlen,src,srclen);
+-      if (res == Z_OK) {
+-           /* ALL IS WELL */
+-      }
+-      return 0;
+-  } ]=]  HAVE_ZLIB )
+-check_c_source_compiles( [=[
+-  #include "zlib.h"
+-  int main()
+-  {
+-      Bytef dest[100];
+-      uLongf destlen = 100;
+-      Bytef *src = 0;
+-      uLong srclen = 3;
+-      int res = uncompress(dest,&destlen,src,srclen);
+-      if (res == Z_OK) {
+-           /* ALL IS WELL */
+-      }
+-      return 0;
+-  } ]=]  HAVE_ZLIB_H )
+-set(CMAKE_REQUIRED_LIBRARIES)
+-if (HAVE_ZLIB) 
+-  # For linking in libz
+-  set(DW_FZLIB "z")
+-endif()
++set(DW_FZLIB CONAN_PKG::zlib)
++
+ 
+ check_c_source_compiles([=[
+ #include <stdint.h>
+diff --git a/cmake/config.h.cmake b/cmake/config.h.cmake
+index 2e4d7e97..29bbdf32 100644
+--- a/cmake/config.h.cmake
++++ b/cmake/config.h.cmake
+@@ -126,11 +126,8 @@
+ /* Set to 1 if __attribute__ ((unused)) is available. */
+ #cmakedefine HAVE_UNUSED_ATTRIBUTE 1
+ 
+-/* Set to 1 if zlib decompression is available. */
+-#cmakedefine HAVE_ZLIB 1
+-
+-/* Define to 1 if you have the <zlib.h> header file. */
+-#cmakedefine HAVE_ZLIB_H 1
++#define HAVE_ZLIB 1
++#define HAVE_ZLIB_H 1
+ 
+ /* Define to the sub-directory where libtool stores uninstalled libraries. */
+ #cmakedefine LT_OBJDIR 1
+@@ -185,4 +182,3 @@
+ 
+ /* Define to `unsigned int' if <sys/types.h> does not define. */
+ #undef size_t
+-

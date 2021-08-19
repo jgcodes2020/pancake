@@ -22,21 +22,18 @@ Reasons include:
 - libdwarf (the only DWARF parser I found for Windows) is slow
 - Wafel caches the address of globals during data path compilation, Pancake doesn't (for safety reasons)
 
-## How do I use it?
-Download from the GitHub releases, the folders in your zip should explain themselves. Documentation is available on [this repo's GitHub Pages.](https://jgcodes2020.github.io/pancake)
+## Building instructions
+You'll need:
+- A relatively recent CMake version (>=3.15)
+- The Conan package manager (`pip install conan`)
+- Recommended: Ninja (`pip install ninja`) to improve build times
 
-If you want to build it on your own computer, see below.
+### Standalone
+Same as any other ordinary CMake package. There are no options at the moment, because I haven't seen the need for it.
 
-### Building it yourself
-This is just your standard CMake project. As such, you can build it like so:
-```bash
-mkdir build && cd build
-cmake ..
-cmake --build .
-```
-I recommend using the Ninja generator if you're using VSCode, as that guarantees access to a compilation database. As a sidenote, no one has built libsm64 on a Mac, and as such you can only use Windows or Linux.
-
-I think I will need more setup to allow use of `find_package`, but `ExternalProject` should work OK.
+### As a Conan package
+Run `conan export . pancake/0.2.0@local/beta` in the project folder. This exports Pancake as a Conan 
+recipe that you can use in your projects.
 
 
 ## Legal issues, acknowledgements, etc.

@@ -1,17 +1,15 @@
-/**
- * @file dwarf_enums.hpp
- * @author your name (you@domain.com)
- * @brief Enums for dwarf.hpp, replaces dwarf.h
- * @version 0.1
- * @date 2021-06-22
- * 
- * @copyright Copyright (c) 2021
- */
+/******************************************************************
+This Source Code Form is subject to the terms of the Mozilla Public
+License, v. 2.0. If a copy of the MPL was not distributed with this
+file, You can obtain one at http://mozilla.org/MPL/2.0/.
+******************************************************************/
+
 #ifndef _PANCAKE_DWARF_ENUMS_HPP_
 #define _PANCAKE_DWARF_ENUMS_HPP_
 
 #include <cstdint>
 #include <iostream>
+#include <stdexcept>
 
 #undef ERROR
 
@@ -530,7 +528,9 @@ namespace pdwarf {
       case attr_type::loclists_base: {
         return out << "loclists_base";
       } break;
+      default: throw std::runtime_error("AAAAAAAAAAAAAAA");
     }
+    return out;
   }
   enum class attr_form {
     addr = 0x01,
@@ -870,7 +870,7 @@ namespace pdwarf {
     return out;
   }
   
-  enum class encoding {
+  enum class encoding : uint16_t {
     address = 0x01,
     boolean = 0x02,
     complex_float = 0x03,
@@ -890,5 +890,67 @@ namespace pdwarf {
     UCS = 0x11,  /* DWARF5 */
     ASCII = 0x12,  /* DWARF5 */
   };
+  
+  inline std::ostream& operator<<(std::ostream& out, encoding enc) {
+    switch (enc) {
+      case encoding::address: {
+        out << "address";
+      } break;
+      case encoding::boolean: {
+        out << "boolean";
+      } break;
+      case encoding::complex_float: {
+        out << "complex_float";
+      } break;
+      case encoding::floating_point: {
+        out << "floating_point";
+      } break;
+      case encoding::signed_int: {
+        out << "signed_int";
+      } break;
+      case encoding::signed_char: {
+        out << "signed_char";
+      } break;
+      case encoding::unsigned_int: {
+        out << "unsigned_int";
+      } break;
+      case encoding::unsigned_char: {
+        out << "unsigned_char";
+      } break;
+      case encoding::imaginary_float: {
+        out << "imaginary_float";
+      } break;
+      case encoding::packed_decimal: {
+        out << "packed_decimal";
+      } break;
+      case encoding::numeric_string: {
+        out << "numeric_string";
+      } break;
+      case encoding::edited: {
+        out << "edited";
+      } break;
+      case encoding::signed_fixed: {
+        out << "signed_fixed";
+      } break;
+      case encoding::unsigned_fixed: {
+        out << "unsigned_fixed";
+      } break;
+      case encoding::decimal_float: {
+        out << "decimal_float";
+      } break;
+      case encoding::UTF: {
+        out << "UTF";
+      } break;
+      case encoding::UCS: {
+        out << "UCS";
+      } break;
+      case encoding::ASCII: {
+        out << "ASCII";
+      } break;
+      default: throw std::runtime_error("AAAAAAAAAA");
+    }
+    return out;
+    
+  }
 }
 #endif

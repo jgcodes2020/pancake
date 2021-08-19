@@ -1,13 +1,9 @@
-/**
- * @file compile.hpp
- * @author your name (you@domain.com)
- * @brief Compiler for "C-style accessor expression" ASTs
- * @version 0.1
- * @date 2021-06-29
- * 
- * @copyright Copyright (c) 2021
- * 
- */
+/******************************************************************
+This Source Code Form is subject to the terms of the Mozilla Public
+License, v. 2.0. If a copy of the MPL was not distributed with this
+file, You can obtain one at http://mozilla.org/MPL/2.0/.
+******************************************************************/
+
 #ifndef _PANCAKE_EXPR_COMPILE_HPP_
 #define _PANCAKE_EXPR_COMPILE_HPP_
 #include <cstdint>

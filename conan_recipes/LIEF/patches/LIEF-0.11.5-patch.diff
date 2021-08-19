@@ -1,0 +1,251 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 5c6a1cc..88c4fa4 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -32,6 +32,9 @@ project(
+   VERSION ${LIEF_VERSION_MAJOR}.${LIEF_VERSION_MINOR}.${LIEF_VERSION_PATCH})
+ message(STATUS "${PROJECT_NAME} ${PROJECT_VERSION}")
+ 
++include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
++conan_basic_setup(TARGETS)
++
+ # LIEF options
+ # =============
+ include(LIEFOptions)
+@@ -102,10 +105,10 @@ set(LIEF_PRIVATE_INCLUDE_FILES)
+ 
+ set(LIBLIEF_SOURCE_FILES
+     "${ELG_CC_PATH}"
+-    "${mbedtls_src_crypto}"
+-    "${mbedtls_src_x509}"
+-    "${mbedtls_src_tls}"
+-    "${LIBFUZZER_SRC_FILES}"
++    # "${mbedtls_src_crypto}"
++    # "${mbedtls_src_x509}"
++    # "${mbedtls_src_tls}"
++    # "${LIBFUZZER_SRC_FILES}"
+     "${CMAKE_CURRENT_SOURCE_DIR}/src/errors.cpp"
+     "${CMAKE_CURRENT_SOURCE_DIR}/src/hash_stream.cpp"
+     "${CMAKE_CURRENT_SOURCE_DIR}/src/logging.cpp"
+@@ -150,14 +153,14 @@ set(LIEF_VISITOR_INCLUDE_FILES
+ 
+ set(LIEF_INCLUDE_FILES ${LIEF_INC_FILES} ${LIEF_VISITOR_INCLUDE_FILES})
+ 
+-set(LIEF_JSON_SRC "${CMAKE_CURRENT_SOURCE_DIR}/src/visitors/json.cpp")
+-set(LIEF_JSON_HDR "${CMAKE_CURRENT_SOURCE_DIR}/include/LIEF/json.hpp"
+-                  "${CMAKE_CURRENT_BINARY_DIR}/include/LIEF/third-party/json.hpp")
++# set(LIEF_JSON_SRC "${CMAKE_CURRENT_SOURCE_DIR}/src/visitors/json.cpp")
++# set(LIEF_JSON_HDR "${CMAKE_CURRENT_SOURCE_DIR}/include/LIEF/json.hpp"
++#                   "${CMAKE_CURRENT_BINARY_DIR}/include/LIEF/third-party/json.hpp")
+ 
+-if(LIEF_ENABLE_JSON)
+-  list(APPEND LIBLIEF_SOURCE_FILES "${LIEF_JSON_SRC}")
+-  list(APPEND LIEF_INC_FILES "${LIEF_JSON_HDR}")
+-endif()
++# if(LIEF_ENABLE_JSON)
++#   list(APPEND LIBLIEF_SOURCE_FILES "${LIEF_JSON_SRC}")
++#   list(APPEND LIEF_INC_FILES "${LIEF_JSON_HDR}")
++# endif()
+ 
+ source_group("Header Files" FILES ${LIEF_INC_FILES})
+ source_group("Source Files" FILES ${LIBLIEF_SOURCE_FILES})
+@@ -166,6 +169,21 @@ source_group("Header Files\\visitors" FILES ${LIEF_VISITOR_INCLUDE_FILES})
+ 
+ add_library(LIB_LIEF ${LIBLIEF_SOURCE_FILES} ${LIEF_INCLUDE_FILES})
+ 
++# Conan dependencies
++# ------------------
++
++target_link_libraries(LIB_LIEF 
++  CONAN_PKG::mbedtls 
++  CONAN_PKG::boost 
++  CONAN_PKG::utfcpp
++)
++if (LIEF_ENABLE_JSON)
++  target_link_libraries(LIB_LIEF CONAN_PKG::nlohmann_json)
++endif()
++if (LIEF_SUPPORT_CXX14 AND NOT LIEF_DISABLE_FROZEN)
++  target_link_libraries(LIB_LIEF CONAN_PKG::frozen)
++endif()
++
+ if(WINDOWS AND BUILD_SHARED_LIBS)
+   target_link_libraries(LIB_LIEF ws2_32)
+ endif()
+@@ -310,47 +328,47 @@ target_include_directories(
+   PUBLIC "${LIEF_PUBLIC_INCLUDE_DIR}"
+   PRIVATE "${LIEF_PRIVATE_INCLUDE_DIR}")
+ 
+-if(LIEF_ENABLE_JSON)
+-  add_custom_command(OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/include/LIEF/third-party/json.hpp
+-    COMMAND
+-      ${CMAKE_COMMAND} -E copy_directory ${LIBJSON_SOURCE_DIR}/
+-      ${CMAKE_CURRENT_BINARY_DIR}/include/LIEF/third-party/
+-    DEPENDS lief_libjson)
+-
+-  target_sources(LIB_LIEF PRIVATE
+-    ${CMAKE_CURRENT_BINARY_DIR}/include/LIEF/third-party/json.hpp)
+-endif()
+-
+-if(LIEF_FROZEN_ENABLED)
+-  add_dependencies(LIB_LIEF lief_frozen)
+-endif()
+-
+-# =======================================
+-# Leaf
+-# =======================================
+-add_custom_command(OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/include/LIEF/third-party/boost/leaf/all.hpp
+-  COMMAND
+-    ${CMAKE_COMMAND} -E copy_directory ${LEAF_INCLUDE_DIR}/
+-    ${CMAKE_CURRENT_BINARY_DIR}/include/LIEF/third-party/
+-  DEPENDS lief_leaf)
+-
+-target_sources(LIB_LIEF PRIVATE
+-  ${CMAKE_CURRENT_BINARY_DIR}/include/LIEF/third-party/boost/leaf/all.hpp)
+-
+-# =======================================
+-# utfcpp
+-# =======================================
+-add_custom_command(OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/include/LIEF/third-party/utfcpp/utf8.h
+-  COMMAND
+-    ${CMAKE_COMMAND} -E copy_directory ${UTFCPP_INCLUDE_DIR}/
+-    ${CMAKE_CURRENT_BINARY_DIR}/include/LIEF/third-party/utfcpp
+-  DEPENDS lief_utfcpp)
+-
+-target_sources(LIB_LIEF PRIVATE
+-  ${CMAKE_CURRENT_BINARY_DIR}/include/LIEF/third-party/utfcpp/utf8.h)
+-
+-
+-add_dependencies(LIB_LIEF lief_spdlog lief_mbed_tls)
++# if(LIEF_ENABLE_JSON)
++#   add_custom_command(OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/include/LIEF/third-party/json.hpp
++#     COMMAND
++#       ${CMAKE_COMMAND} -E copy_directory ${LIBJSON_SOURCE_DIR}/
++#       ${CMAKE_CURRENT_BINARY_DIR}/include/LIEF/third-party/
++#     DEPENDS lief_libjson)
++
++#   target_sources(LIB_LIEF PRIVATE
++#     ${CMAKE_CURRENT_BINARY_DIR}/include/LIEF/third-party/json.hpp)
++# endif()
++
++# if(LIEF_FROZEN_ENABLED)
++#   add_dependencies(LIB_LIEF lief_frozen)
++# endif()
++
++# # =======================================
++# # Leaf
++# # =======================================
++# add_custom_command(OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/include/LIEF/third-party/boost/leaf/all.hpp
++#   COMMAND
++#     ${CMAKE_COMMAND} -E copy_directory ${LEAF_INCLUDE_DIR}/
++#     ${CMAKE_CURRENT_BINARY_DIR}/include/LIEF/third-party/
++#   DEPENDS lief_leaf)
++
++# target_sources(LIB_LIEF PRIVATE
++#   ${CMAKE_CURRENT_BINARY_DIR}/include/LIEF/third-party/boost/leaf/all.hpp)
++
++# # =======================================
++# # utfcpp
++# # =======================================
++# add_custom_command(OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/include/LIEF/third-party/utfcpp/utf8.h
++#   COMMAND
++#     ${CMAKE_COMMAND} -E copy_directory ${UTFCPP_INCLUDE_DIR}/
++#     ${CMAKE_CURRENT_BINARY_DIR}/include/LIEF/third-party/utfcpp
++#   DEPENDS lief_utfcpp)
++
++# target_sources(LIB_LIEF PRIVATE
++#   ${CMAKE_CURRENT_BINARY_DIR}/include/LIEF/third-party/utfcpp/utf8.h)
++
++
++# add_dependencies(LIB_LIEF lief_spdlog lief_mbed_tls)
+ 
+ # Flags definition
+ # ----------------
+diff --git a/include/LIEF/errors.hpp b/include/LIEF/errors.hpp
+index 9eee704..1cd0e7c 100644
+--- a/include/LIEF/errors.hpp
++++ b/include/LIEF/errors.hpp
+@@ -16,7 +16,7 @@
+ #ifndef LIEF_ERROR_H_
+ #define LIEF_ERROR_H_
+ #include <system_error>
+-#include <LIEF/third-party/boost/leaf/all.hpp>
++#include <boost/leaf/detail/all.hpp>
+ 
+ //! LIEF error codes definition
+ enum class lief_errors {
+diff --git a/include/LIEF/json.hpp b/include/LIEF/json.hpp
+index 9e24650..18f085d 100644
+--- a/include/LIEF/json.hpp
++++ b/include/LIEF/json.hpp
+@@ -19,7 +19,7 @@
+ #include <LIEF/config.h>
+ 
+ #ifdef LIEF_JSON_SUPPORT
+-#include <LIEF/third-party/json.hpp>
++#include <nlohmann/json.hpp>
+ 
+ using json = nlohmann::json;
+ #endif
+diff --git a/src/BinaryStream/BinaryStream.cpp b/src/BinaryStream/BinaryStream.cpp
+index 1b9a8c9..eb76a75 100644
+--- a/src/BinaryStream/BinaryStream.cpp
++++ b/src/BinaryStream/BinaryStream.cpp
+@@ -16,7 +16,7 @@
+ #include "LIEF/BinaryStream/BinaryStream.hpp"
+ #include "LIEF/DWARF/enums.hpp"
+ #include "LIEF/utils.hpp"
+-#include "LIEF/third-party/utfcpp/utf8/checked.h"
++#include "utf8/checked.h"
+ 
+ #include <iomanip>
+ #include <sstream>
+@@ -278,4 +278,3 @@ void BinaryStream::set_endian_swap(bool swap) {
+   this->endian_swap_ = swap;
+ }
+ }
+-
+diff --git a/src/PE/Builder.cpp b/src/PE/Builder.cpp
+index 894f824..6f4e8ea 100644
+--- a/src/PE/Builder.cpp
++++ b/src/PE/Builder.cpp
+@@ -21,7 +21,7 @@
+ 
+ #include "logging.hpp"
+ 
+-#include "LIEF/third-party/utfcpp/utf8.h"
++#include "utf8.h"
+ #include "LIEF/exception.hpp"
+ 
+ #include "LIEF/PE/Builder.hpp"
+diff --git a/src/PE/signature/SignatureParser.cpp b/src/PE/signature/SignatureParser.cpp
+index b9e4b0a..c26f17d 100644
+--- a/src/PE/signature/SignatureParser.cpp
++++ b/src/PE/signature/SignatureParser.cpp
+@@ -44,7 +44,7 @@
+ 
+ #include "LIEF/PE/signature/OIDToString.hpp"
+ 
+-#include "LIEF/third-party/utfcpp/utf8.h"
++#include "utf8.h"
+ #include "logging.hpp"
+ #include "pkcs7.h"
+ 
+@@ -1134,5 +1134,3 @@ result<SignatureParser::SpcPeImageData> SignatureParser::parse_spc_pe_image_data
+ 
+ }
+ }
+-
+-
+diff --git a/src/utils.cpp b/src/utils.cpp
+index c95d5ec..bbae96d 100644
+--- a/src/utils.cpp
++++ b/src/utils.cpp
+@@ -28,7 +28,7 @@
+ #include <spdlog/fmt/fmt.h>
+ 
+ #include "LIEF/utils.hpp"
+-#include "LIEF/third-party/utfcpp/utf8.h"
++#include "utf8.h"
+ 
+ namespace LIEF {
+ uint64_t align(uint64_t value, uint64_t align_on) {

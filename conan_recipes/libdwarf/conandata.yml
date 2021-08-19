@@ -1,0 +1,5 @@
+patches:
+  "0.1.1": "patches/libdwarf-0.1.1-patch.diff"
+package:
+  "0.1.1":
+    libdwarf_dir: "src/lib/libdwarf"

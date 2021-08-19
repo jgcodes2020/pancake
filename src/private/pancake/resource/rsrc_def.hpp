@@ -1,13 +1,9 @@
-/**
- * @file resource_struct.hpp
- * @author jgcodes2020
- * @brief typedefs arrays as resources.
- * @version 0.1
- * @date 2021-06-22
- * 
- * @copyright Copyright (c) 2021
- * 
- */
+/******************************************************************
+This Source Code Form is subject to the terms of the Mozilla Public
+License, v. 2.0. If a copy of the MPL was not distributed with this
+file, You can obtain one at http://mozilla.org/MPL/2.0/.
+******************************************************************/
+
 #ifndef _PANCAKE_RSRC_DEF_HPP_
 #define _PANCAKE_RSRC_DEF_HPP_
 #include <sstream>

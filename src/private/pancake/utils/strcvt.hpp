@@ -1,36 +1,20 @@
-/**
- * @file utils.hpp
- * @author your name (you@domain.com)
- * @brief A bunch of useful functions.
- * @version 0.1
- * @date 2021-06-17
- * 
- * @copyright Copyright (c) 2021
- */
+/******************************************************************
+This Source Code Form is subject to the terms of the Mozilla Public
+License, v. 2.0. If a copy of the MPL was not distributed with this
+file, You can obtain one at http://mozilla.org/MPL/2.0/.
+******************************************************************/
+
 #ifndef _PANCAKE_UTILS_STRCVT_HPP_
 #define _PANCAKE_UTILS_STRCVT_HPP_
 
-#include <string>
 #include <locale>
-#include <codecvt>
+#include <sstream>
+#include <string>
+#include <string_view>
 
-namespace pancake {
-  /**
-   * @brief String conversion stuff.
-   */
-  namespace strcvt {
-    /**
-     * @brief The UTF-8 locale.
-     */
-    std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>> converter;
-    
-    inline std::string to_utf8(std::wstring str) {
-      return converter.to_bytes(str);
-    }
-    inline std::wstring to_utf16(std::string str) {
-      return converter.from_bytes(str);
-    }
-  }
-  
-}
+namespace pancake::strcvt {
+
+  std::string to_char_string(std::wstring str);
+  std::wstring to_utf16(std::string str);
+}  // namespace pancake::strcvt
 #endif

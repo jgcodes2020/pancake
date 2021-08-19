@@ -1,0 +1,2 @@
+patches:
+  "0.11.5": "patches/LIEF-0.11.5-patch.diff"

@@ -1,3 +1,11 @@
+/***************************
+The source code below is licensed under the BSD Zero-Clause License.
+See the README.md in this directory for details.
+
+Many people will probably have written this in some other form,
+so I have no reason to go after anyone.
+***************************/
+
 #ifndef _PANCAKE_STX_OVERLOAD_HPP
 #define _PANCAKE_STX_OVERLOAD_HPP
 

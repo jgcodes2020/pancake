@@ -1,3 +1,9 @@
+/******************************************************************
+This Source Code Form is subject to the terms of the Mozilla Public
+License, v. 2.0. If a copy of the MPL was not distributed with this
+file, You can obtain one at http://mozilla.org/MPL/2.0/.
+******************************************************************/
+
 #include <pancake/sm64.hpp>
 
 #include <any>
@@ -77,12 +83,13 @@ namespace pancake {
     void* const get(string expr, const type_info* provided) {
       auto search = cache.find(expr);
       if (search != cache.end()) {
-        auto type = search->second;
-        if (provided != nullptr && type.second != *provided) {
+        auto& type = search->second.second;
+        if (provided != nullptr && type != *provided) {
           stringstream fmt;
-          fmt << "Expected type " << type.second.name() << ", got " << provided->name();
+          fmt << "Expected type " << type.name() << ", got " << provided->name();
           throw type_error(fmt.str());
         }
+        return search->second.first;
       }
       auto [eval, type] = compile(
         parse(expr), dbg);
@@ -106,7 +113,7 @@ namespace pancake {
           }
         }, eval.steps[i]);
       }
-      cache.emplace(expr, ptr);
+      cache.emplace(expr, std::pair<void*, const type_info&> {reinterpret_cast<void*>(ptr), type});
       return ptr;
     }
     

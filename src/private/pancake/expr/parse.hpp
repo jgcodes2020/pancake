@@ -1,12 +1,9 @@
-/**
- * @file exparser.hpp
- * @author jgcodes2020
- * @brief Parser for "C-style accessor expressions"
- * @version 0.1
- * @date 2021-06-18
- * 
- * @copyright Copyright (c) 2021
- */
+/******************************************************************
+This Source Code Form is subject to the terms of the Mozilla Public
+License, v. 2.0. If a copy of the MPL was not distributed with this
+file, You can obtain one at http://mozilla.org/MPL/2.0/.
+******************************************************************/
+
 #ifndef _PANCAKE_EXPR_PARSE_HPP_
 #define _PANCAKE_EXPR_PARSE_HPP_
 
@@ -73,7 +70,7 @@ namespace pancake::expr {
   };
   
   inline std::ostream& operator<<(std::ostream& out, const expr_ast::step& step) {
-    visit(overload {
+    visit(stx::overload {
       [&](expr_ast::subscript step) mutable -> void {
         out << "subscript " << step.index;
       },
@@ -88,7 +85,7 @@ namespace pancake::expr {
     out << "get " << code.global;
     for (auto& i: code.steps) {
       out << " -> ";
-      visit(overload {
+      visit(stx::overload {
         [&](expr_ast::subscript step) mutable -> void {
           out << "subscript " << step.index;
         },

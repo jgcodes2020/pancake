@@ -1,0 +1,22 @@
+diff --git a/include/mbedtls/config.h b/include/mbedtls/config.h
+index 464b61ee2..1a0e29e87 100644
+--- a/include/mbedtls/config.h
++++ b/include/mbedtls/config.h
+@@ -2835,7 +2835,7 @@
+  *            it, and considering stronger message digests instead.
+  *
+  */
+-//#define MBEDTLS_MD2_C
++#define MBEDTLS_MD2_C
+ 
+ /**
+  * \def MBEDTLS_MD4_C
+@@ -2852,7 +2852,7 @@
+  *            it, and considering stronger message digests instead.
+  *
+  */
+-//#define MBEDTLS_MD4_C
++#define MBEDTLS_MD4_C
+ 
+ /**
+  * \def MBEDTLS_MD5_C

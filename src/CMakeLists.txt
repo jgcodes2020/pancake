@@ -21,6 +21,7 @@ set(pancake_sources
   "common/expr/compile.cpp" 
   "common/expr/parse.cpp" 
   "common/dwarf/error.cpp"
+  "common/dwarf/type_lookup.cpp"
 )
 if(${CMAKE_SYSTEM_NAME} STREQUAL "Windows")
   list(APPEND pancake_sources
@@ -53,9 +54,6 @@ set_target_properties(pancake PROPERTIES
   CXX_STANDARD_REQUIRED on 
 )
 
-if(${CMAKE_SYSTEM_NAME} STREQUAL "Linux")
-endif()
-
 # Include both public/private headers
 target_include_directories(pancake 
   PUBLIC ${pancake_export} 
@@ -65,12 +63,16 @@ target_include_directories(pancake
 
 if(${CMAKE_SYSTEM_NAME} STREQUAL "Windows")
   target_link_libraries(pancake 
-    PUBLIC LIEF::dep libdwarf::dep nlohmann_json::dep
+    PUBLIC CONAN_PKG::LIEF CONAN_PKG::libdwarf CONAN_PKG::nlohmann_json
   )
 elseif(${CMAKE_SYSTEM_NAME} STREQUAL "Linux")
   target_link_libraries(pancake 
-    PUBLIC LIEF::dep libdwarf::dep nlohmann_json::dep ${CMAKE_DL_LIBS}
+    PUBLIC CONAN_PKG::LIEF CONAN_PKG::libdwarf CONAN_PKG::nlohmann_json ${CMAKE_DL_LIBS}
   )
 else()
   message(FATAL_ERROR "This library can only be compiled for Windows and Linux. I don't have a Mac, so I can't build Apple software.")
 endif()
+
+# Install stuff
+install(TARGETS pancake DESTINATION "lib")
+install(DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/export" DESTINATION "include")

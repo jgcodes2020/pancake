@@ -10,4 +10,4 @@ target_include_directories(experiment
   PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/include"
 )
 
-target_link_libraries(experiment pancake backward::dep)
+target_link_libraries(experiment pancake)
