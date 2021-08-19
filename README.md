@@ -36,5 +36,18 @@ Run `conan export . pancake/0.2.0@local/beta` in the project folder. This export
 recipe that you can use in your projects.
 
 
-## Legal issues, acknowledgements, etc.
-I am currently not willing to license Pancake as open source, simply due to the non-licensing of the Super Mario 64 decompilation. If I can be 100% sure Nintendo isn't going to chase after me, I will officially open-source this.
+## Legal obligations
+libdwarf is licensed under the LGPL. To comply, I must provide instructions on relinking:
+1. Make a CMake imported target for your libdwarf, like so:
+```
+add_library(libdwarf_custom STATIC IMPORTED)
+set_target_properties(libdwarf_custom PROPERTIES
+  IMPORTED_LOCATION ${LIBDWARF_LIBFILE}
+  INTERFACE_INCLUDE_DIRECTORIES ${LIBDWARF_INCLUDE_DIRS}
+)
+```
+2. Replace `CONAN_PKG::libdwarf` with `libdwarf_custom` or whatever you named your cmake target.
+3. You're done!
+
+This library is licensed under the Mozilla Public License, version 2. See the license at LICENSE.md 
+for full information.
