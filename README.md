@@ -37,8 +37,8 @@ recipe that you can use in your projects.
 
 
 ## Legal obligations
-libdwarf is licensed under the LGPL. To comply, I must provide instructions on relinking:
-1. Make a CMake imported target for your libdwarf, like so:
+libdwarf is licensed under the LGPL. To comply, I have provide instructions on relinking:
+1. Make a CMake imported target for your libdwarf. Here's a template.
 ```
 add_library(libdwarf_custom STATIC IMPORTED)
 set_target_properties(libdwarf_custom PROPERTIES
@@ -46,8 +46,10 @@ set_target_properties(libdwarf_custom PROPERTIES
   INTERFACE_INCLUDE_DIRECTORIES ${LIBDWARF_INCLUDE_DIRS}
 )
 ```
+  - Replace \${LIBDWARF_LIBFILE} with the path to your library.
+  - Replace \${LIBDWARF_INCLUDE_DIRS} with the path to your include directory.
 2. Replace `CONAN_PKG::libdwarf` with `libdwarf_custom` or whatever you named your cmake target.
-3. You're done!
+3. You're done, rebuild again and test!
 
 This library is licensed under the Mozilla Public License, version 2. See the license at LICENSE.md 
 for full information.
