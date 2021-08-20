@@ -68,11 +68,11 @@ class LibdwarfConan(ConanFile):
 
     def build(self):
         cmake = CMake(self)
-        try:
-            shutil.copy(path.join(self.install_folder, "conanbuildinfo.cmake"), path.join(
-                self.build_folder, "conanbuildinfo.cmake"))
-        except:
-            pass
+        
+        # Use ninja if available, because it's fast
+        if shutil.which("ninja") is not None:
+            cmake.generator = "Ninja"
+        
         cmake.configure(defs={
             "LIBDWARF_CRT": ""
         }, source_dir="libdwarf-code")

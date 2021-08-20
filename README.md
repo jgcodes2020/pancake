@@ -29,11 +29,11 @@ You'll need:
 - Recommended: Ninja (`pip install ninja`) to improve build times
 
 ### Standalone
-Same as any other ordinary CMake package. There are no options at the moment, because I haven't seen the need for it.
+
 
 ### As a Conan package
 Run `conan export . pancake/0.2.0@local/beta` in the project folder. This exports Pancake as a Conan 
-recipe that you can use in your projects.
+recipe that you can use in your projects. You will need to build from source.
 
 
 ## Legal obligations

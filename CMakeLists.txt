@@ -31,7 +31,7 @@ endif()
 include("${PROJECT_BINARY_DIR}/conan.cmake")
 
 # Install packages
-if(NOT CONAN_EXPORTED)
+if(NOT CONAN_IN_LOCAL_CACHE)
   if(${GENERATOR_IS_MULTI_CONFIG})
     foreach(TYPE ${CMAKE_CONFIGURATION_TYPES})
       conan_cmake_autodetect(CONAN_CMAKE_SETTINGS BUILD_TYPE ${TYPE})

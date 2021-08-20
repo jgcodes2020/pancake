@@ -12,20 +12,24 @@ class PancakeConan(ConanFile):
     topics = ("analysis", "sm64", "cpp17")
     settings = "os", "compiler", "build_type", "arch"
     options = {"shared": [True, False], "fPIC": [True, False]}
-    default_options = {"shared": False, "fPIC": True}
+    default_options = {
+        "shared": False, 
+        "fPIC": True
+    }
     generators = "cmake"
 
     def config_options(self):
         if self.settings.os == "Windows":
             del self.options.fPIC
-            
     def _cmake_config(self):
         cmake = CMake(self)
         # Use ninja if available, because it's fast
         if shutil.which("ninja") is not None:
             cmake.generator = "Ninja"
         
-        cmake.configure()
+        cmake.configure(defs={
+            "CONAN_IN_LOCAL_CACHE": self.in_local_cache
+        })
         return cmake
             
     def build(self):

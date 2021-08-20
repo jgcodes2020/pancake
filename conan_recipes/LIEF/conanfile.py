@@ -1,5 +1,6 @@
 from conans import ConanFile, CMake, tools
 from os import path
+import shutil
 
 class LIEFConan(ConanFile):
     name = "LIEF"
@@ -65,6 +66,11 @@ class LIEFConan(ConanFile):
         
     def _cmake_config(self):
         cmake = CMake(self)
+        
+        # Use ninja if available, because it's fast
+        if shutil.which("ninja") is not None:
+            cmake.generator = "Ninja"
+        
         cmake.configure(source_folder="LIEF", defs={
             "LIEF_USE_JSON": self.options.use_json,
             "LIEF_FROZEN_DISABLED": not self.options.use_frozen,
