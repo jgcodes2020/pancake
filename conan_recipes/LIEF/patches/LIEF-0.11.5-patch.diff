@@ -1,5 +1,5 @@
 diff --git a/CMakeLists.txt b/CMakeLists.txt
-index 5c6a1cc..88c4fa4 100644
+index 5c6a1cc..cb44745 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
 @@ -32,6 +32,9 @@ project(
@@ -49,7 +49,7 @@ index 5c6a1cc..88c4fa4 100644
  
  source_group("Header Files" FILES ${LIEF_INC_FILES})
  source_group("Source Files" FILES ${LIBLIEF_SOURCE_FILES})
-@@ -166,6 +169,21 @@ source_group("Header Files\\visitors" FILES ${LIEF_VISITOR_INCLUDE_FILES})
+@@ -166,6 +169,22 @@ source_group("Header Files\\visitors" FILES ${LIEF_VISITOR_INCLUDE_FILES})
  
  add_library(LIB_LIEF ${LIBLIEF_SOURCE_FILES} ${LIEF_INCLUDE_FILES})
  
@@ -60,6 +60,7 @@ index 5c6a1cc..88c4fa4 100644
 +  CONAN_PKG::mbedtls 
 +  CONAN_PKG::boost 
 +  CONAN_PKG::utfcpp
++  CONAN_PKG::spdlog
 +)
 +if (LIEF_ENABLE_JSON)
 +  target_link_libraries(LIB_LIEF CONAN_PKG::nlohmann_json)
@@ -71,7 +72,7 @@ index 5c6a1cc..88c4fa4 100644
  if(WINDOWS AND BUILD_SHARED_LIBS)
    target_link_libraries(LIB_LIEF ws2_32)
  endif()
-@@ -310,47 +328,47 @@ target_include_directories(
+@@ -310,47 +329,47 @@ target_include_directories(
    PUBLIC "${LIEF_PUBLIC_INCLUDE_DIR}"
    PRIVATE "${LIEF_PRIVATE_INCLUDE_DIR}")
  

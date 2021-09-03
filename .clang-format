@@ -7,8 +7,10 @@ AlignAfterOpenBracket: AlwaysBreak
 AlignConsecutiveAssignments: Consecutive
 AlignEscapedNewlines: Left
 AlignOperands: DontAlign
+
 AllowShortIfStatementsOnASingleLine: Never
 AllowShortLambdasOnASingleLine: Inline
+
 BinPackArguments: true
 BinPackParameters: true
 
@@ -48,11 +50,15 @@ IncludeCategories:
   - Regex: '^<([^.].h(pp|xx|h))>$'
     Priority: 3
 IndentPPDirectives: BeforeHash
+
 NamespaceIndentation: All
 PointerAlignment: Left
+
 SpaceAfterCStyleCast: true
 SpaceBeforeCtorInitializerColon: true
 SpaceBeforeCpp11BracedList: true
 SpaceAroundPointerQualifiers: Before
+
 Standard: Cpp11
+
 UseTab: Never

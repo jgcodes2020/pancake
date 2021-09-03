@@ -17,6 +17,7 @@ class PancakeConan(ConanFile):
         "fPIC": True
     }
     generators = "cmake"
+    exports_sources = "modules/*", "conan_recipes/*"
 
     def config_options(self):
         if self.settings.os == "Windows":
@@ -27,9 +28,7 @@ class PancakeConan(ConanFile):
         if shutil.which("ninja") is not None:
             cmake.generator = "Ninja"
         
-        cmake.configure(defs={
-            "CONAN_IN_LOCAL_CACHE": self.in_local_cache
-        })
+        cmake.configure()
         return cmake
             
     def build(self):

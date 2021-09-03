@@ -1,14 +1,23 @@
-#!/usr/bin/env python
-
+#!/usr/bin/python3
 
 from argparse import ArgumentParser, ArgumentError
 
 from typing import Callable
 from pathlib import Path
 
-parser = ArgumentParser("Locks and unlocks libsm64 with a ROM.")
-subparsers = parser.add_subparsers(dest="p_subcmd")
-unlock_parser = subparsers.add_parser("unlock", help="Unlocks libsm64.")
+parser = ArgumentParser(
+    description="Locks and unlocks libsm64 with a ROM.",
+    exit_on_error=True
+)
+parser.set_defaults(func=lambda x: parser.print_usage())
+subparsers = parser.add_subparsers(
+    dest="p_subcmd", 
+    required=True, 
+    metavar="<subcmd>"
+)
+unlock_parser = subparsers.add_parser("unlock", 
+    help="Unlocks libsm64."
+)
 unlock_parser.add_argument("input",
     help="The input.",
     type=Path
@@ -26,7 +35,9 @@ unlock_parser.add_argument("-o", "--output",
     required=True
 )
 
-lock_parser = subparsers.add_parser("lock", help="Locks libsm64.")
+lock_parser = subparsers.add_parser("lock", 
+    help="Locks libsm64."
+)
 lock_parser.add_argument("input",
     help="The input.",
     type=Path

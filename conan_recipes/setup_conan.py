@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/python3
 import subprocess as subp
 import shlex
 import sys
@@ -11,7 +11,7 @@ def setup_pkg(name: str, dirname: str):
     if subp.run(
         ["conan", "inspect", name],
         stdout=subp.DEVNULL, stderr=subp.STDOUT).returncode != 0:
-        print("Creating package for libdwarf/0.1.1...")
+        print(f"Creating package for {name}")
         subp.run(
             ["conan", "export", f"./{dirname}", name],
             cwd=Path(__file__).parent)

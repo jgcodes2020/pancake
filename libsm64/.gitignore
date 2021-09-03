@@ -1,2 +1,6 @@
+# Shared libraries
 *.so
+# ROM Files
 *.z64
+*.n64
+*.v64
