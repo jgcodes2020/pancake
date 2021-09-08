@@ -26,7 +26,7 @@ inline std::regex operator"" _re(const char* str, size_t size) { return std::reg
 /**
  * @brief Expression parser producing a list of "instructions."
  */
-namespace pancake.expr {
+namespace pancake::expr {
   namespace lexer {
     struct token {
     private:

@@ -33,4 +33,6 @@ target_include_directories(pancake.dl
   PUBLIC "${CMAKE_CURRENT_LIST_DIR}/include"
 )
 
-target_link_libraries(pancake.dl CONAN_PKG::LIEF)
+target_link_libraries(pancake.dl 
+  PRIVATE CONAN_PKG::LIEF ${CMAKE_DL_LIBS}
+)

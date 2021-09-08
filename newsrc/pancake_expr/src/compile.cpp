@@ -43,7 +43,7 @@ namespace {
   }
 }
 
-namespace pancake.expr {
+namespace pancake::expr {
   const std::pair<expr_eval, const std::type_info&> compile(const expr_ast& ast, shared_ptr<Dwarf_Debug_s>& dbg) {
     expr_eval result;
     

@@ -13,7 +13,7 @@ add_library(pancake.expr
 # Properties
 # ==========
 
-set_target_properties(pancake.expr
+set_target_properties(pancake.expr PROPERTIES
   CXX_STANDARD 17
   CXX_STANDARD_REQUIRED on
 )
@@ -22,4 +22,6 @@ target_include_directories(pancake.expr
   PUBLIC include
 )
 
-target_link_libraries(pancake.expr )
+target_link_libraries(pancake.expr
+  PUBLIC CONAN_PKG::libdwarf
+)

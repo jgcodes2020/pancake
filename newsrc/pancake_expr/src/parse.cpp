@@ -24,16 +24,16 @@ file, You can obtain one at http://mozilla.org/MPL/2.0/.
 using std::cerr, std::stringstream, std::vector, std::string_view;
 using std::string, std::regex, std::regex_search, std::smatch;
 
-namespace pancake.expr {
+namespace pancake::expr {
   std::ostream& operator<<(std::ostream& out, lexer::token& token) {
     return out << "\"" << token.text << "\"";
   }
-  
-  template<typename T>
+
+  template <typename T>
   std::ostream& operator<<(std::ostream& out, std::vector<T> vec) {
     out << "[";
     for (int i = 0; i < vec.size(); i++) {
-      out << vec[i] << ((i + 1 == vec.size())? "" : ", ");
+      out << vec[i] << ((i + 1 == vec.size()) ? "" : ", ");
     }
     return out << "]";
   }
@@ -42,7 +42,7 @@ namespace pancake.expr {
   inline static const regex EXP_TOKEN =
     regex(R"(^\s*([\[\].]|(?:->)|(?:[A-Za-z_]\w*)|(?:[1-9]?[0-9]+)|)"
           R"((?:\d|[1-9]\d+)|(?:0x[\da-fA-F]+)|(?:0b[01]+)|(?:0[0-7]+)))");
-  
+
   // Lexes and preprocesses a string.
   vector<lexer::token> preprocess(const string& expr) {
     using lexer::token;
@@ -70,7 +70,7 @@ namespace pancake.expr {
         throw std::invalid_argument(fmt.str());
       }
       string_view matched(&expr[0] + (begin - expr.begin()), match.length());
-      //cerr << "Parsing token \"" << matched << "\"\n";
+      // cerr << "Parsing token \"" << matched << "\"\n";
 
       // search object fields
       nlohmann::json::iterator entry;
@@ -83,11 +83,11 @@ namespace pancake.expr {
         auto& obj = *entry;
         result.insert(
           result.end(),
-          {
-            token {"rawData", token::type::identifier, begin - expr.begin()},
-            token {".", token::type::member_op, begin - expr.begin()},
-            token {static_cast<string>(obj.at("array")), token::type::identifier, begin - expr.begin()}
-          });
+          {token {"rawData", token::type::identifier, begin - expr.begin()},
+           token {".", token::type::member_op, begin - expr.begin()},
+           token {
+             static_cast<string>(obj.at("array")), token::type::identifier,
+             begin - expr.begin()}});
         // before indices
         for (auto& i : obj.at("indices")) {
           result.insert(
@@ -101,36 +101,40 @@ namespace pancake.expr {
             });
         }
         continue;
-      } else if ([&]() mutable -> bool {
-                   search_space = sm64_macro_defns::get()["constants"];
-                   entry = search_space.find(matched);
-                   return entry != search_space.end();
-                 }()) {
+      }
+      else if ([&]() mutable -> bool {
+                 search_space = sm64_macro_defns::get()["constants"];
+                 entry        = search_space.find(matched);
+                 return entry != search_space.end();
+               }()) {
         auto obj    = *entry;
         string type = obj.at("type");
         if (type == "s64") {
           result.push_back(
             {std::to_string(obj.at("value").get<int64_t>()),
              token::type::number, begin - expr.begin()});
-        } else if (type == "f64") {
+        }
+        else if (type == "f64") {
           throw std::invalid_argument("Floating point values are not allowed");
-        } else if (type == "null") {
+        }
+        else if (type == "null") {
         }
         throw std::logic_error(
           "Pancake was compiled with a broken sm64_macro_defns.json. "
           "Report this as an issue on the issue tracker.");
-      } else {
-        result.push_back(token {string(matched), last_type, begin - expr.begin()});
+      }
+      else {
+        result.push_back(
+          token {string(matched), last_type, begin - expr.begin()});
       }
     }
-    //cerr << result << "\n";
-    
+    // cerr << result << "\n";
+
     return result;
   }
-  
+
   // Parses a lexed expression.
-  expr_ast parse(
-    const std::vector<lexer::token>& tokens, const string& expr) {
+  expr_ast parse(const std::vector<lexer::token>& tokens, const string& expr) {
     using lexer::token;
     if (tokens[0].t_type != token::type::identifier) {
       stringstream fmt;
@@ -179,11 +183,9 @@ namespace pancake.expr {
         } break;
       }
     }
-    //cerr << result << "\n";
+    // cerr << result << "\n";
     return result;
   }
-  
-  expr_ast parse(std::string expr) {
-    return parse(preprocess(expr), expr);
-  }
-}  // namespace pancake.expr
+
+  expr_ast parse(std::string expr) { return parse(preprocess(expr), expr); }
+}  // namespace pancake::expr

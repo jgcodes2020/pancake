@@ -13,12 +13,11 @@ file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #include <vector>
 #include <iostream>
 
-#include <libdwarf/libdwarf.h>
 #include <pancake/expr/parse.hpp>
 #include <pancake/dwarf/functions.hpp>
 #include <pancake/stx/overload.hpp>
 
-namespace pancake.expr {
+namespace pancake::expr {
   /**
    * @brief Represents a compiled expression, which can be quickly evaluated.
    */
@@ -71,6 +70,6 @@ namespace pancake.expr {
    * @param ast an AST to compile
    * @return const compiled_expr the offsets
    */
-  const std::pair<expr_eval, const std::type_info&> compile(const expr_ast& ast, std::shared_ptr<Dwarf_Debug_s>& dbg);
+  const std::pair<expr_eval, const std::type_info&> compile(const expr_ast& ast, pdwarf::nosp_t<Dwarf_Debug> dbg);
 }
 #endif

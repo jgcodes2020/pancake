@@ -19,34 +19,7 @@ file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #include <libdwarf/libdwarf.h>
 
 namespace pdwarf {
-  namespace details {
-    template<typename T>
-    struct is_shared_ptr : public std::false_type {};
-    
-    template<typename T>
-    struct is_shared_ptr<std::shared_ptr<T>> : public std::true_type {};
-    
-    template<typename T>
-    struct is_unique_ptr : public std::false_type {};
-    
-    template<typename T, typename D>
-    struct is_unique_ptr<std::unique_ptr<T, D>> : public std::true_type {};
-    
-    template<typename T>
-    const bool is_shared_ptr_v = is_shared_ptr<T>::value;
-    
-    template<typename T>
-    const bool is_unique_ptr_v = is_unique_ptr<T>::value;
-    
-    template<typename T>
-    T as_ptr(const std::enable_if_t<std::is_pointer_v<T>, T>& x) {
-      return x;
-    }
-    template<typename T>
-    decltype(std::declval<T>().get()) as_ptr(const T& x) {
-      return x.get();
-    }
-    
+  inline namespace details {
     template<typename... Ts>
     struct false_sink : public std::false_type {};
     
@@ -91,9 +64,7 @@ namespace pdwarf {
     return init_path(path.c_str());
   }
   
-  template<typename Debug>
-  Dwarf_Global* get_globals(const Debug& dbg_p, dw_signed& size) {
-    Dwarf_Debug dbg = details::as_ptr<Debug>(dbg_p);
+  inline Dwarf_Global* get_globals(nosp_t<Dwarf_Debug> dbg, dw_signed& size) {
     
     Dwarf_Global* globals;
     Dwarf_Error err;
@@ -114,10 +85,7 @@ namespace pdwarf {
     return globals;
   }
   
-  template<typename Global, typename Debug>
-  Dwarf_Die global_die(const Global& global_p, const Debug& debug_p) {
-    Dwarf_Global global = details::as_ptr<Global>(global_p);
-    Dwarf_Debug dbg = details::as_ptr<Debug>(debug_p);
+  inline Dwarf_Die global_die(nosp_t<Dwarf_Global> global, nosp_t<Dwarf_Debug> dbg) {
     
     Dwarf_Error err;
     int rcode;
@@ -147,11 +115,7 @@ namespace pdwarf {
     return die;
   }
   
-  template<typename Global, typename Debug>
-  std::string global_name(const Global& global_p, const Debug& debug_p) {
-    Dwarf_Global global = details::as_ptr<Global>(global_p);
-    Dwarf_Debug dbg = details::as_ptr<Debug>(debug_p);
-    
+  inline std::string global_name(nosp_t<Dwarf_Global> global, nosp_t<Dwarf_Debug> dbg) {
     Dwarf_Error err;
     
     char* name;
@@ -165,10 +129,7 @@ namespace pdwarf {
     return name;
   }
   
-  template<typename Die, typename Debug>
-  bool has_attr(const Die& die_p, pdwarf::attr_type type, const Debug& dbg_p) {
-    Dwarf_Debug dbg = details::as_ptr<Debug>(dbg_p);
-    Dwarf_Die die = details::as_ptr<Die>(die_p);
+  inline bool has_attr(nosp_t<Dwarf_Die> die, pdwarf::attr_type type, nosp_t<Dwarf_Debug> dbg) {
     
     Dwarf_Error err;
     
@@ -183,10 +144,8 @@ namespace pdwarf {
     return result;
   }
   
-  template<typename R, typename Die, typename Debug>
-  R attr(const Die& die_p, pdwarf::attr_type type, const Debug& dbg_p) {
-    Dwarf_Debug dbg = details::as_ptr<Debug>(dbg_p);
-    Dwarf_Die die = details::as_ptr<Die>(die_p);
+  template<typename R>
+  R attr(nosp_t<Dwarf_Die> die, pdwarf::attr_type type, nosp_t<Dwarf_Debug> dbg) {
     
     Dwarf_Error err;
     
@@ -264,15 +223,12 @@ namespace pdwarf {
       return result;
     }
     else {
-      static_assert(details::false_sink<R>::value, "attr requires R to be one of {std::string, Dwarf_Die, Dwarf_Unsigned, Dwarf_Signed}");
+      static_assert(details::false_sink_v<R>, "attr requires R to be one of {std::string, Dwarf_Die, Dwarf_Unsigned, Dwarf_Signed}");
     }
     
   }
   
-  template<typename Die, typename Debug>
-  Dwarf_Die child(const Die& die_p, const Debug& dbg_p) {
-    Dwarf_Debug dbg = details::as_ptr<Debug>(dbg_p);
-    Dwarf_Die die = details::as_ptr<Die>(die_p);
+  inline Dwarf_Die child(nosp_t<Dwarf_Die> die, nosp_t<Dwarf_Debug> dbg) {
     
     Dwarf_Error err;
     
@@ -288,10 +244,7 @@ namespace pdwarf {
     return result;
   }
   
-  template<typename Die, typename Debug>
-  Dwarf_Die siblingof(const Die& die_p, const Debug& dbg_p) {
-    Dwarf_Debug dbg = details::as_ptr<Debug>(dbg_p);
-    Dwarf_Die die = details::as_ptr<Die>(die_p);
+  inline Dwarf_Die siblingof(nosp_t<Dwarf_Die> die, nosp_t<Dwarf_Debug> dbg) {
     
     Dwarf_Error err;
     
@@ -312,10 +265,7 @@ namespace pdwarf {
     return result;
   }
   
-  template<typename Die, typename Debug>
-  die_tag tag(const Die& die_p, const Debug& dbg_p) {
-    Dwarf_Debug dbg = details::as_ptr<Debug>(dbg_p);
-    Dwarf_Die die = details::as_ptr<Die>(die_p);
+  inline die_tag tag(nosp_t<Dwarf_Die> die, nosp_t<Dwarf_Debug> dbg) {
     
     Dwarf_Error err;
     

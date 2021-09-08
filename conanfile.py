@@ -39,6 +39,7 @@ class PancakeConan(ConanFile):
         self.requires("libdwarf/0.1.1@jgcodes2020/stable")
         self.requires("LIEF/0.11.5@jgcodes2020/stable")
         self.requires("nlohmann_json/[>=3.9.1]")
+        self.requires("ms-gsl/[>=3.1.0]")
 
     def package(self):
         cmake = self._cmake_config()

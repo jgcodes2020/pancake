@@ -23,4 +23,6 @@ target_include_directories(pancake.dwarf
   PUBLIC include
 )
 
-target_link_libraries(pancake.dwarf CONAN_PKG::libdwarf)
+target_link_libraries(pancake.dwarf 
+  PUBLIC CONAN_PKG::libdwarf
+)

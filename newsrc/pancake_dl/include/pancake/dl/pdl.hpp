@@ -11,7 +11,7 @@
 #include <dlfcn.h>
 #endif
 
-namespace pancake.dl {
+namespace pancake::dl {
   
   #if defined(_WIN32)
   using handle = HMODULE;
@@ -44,10 +44,6 @@ namespace pancake.dl {
     template<typename T>
     T& get_symbol(const std::string& name) {
       return *reinterpret_cast<T*>(_impl_get_symbol(name));
-    }
-    
-    void test() {
-      get_symbol<void()>("sm64_init");
     }
     
     section get_section(const std::string& name);

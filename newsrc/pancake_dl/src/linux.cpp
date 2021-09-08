@@ -12,7 +12,7 @@
 namespace fs = std::filesystem;
 namespace ELF = LIEF::ELF;
 
-namespace pancake.dl {
+namespace pancake::dl {
   struct library::impl {
     handle hnd;
     std::unique_ptr<ELF::Binary> bin;

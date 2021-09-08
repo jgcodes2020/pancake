@@ -38,9 +38,11 @@ BraceWrapping:
   SplitEmptyRecord: false
   SplitEmptyNamespace: false
 
-BreakStringLiterals: "false"
+BreakStringLiterals: false
+BreakConstructorInitializers: AfterColon
+
 ContinuationIndentWidth: 2
-Cpp11BracedListStyle: "true"
+Cpp11BracedListStyle: true
 IncludeCategories:
   # POSIX
   - Regex: '^<[^.]+\.h>'

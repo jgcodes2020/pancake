@@ -14,7 +14,6 @@ file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #include <type_traits>
 #include <utility>
 namespace pdwarf {
-  
   // make it unusable unless specialized
   template<typename T>
   struct dwarf_deleter;
@@ -67,30 +66,10 @@ namespace pdwarf {
     }
   };
   
-  
-  
   /*
-  Constructs a shared pointer using dwarf_deleter.
-  The variadic arguments are forwarded to the constructor of the deleter.
-  */
-  template<typename T, typename... Args>
-  std::shared_ptr<std::remove_pointer_t<T>> dwarf_make_shared(std::enable_if_t<
-    !std::is_array_v<T>, T
-  > v, Args&&... args) {
-    return std::shared_ptr<std::remove_pointer_t<T>>(v, dwarf_deleter<T>(std::forward<Args>(args)...));
-  }
-  
-  template<typename T, typename... Args>
-  std::shared_ptr<T> dwarf_make_shared(std::remove_extent_t<
-    std::enable_if_t<std::is_array_v<T>, T>
-  >* v, Args&&... args) {
-    return std::shared_ptr<T>(v, dwarf_deleter<T>(std::forward<Args>(args)...));
-  }
-  
-  /*
-  Constructs a unique pointer using dwarf_deleter.
-  The variadic arguments are forwarded to the constructor of the deleter.
-  */
+   * Constructs a unique pointer using dwarf_deleter.
+   * The variadic arguments are forwarded to the constructor of the deleter.
+   */
   template<typename T, typename... Args>
   std::unique_ptr<
     std::remove_pointer_t<T>, 
@@ -106,5 +85,28 @@ namespace pdwarf {
   > dwarf_make_unique(std::remove_extent_t<std::enable_if_t<std::is_array_v<T>, T>>* v, Args&&... args) {
     return std::unique_ptr<T, dwarf_deleter<T>>(v, dwarf_deleter<T>(std::forward<Args>(args)...));
   }
+  
+  /**
+   * @brief A non-owning smart pointer.
+   * @details It allows implicit conversion from standard types.
+   * 
+   * @tparam T 
+   */
+  template<typename T>
+  struct nos_pointer {
+    T* ptr;
+    
+    nos_pointer(T* src) : ptr(src) {}
+    nos_pointer(std::shared_ptr<T> src) : ptr(src.get()) {}
+    template<typename D>
+    nos_pointer(std::unique_ptr<T, D> src) : ptr(src.get()) {}
+    
+    operator T* () {
+      return ptr;
+    }
+  };
+  
+  template<typename T>
+  using nosp_t = nos_pointer<std::remove_pointer_t<T>>;
 }
 #endif
