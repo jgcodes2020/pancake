@@ -1,26 +1,20 @@
 #ifndef _PANCAKE_RSRC_SPANSTREAM_
 #define _PANCAKE_RSRC_SPANSTREAM_
 
-#include <ios>
-#include <limits>
-#include <memory>
-#include <stdexcept>
-#include <streambuf>
-#include <string>
-#include <type_traits>
-
-#if !defined(__cpp_lib_span)
-#include <gsl/span>
-#endif
+#include <pancake/rsrc/span.hpp>
 #if defined(__cpp_lib_spanstream)
-#include <spanstream>
+  #include <spanstream>
+#else
+  #include <ios>
+  #include <limits>
+  #include <memory>
+  #include <stdexcept>
+  #include <streambuf>
+  #include <string>
+  #include <type_traits>
 #endif
 
 namespace std {
-#if !defined(__cpp_lib_span)
-  template <typename _T>
-  using span = gsl::span<_T>;
-#endif
 #if !defined(__cpp_lib_spanstream)
   template <typename _CharT, typename _Traits = char_traits<_CharT>>
   class basic_spanbuf : public basic_streambuf<_CharT, _Traits> {
@@ -218,43 +212,39 @@ namespace std {
     // Constructors
     // ============
     explicit basic_ispanstream(
-      std::span<_CharT> _s,
-      ios_base::openmode _flags = ios_base::in) :
+      std::span<_CharT> _s, ios_base::openmode _flags = ios_base::in) :
         stream_type(&m_buf), m_buf(_s, _flags) {}
 
     basic_ispanstream(const basic_ispanstream&) = delete;
 
     basic_ispanstream(basic_ispanstream&& rhs) :
-      stream_type(std::move(rhs.m_buf)), m_buf(std::move(rhs.m_buf)) {
-      this->set_rdbuf(&m_buf);  
+        stream_type(std::move(rhs.m_buf)), m_buf(std::move(rhs.m_buf)) {
+      this->set_rdbuf(&m_buf);
     }
-    
+
     // Member functions
     // ================
     void swap(basic_ispanstream& rhs) {
       stream_type::swap(rhs);
       m_buf.swap(rhs.m_buf);
     }
-    
+
     buf_type* rdbuf() const noexcept {
       return const_cast<buf_type*>(addressof(m_buf));
     }
-    
-    span_type span() {
-      return m_buf.span();
-    }
-    
-    void span(span_type s) {
-      m_buf.span(s);
-    }
+
+    span_type span() { return m_buf.span(); }
+
+    void span(span_type s) { m_buf.span(s); }
   };
-  
+
   template <typename _CharT, typename _Traits>
   void swap(
-    basic_ispanstream<_CharT, _Traits> _x, basic_ispanstream<_CharT, _Traits> _y) {
+    basic_ispanstream<_CharT, _Traits> _x,
+    basic_ispanstream<_CharT, _Traits> _y) {
     _x.swap(_y);
   }
-  
+
   template <typename _CharT, typename _Traits = char_traits<_CharT>>
   class basic_ospanstream : public basic_ostream<_CharT, _Traits> {
   public:
@@ -275,43 +265,39 @@ namespace std {
     // Constructors
     // ============
     explicit basic_ospanstream(
-      std::span<_CharT> _s,
-      ios_base::openmode _flags = ios_base::out) :
+      std::span<_CharT> _s, ios_base::openmode _flags = ios_base::out) :
         stream_type(&m_buf), m_buf(_s, _flags) {}
 
     basic_ospanstream(const basic_ospanstream&) = delete;
 
     basic_ospanstream(basic_ospanstream&& rhs) :
-      stream_type(std::move(rhs.m_buf)), m_buf(std::move(rhs.m_buf)) {
-      this->set_rdbuf(&m_buf);  
+        stream_type(std::move(rhs.m_buf)), m_buf(std::move(rhs.m_buf)) {
+      this->set_rdbuf(&m_buf);
     }
-    
+
     // Member functions
     // ================
     void swap(basic_ospanstream& rhs) {
       stream_type::swap(rhs);
       m_buf.swap(rhs.m_buf);
     }
-    
+
     buf_type* rdbuf() const noexcept {
       return const_cast<buf_type*>(addressof(m_buf));
     }
-    
-    span_type span() {
-      return m_buf.span();
-    }
-    
-    void span(span_type s) {
-      m_buf.span(s);
-    }
+
+    span_type span() { return m_buf.span(); }
+
+    void span(span_type s) { m_buf.span(s); }
   };
-  
+
   template <typename _CharT, typename _Traits>
   void swap(
-    basic_ospanstream<_CharT, _Traits> _x, basic_ospanstream<_CharT, _Traits> _y) {
+    basic_ospanstream<_CharT, _Traits> _x,
+    basic_ospanstream<_CharT, _Traits> _y) {
     _x.swap(_y);
   }
-  
+
   template <typename _CharT, typename _Traits = char_traits<_CharT>>
   class basic_spanstream : public basic_iostream<_CharT, _Traits> {
   public:
@@ -339,46 +325,43 @@ namespace std {
     basic_spanstream(const basic_spanstream&) = delete;
 
     basic_spanstream(basic_spanstream&& rhs) :
-      stream_type(std::move(rhs.m_buf)), m_buf(std::move(rhs.m_buf)) {
-      this->set_rdbuf(&m_buf);  
+        stream_type(std::move(rhs.m_buf)), m_buf(std::move(rhs.m_buf)) {
+      this->set_rdbuf(&m_buf);
     }
-    
+
     // Member functions
     // ================
     void swap(basic_spanstream& rhs) {
       stream_type::swap(rhs);
       m_buf.swap(rhs.m_buf);
     }
-    
+
     buf_type* rdbuf() const noexcept {
       return const_cast<buf_type*>(addressof(m_buf));
     }
-    
-    span_type span() {
-      return m_buf.span();
-    }
-    
-    void span(span_type s) {
-      m_buf.span(s);
-    }
+
+    span_type span() { return m_buf.span(); }
+
+    void span(span_type s) { m_buf.span(s); }
   };
-  
+
   template <typename _CharT, typename _Traits>
   void swap(
-    basic_spanstream<_CharT, _Traits> _x, basic_spanstream<_CharT, _Traits> _y) {
+    basic_spanstream<_CharT, _Traits> _x,
+    basic_spanstream<_CharT, _Traits> _y) {
     _x.swap(_y);
   }
-  
-  using spanbuf = basic_spanbuf<char>;
+
+  using spanbuf  = basic_spanbuf<char>;
   using wspanbuf = basic_spanbuf<wchar_t>;
-  
-  using ispanstream = basic_ispanstream<char>;
+
+  using ispanstream  = basic_ispanstream<char>;
   using wispanstream = basic_ispanstream<wchar_t>;
-  
-  using ospanstream = basic_ospanstream<char>;
+
+  using ospanstream  = basic_ospanstream<char>;
   using wospanstream = basic_ospanstream<wchar_t>;
-  
-  using spanstream = basic_spanstream<char>;
+
+  using spanstream  = basic_spanstream<char>;
   using wspanstream = basic_spanstream<wchar_t>;
 #endif
 }  // namespace std
