@@ -144,11 +144,11 @@ namespace pancake {
     button buttons;
     int8_t stick_x, stick_y;
 
-    /**
-     * @brief Sets the input on an `sm64` instance to the current input.
-     *
-     * @param game
-     */
+    /*!
+    Applies an input to an instance of libsm64.
+    
+    :param game: the game to apply to
+    */
     void apply(sm64& game) const;
   };
 

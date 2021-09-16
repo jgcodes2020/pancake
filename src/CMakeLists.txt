@@ -11,7 +11,7 @@ function(pancake_rsrc_gen var_outputs src_name)
   add_custom_command(
     OUTPUT ${gen_src} ${gen_inc}
     MAIN_DEPENDENCY ${abs_path}
-    COMMAND python3 "${PROJECT_SOURCE_DIR}/scripts/rsrc_gen_v2.py" -C "${gen_src}" -H "${gen_inc}" "${abs_path}"
+    COMMAND python3 "${PROJECT_SOURCE_DIR}/scripts/rsrc_gen_cstr.py" -C "${gen_src}" -H "${gen_inc}" "${abs_path}"
   )
 endfunction()
 

@@ -7,8 +7,8 @@
 #include <cstddef>
 #include <gsl/span>
 namespace std {
-  template<typename _T, size_t extent = gsl::dynamic_extent>
-  using span = gsl::span<_T, extent>;
+  template<typename _T>
+  using span = gsl::span<_T>;
 }
 #endif
 
