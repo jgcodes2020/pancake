@@ -174,6 +174,7 @@ namespace std {
           }
           return (this->epptr() - this->pbase()) + _off;
         } break;
+        default: break;
       }
     }
 
