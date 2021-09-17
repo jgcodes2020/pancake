@@ -26,6 +26,7 @@ Reasons include:
 You'll need:
 - A relatively recent CMake version (>=3.15)
 - The Conan package manager (`pip install conan`)
+- On Windows, NASM. This is because the Microsoft assembler doesn't support the `incbin` directive.
 - Recommended: Ninja (`pip install ninja`) to improve build times
 
 ### Standalone
