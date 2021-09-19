@@ -14,7 +14,8 @@ file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #include <iostream>
 
 #include <pancake/expr/parse.hpp>
-#include <pancake/dwarf/functions.hpp>
+#include <pancake/dwarf/types.hpp>
+#include <pancake/dwarf/type_lookup.hpp>
 #include <pancake/stx/overload.hpp>
 
 namespace pancake::expr {
@@ -70,6 +71,6 @@ namespace pancake::expr {
    * @param ast an AST to compile
    * @return const compiled_expr the offsets
    */
-  const std::pair<expr_eval, const std::type_info&> compile(const expr_ast& ast, pdwarf::nosp_t<Dwarf_Debug> dbg);
+  const std::pair<expr_eval, dwarf::base_type_info> compile(const expr_ast& ast, pancake::dwarf::debug dbg);
 }
 #endif

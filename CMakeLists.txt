@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.15)
 project(Pancake
-  VERSION 0.2.0
+  VERSION 0.3.0
   DESCRIPTION "A library to interface with libsm64"
   HOMEPAGE_URL "https://github.com/jgcodes2020/pancake"
   LANGUAGES C CXX

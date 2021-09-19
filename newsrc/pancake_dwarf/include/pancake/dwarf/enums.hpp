@@ -871,6 +871,7 @@ namespace pancake::dwarf {
   }
   
   enum class encoding : uint16_t {
+    none = 0x00,
     address = 0x01,
     boolean = 0x02,
     complex_float = 0x03,

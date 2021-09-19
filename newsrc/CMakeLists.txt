@@ -1,3 +1,4 @@
+add_subdirectory(pancake_api)
 add_subdirectory(pancake_dl)
 add_subdirectory(pancake_dwarf)
 add_subdirectory(pancake_expr)
@@ -8,6 +9,9 @@ target_link_libraries(pancake.dwarf
   PRIVATE pancake.stx
 )
 target_link_libraries(pancake.expr 
-  PRIVATE pancake.stx
+  PRIVATE pancake.stx pancake.rsrc
   PUBLIC pancake.dwarf
+)
+target_link_libraries(pancake.api
+  PRIVATE pancake.dl pancake.dwarf pancake.expr
 )

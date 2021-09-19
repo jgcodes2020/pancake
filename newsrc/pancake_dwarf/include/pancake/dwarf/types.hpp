@@ -95,7 +95,7 @@ namespace pancake::dwarf {
         }
       }
       if (value < 0) {
-        return std::optional<global>();
+        return std::nullopt;
       }
       return global(dbg, ptr[value]);
     }
@@ -238,13 +238,23 @@ namespace pancake::dwarf {
 
       return die(dbg, res);
     }
+    
+    die_tag tag() {
+      Dwarf_Error err;
+      Dwarf_Half res;
+      if (dwarf_tag(ptr.get(), &res, &err) == DW_DLV_ERROR) {
+        throw std::logic_error(dwarf_errmsg(err));
+      }
+      
+      return static_cast<die_tag>(res);
+    }
 
-    die child() {
+    std::optional<die> child() {
       Dwarf_Die res;
       Dwarf_Error err;
       switch (dwarf_child(ptr.get(), &res, &err)) {
         case DW_DLV_NO_ENTRY: {
-          throw std::invalid_argument("DIE does not have any children");
+          return std::nullopt;
         } break;
         case DW_DLV_ERROR: {
           throw std::invalid_argument(dwarf_errmsg(err));
@@ -256,12 +266,12 @@ namespace pancake::dwarf {
       throw std::logic_error("this shouldn't happen");
     }
 
-    die sibling() {
+    std::optional<die> sibling() {
       Dwarf_Die res;
       Dwarf_Error err;
       switch (dwarf_siblingof_b(dbg.get(), ptr.get(), true, &res, &err)) {
         case DW_DLV_NO_ENTRY: {
-          throw std::invalid_argument("DIE does not have a sibling");
+          return std::nullopt;
         } break;
         case DW_DLV_ERROR: {
           throw std::invalid_argument(dwarf_errmsg(err));

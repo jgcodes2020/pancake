@@ -5,7 +5,7 @@ file, You can obtain one at http://mozilla.org/MPL/2.0/.
 ******************************************************************/
 
 
-#include "pancake/movie.hpp"
+#include <pancake/movie.hpp>
 
 #include <cstring>
 #include <stdint.h>
@@ -24,7 +24,6 @@ file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #include <vector>
 
 #include <pancake/sm64.hpp>
-#include <pancake/debug/pause.hpp>
 
 using std::ios, std::stringstream, std::fstream;
 using std::numeric_limits;
@@ -101,35 +100,35 @@ namespace pancake {
         fmt << "File " << path << " isn't a valid M64, signature should be \"M64\\x1A\"";
         throw invalid_m64(fmt.str());
       }
-      read_int32(&data[M64_OFFSETS::version], metadata.version);
-      read_int32(&data[M64_OFFSETS::timestamp], metadata.timestamp);
-      read_int32(&data[M64_OFFSETS::num_vis], metadata.num_vis);
-      read_int32(&data[M64_OFFSETS::rerecords], metadata.rerecords);
-      metadata.vis_per_s = data[M64_OFFSETS::vis_per_s];
-      metadata.num_controllers = data[M64_OFFSETS::num_controllers];
-      read_int32(&data[M64_OFFSETS::num_input_frames], metadata._num_input_frames);
+      read_int32(&data[m64_offs::version], metadata.version);
+      read_int32(&data[m64_offs::timestamp], metadata.timestamp);
+      read_int32(&data[m64_offs::num_vis], metadata.num_vis);
+      read_int32(&data[m64_offs::rerecords], metadata.rerecords);
+      metadata.vis_per_s = data[m64_offs::vis_per_s];
+      metadata.num_controllers = data[m64_offs::num_controllers];
+      read_int32(&data[m64_offs::num_input_frames], metadata._num_input_frames);
       std::cerr << "Input frame len is: " << metadata._num_input_frames << "\n";
       // perform type-punning pointer casts, since underlying types are defined
-      read_int16(&data[M64_OFFSETS::start_type], *reinterpret_cast<uint16_t*>(&metadata.start_type));
-      read_int32(&data[M64_OFFSETS::controllers], *reinterpret_cast<uint32_t*>(&metadata.controllers));
+      read_int16(&data[m64_offs::start_type], *reinterpret_cast<uint16_t*>(&metadata.start_type));
+      read_int32(&data[m64_offs::controllers], *reinterpret_cast<uint32_t*>(&metadata.controllers));
       
-      read_str(&data[M64_OFFSETS::rom_name], metadata.rom_name);
-      read_int32(&data[M64_OFFSETS::crc], metadata.crc);
-      read_int16(&data[M64_OFFSETS::country_code], metadata.country_code);
+      read_str(&data[m64_offs::rom_name], metadata.rom_name);
+      read_int32(&data[m64_offs::crc], metadata.crc);
+      read_int16(&data[m64_offs::country_code], metadata.country_code);
       
-      read_str(&data[M64_OFFSETS::video_plugin], metadata.video_plugin);
-      read_str(&data[M64_OFFSETS::sound_plugin], metadata.sound_plugin);
-      read_str(&data[M64_OFFSETS::input_plugin], metadata.input_plugin);
-      read_str(&data[M64_OFFSETS::rsp_plugin], metadata.rsp_plugin);
+      read_str(&data[m64_offs::video_plugin], metadata.video_plugin);
+      read_str(&data[m64_offs::sound_plugin], metadata.sound_plugin);
+      read_str(&data[m64_offs::input_plugin], metadata.input_plugin);
+      read_str(&data[m64_offs::rsp_plugin], metadata.rsp_plugin);
       
-      read_str(&data[M64_OFFSETS::authors], metadata.authors);
-      read_str(&data[M64_OFFSETS::description], metadata.description);
+      read_str(&data[m64_offs::authors], metadata.authors);
+      read_str(&data[m64_offs::description], metadata.description);
     }
     
     m_inputs = std::vector<frame>(metadata.num_input_frames());
     unique_ptr<char[]> data = unique_ptr<char[]>(new char[metadata._num_input_frames * 4]);
     // seek to inputs at 0x0100
-    in.seekg(M64_OFFSETS::start_of_data, ios::beg);
+    in.seekg(m64_offs::start_of_data, ios::beg);
     in.read(data.get(), metadata._num_input_frames * 4);
     // x64 is little-endian, so everything lines up
     for (size_t i = 0; i < m_inputs.size(); i++) {
@@ -228,31 +227,31 @@ namespace pancake {
     std::ofstream out         = std::ofstream(path, ios::out | ios::binary);
     unique_ptr<char[]> buffer = unique_ptr<char[]>(new char[1024]);
     // Metadata
-    std::copy(M64_SIG.begin(), M64_SIG.end(), &buffer[M64_OFFSETS::signature]);
+    std::copy(M64_SIG.begin(), M64_SIG.end(), &buffer[m64_offs::signature]);
 
-    dump_int32(metadata.version, &buffer[M64_OFFSETS::version]);
-    dump_int32(metadata.timestamp, &buffer[M64_OFFSETS::timestamp]);
-    dump_int32(metadata.num_vis, &buffer[M64_OFFSETS::num_vis]);
-    dump_int32(metadata.rerecords, &buffer[M64_OFFSETS::rerecords]);
-    buffer[M64_OFFSETS::vis_per_s]       = metadata.vis_per_s;
-    buffer[M64_OFFSETS::num_controllers] = metadata.num_controllers;
-    dump_int32(metadata.num_input_frames(), &buffer[M64_OFFSETS::num_input_frames]);
+    dump_int32(metadata.version, &buffer[m64_offs::version]);
+    dump_int32(metadata.timestamp, &buffer[m64_offs::timestamp]);
+    dump_int32(metadata.num_vis, &buffer[m64_offs::num_vis]);
+    dump_int32(metadata.rerecords, &buffer[m64_offs::rerecords]);
+    buffer[m64_offs::vis_per_s]       = metadata.vis_per_s;
+    buffer[m64_offs::num_controllers] = metadata.num_controllers;
+    dump_int32(metadata.num_input_frames(), &buffer[m64_offs::num_input_frames]);
     
     dump_int16(
-      static_cast<uint16_t>(metadata.start_type), &buffer[M64_OFFSETS::start_type]);
-    dump_int32(static_cast<uint32_t>(metadata.controllers), &buffer[M64_OFFSETS::controllers]);
+      static_cast<uint16_t>(metadata.start_type), &buffer[m64_offs::start_type]);
+    dump_int32(static_cast<uint32_t>(metadata.controllers), &buffer[m64_offs::controllers]);
     
-    dump_str(metadata.rom_name, &buffer[M64_OFFSETS::rom_name], 32);
-    dump_int32(metadata.crc, &buffer[M64_OFFSETS::crc]);
-    dump_int32(metadata.country_code, &buffer[M64_OFFSETS::country_code]);
+    dump_str(metadata.rom_name, &buffer[m64_offs::rom_name], 32);
+    dump_int32(metadata.crc, &buffer[m64_offs::crc]);
+    dump_int32(metadata.country_code, &buffer[m64_offs::country_code]);
     
-    dump_str(metadata.video_plugin, &buffer[M64_OFFSETS::video_plugin], 64);
-    dump_str(metadata.sound_plugin, &buffer[M64_OFFSETS::sound_plugin], 64);
-    dump_str(metadata.input_plugin, &buffer[M64_OFFSETS::input_plugin], 64);
-    dump_str(metadata.rsp_plugin, &buffer[M64_OFFSETS::rsp_plugin], 64);
+    dump_str(metadata.video_plugin, &buffer[m64_offs::video_plugin], 64);
+    dump_str(metadata.sound_plugin, &buffer[m64_offs::sound_plugin], 64);
+    dump_str(metadata.input_plugin, &buffer[m64_offs::input_plugin], 64);
+    dump_str(metadata.rsp_plugin, &buffer[m64_offs::rsp_plugin], 64);
     
-    dump_str(metadata.authors, &buffer[M64_OFFSETS::authors], 222);
-    dump_str(metadata.description, &buffer[M64_OFFSETS::description], 256);
+    dump_str(metadata.authors, &buffer[m64_offs::authors], 222);
+    dump_str(metadata.description, &buffer[m64_offs::description], 256);
 
     out.seekp(0, ios::beg);
     out.write(&buffer[0], 1024);
@@ -266,7 +265,7 @@ namespace pancake {
       buffer[j + 2] = m_inputs[i].stick_x;
       buffer[j + 3] = m_inputs[i].stick_y;
     }
-    out.seekp(M64_OFFSETS::start_of_data, ios::beg);
+    out.seekp(m64_offs::start_of_data, ios::beg);
     out.write(&buffer[0], input_size);
   }
 }  // namespace pancake

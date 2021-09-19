@@ -12,26 +12,32 @@ file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #include <type_traits>
 #include <typeinfo>
 #include <utility>
+
 #include <pancake/dwarf/enums.hpp>
-#include <pancake/stx/misc_hashes.hpp>
-namespace std {
-  PANCAKE_STX_ENUM_CLASS_HASH(pancake::dwarf::encoding)
-}
+
 namespace pancake::dwarf {
 
-  struct dwarf_type_info {
+  struct base_type_info {
     encoding encoding;
     size_t size;
+    
+    bool operator==(const base_type_info& other) const {
+      return encoding == other.encoding && size == other.size;
+    }
+    
+    bool operator!=(const base_type_info& other) const {
+      return !(*this == other);
+    }
   };
 
   template <typename _T>
-  constexpr dwarf_type_info get_type_info() {
+  constexpr base_type_info get_type_info() {
     static_assert(
       std::is_arithmetic_v<_T> && !std::is_const_v<_T> &&
         !std::is_volatile_v<_T>,
       "Type must be arithmetic with no CV qualifiers");
 
-    dwarf_type_info result;
+    base_type_info result;
     if constexpr (std::is_same_v<_T, char>) {
       if constexpr (std::numeric_limits<_T>::is_signed) {
         result.encoding = encoding::signed_char;

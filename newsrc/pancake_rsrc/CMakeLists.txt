@@ -20,12 +20,14 @@ function(pancake_rsrc_gen target src_name)
   add_custom_command(
     OUTPUT ${gen_obj} ${gen_inc}
     MAIN_DEPENDENCY ${abs_path}
-    COMMAND python3 "${PROJECT_SOURCE_DIR}/scripts/rsrc_gen_asm.py" -O "${gen_obj}" -H "${gen_inc}" "${abs_path}"
+    COMMENT "Generating linkable object for ${src_name}"
+    COMMAND python3 "${Pancake_SOURCE_DIR}/scripts/rsrc_gen_asm.py" -O "${gen_obj}" -H "${gen_inc}" "${abs_path}"
   )
   
   
   target_sources(${target}
     PRIVATE ${gen_obj}
+    PUBLIC ${gen_inc}
   )
   set_source_files_properties(gen_obj PROPERTIES
     EXTERNAL_OBJECT on
@@ -48,9 +50,9 @@ set_target_properties(pancake.rsrc PROPERTIES
 )
 
 target_include_directories(pancake.rsrc
-  PUBLIC include
+  PUBLIC include "${CMAKE_CURRENT_BINARY_DIR}/_genhdrs"
 )
 
 target_link_libraries(pancake.rsrc
-  PUBLIC CONAN_PKG::ms-gsl
+  PUBLIC CONAN_PKG::ms-gsl CONAN_PKG::nlohmann_json
 )
