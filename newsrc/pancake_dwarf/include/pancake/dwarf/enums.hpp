@@ -13,7 +13,7 @@ file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 #undef ERROR
 
-namespace pdwarf {
+namespace pancake::dwarf {
   struct return_code {
     enum {
       ok = 0,
@@ -21,7 +21,7 @@ namespace pdwarf {
       no_entry = -1
     };
   };
-  enum class attr_type : uint16_t {
+  enum class dw_attrs : uint16_t {
     sibling = 0x01,
     location = 0x02,
     name = 0x03,
@@ -151,381 +151,381 @@ namespace pdwarf {
     loclists_base = 0x8c
   };
   // Generated using VSCode find and replace
-  inline std::ostream& operator<<(std::ostream& out, attr_type attr) {
+  inline std::ostream& operator<<(std::ostream& out, dw_attrs attr) {
     switch (attr) {
-      case attr_type::sibling: {
+      case dw_attrs::sibling: {
         return out << "sibling";
       } break;
-      case attr_type::location: {
+      case dw_attrs::location: {
         return out << "location";
       } break;
-      case attr_type::name: {
+      case dw_attrs::name: {
         return out << "name";
       } break;
-      case attr_type::ordering: {
+      case dw_attrs::ordering: {
         return out << "ordering";
       } break;
-      case attr_type::subscr_data: {
+      case dw_attrs::subscr_data: {
         return out << "subscr_data";
       } break;
-      case attr_type::byte_size: {
+      case dw_attrs::byte_size: {
         return out << "byte_size";
       } break;
-      case attr_type::bit_offset: {
+      case dw_attrs::bit_offset: {
         return out << "bit_offset";
       } break;
-      case attr_type::bit_size: {
+      case dw_attrs::bit_size: {
         return out << "bit_size";
       } break;
-      case attr_type::element_list: {
+      case dw_attrs::element_list: {
         return out << "element_list";
       } break;
-      case attr_type::stmt_list: {
+      case dw_attrs::stmt_list: {
         return out << "stmt_list";
       } break;
-      case attr_type::low_pc: {
+      case dw_attrs::low_pc: {
         return out << "low_pc";
       } break;
-      case attr_type::high_pc: {
+      case dw_attrs::high_pc: {
         return out << "high_pc";
       } break;
-      case attr_type::language: {
+      case dw_attrs::language: {
         return out << "language";
       } break;
-      case attr_type::member: {
+      case dw_attrs::member: {
         return out << "member";
       } break;
-      case attr_type::discr: {
+      case dw_attrs::discr: {
         return out << "discr";
       } break;
-      case attr_type::discr_value: {
+      case dw_attrs::discr_value: {
         return out << "discr_value";
       } break;
-      case attr_type::visibility: {
+      case dw_attrs::visibility: {
         return out << "visibility";
       } break;
-      case attr_type::import: {
+      case dw_attrs::import: {
         return out << "import";
       } break;
-      case attr_type::string_length: {
+      case dw_attrs::string_length: {
         return out << "string_length";
       } break;
-      case attr_type::common_reference: {
+      case dw_attrs::common_reference: {
         return out << "common_reference";
       } break;
-      case attr_type::comp_dir: {
+      case dw_attrs::comp_dir: {
         return out << "comp_dir";
       } break;
-      case attr_type::const_value: {
+      case dw_attrs::const_value: {
         return out << "const_value";
       } break;
-      case attr_type::containing_type: {
+      case dw_attrs::containing_type: {
         return out << "containing_type";
       } break;
-      case attr_type::default_value: {
+      case dw_attrs::default_value: {
         return out << "default_value";
       } break;
-      case attr_type::inline_: {
+      case dw_attrs::inline_: {
         return out << "inline_";
       } break;
-      case attr_type::is_optional: {
+      case dw_attrs::is_optional: {
         return out << "is_optional";
       } break;
-      case attr_type::lower_bound: {
+      case dw_attrs::lower_bound: {
         return out << "lower_bound";
       } break;
-      case attr_type::producer: {
+      case dw_attrs::producer: {
         return out << "producer";
       } break;
-      case attr_type::prototyped: {
+      case dw_attrs::prototyped: {
         return out << "prototyped";
       } break;
-      case attr_type::return_addr: {
+      case dw_attrs::return_addr: {
         return out << "return_addr";
       } break;
-      case attr_type::start_scope: {
+      case dw_attrs::start_scope: {
         return out << "start_scope";
       } break;
-      case attr_type::bit_stride: {
+      case dw_attrs::bit_stride: {
         return out << "bit_stride/stride_size";
       } break;
-      case attr_type::upper_bound: {
+      case dw_attrs::upper_bound: {
         return out << "upper_bound";
       } break;
-      case attr_type::abstract_origin: {
+      case dw_attrs::abstract_origin: {
         return out << "abstract_origin";
       } break;
-      case attr_type::accessibility: {
+      case dw_attrs::accessibility: {
         return out << "accessibility";
       } break;
-      case attr_type::address_class: {
+      case dw_attrs::address_class: {
         return out << "address_class";
       } break;
-      case attr_type::artificial: {
+      case dw_attrs::artificial: {
         return out << "artificial";
       } break;
-      case attr_type::base_types: {
+      case dw_attrs::base_types: {
         return out << "base_types";
       } break;
-      case attr_type::calling_convention: {
+      case dw_attrs::calling_convention: {
         return out << "calling_convention";
       } break;
-      case attr_type::count: {
+      case dw_attrs::count: {
         return out << "count";
       } break;
-      case attr_type::data_member_location: {
+      case dw_attrs::data_member_location: {
         return out << "data_member_location";
       } break;
-      case attr_type::decl_column: {
+      case dw_attrs::decl_column: {
         return out << "decl_column";
       } break;
-      case attr_type::decl_file: {
+      case dw_attrs::decl_file: {
         return out << "decl_file";
       } break;
-      case attr_type::decl_line: {
+      case dw_attrs::decl_line: {
         return out << "decl_line";
       } break;
-      case attr_type::declaration: {
+      case dw_attrs::declaration: {
         return out << "declaration";
       } break;
-      case attr_type::discr_list: {
+      case dw_attrs::discr_list: {
         return out << "discr_list";
       } break;
-      case attr_type::encoding: {
+      case dw_attrs::encoding: {
         return out << "encoding";
       } break;
-      case attr_type::external: {
+      case dw_attrs::external: {
         return out << "external";
       } break;
-      case attr_type::frame_base: {
+      case dw_attrs::frame_base: {
         return out << "frame_base";
       } break;
-      case attr_type::friend_: {
+      case dw_attrs::friend_: {
         return out << "friend_";
       } break;
-      case attr_type::identifier_case: {
+      case dw_attrs::identifier_case: {
         return out << "identifier_case";
       } break;
-      case attr_type::macro_info: {
+      case dw_attrs::macro_info: {
         return out << "macro_info";
       } break;
-      case attr_type::namelist_item: {
+      case dw_attrs::namelist_item: {
         return out << "namelist_item";
       } break;
-      case attr_type::priority: {
+      case dw_attrs::priority: {
         return out << "priority";
       } break;
-      case attr_type::segment: {
+      case dw_attrs::segment: {
         return out << "segment";
       } break;
-      case attr_type::specification: {
+      case dw_attrs::specification: {
         return out << "specification";
       } break;
-      case attr_type::static_link: {
+      case dw_attrs::static_link: {
         return out << "static_link";
       } break;
-      case attr_type::type: {
+      case dw_attrs::type: {
         return out << "type";
       } break;
-      case attr_type::use_location: {
+      case dw_attrs::use_location: {
         return out << "use_location";
       } break;
-      case attr_type::variable_parameter: {
+      case dw_attrs::variable_parameter: {
         return out << "variable_parameter";
       } break;
-      case attr_type::virtuality: {
+      case dw_attrs::virtuality: {
         return out << "virtuality";
       } break;
-      case attr_type::vtable_elem_location: {
+      case dw_attrs::vtable_elem_location: {
         return out << "vtable_elem_location";
       } break;
-      case attr_type::allocated: {
+      case dw_attrs::allocated: {
         return out << "allocated";
       } break;
-      case attr_type::associated: {
+      case dw_attrs::associated: {
         return out << "associated";
       } break;
-      case attr_type::data_location: {
+      case dw_attrs::data_location: {
         return out << "data_location";
       } break;
-      case attr_type::byte_stride: {
+      case dw_attrs::byte_stride: {
         return out << "byte_stride/stride";
       } break;
-      case attr_type::entry_pc: {
+      case dw_attrs::entry_pc: {
         return out << "entry_pc";
       } break;
-      case attr_type::use_UTF8: {
+      case dw_attrs::use_UTF8: {
         return out << "use_UTF8";
       } break;
-      case attr_type::extension: {
+      case dw_attrs::extension: {
         return out << "extension";
       } break;
-      case attr_type::ranges: {
+      case dw_attrs::ranges: {
         return out << "ranges";
       } break;
-      case attr_type::trampoline: {
+      case dw_attrs::trampoline: {
         return out << "trampoline";
       } break;
-      case attr_type::call_column: {
+      case dw_attrs::call_column: {
         return out << "call_column";
       } break;
-      case attr_type::call_file: {
+      case dw_attrs::call_file: {
         return out << "call_file";
       } break;
-      case attr_type::call_line: {
+      case dw_attrs::call_line: {
         return out << "call_line";
       } break;
-      case attr_type::description: {
+      case dw_attrs::description: {
         return out << "description";
       } break;
-      case attr_type::binary_scale: {
+      case dw_attrs::binary_scale: {
         return out << "binary_scale";
       } break;
-      case attr_type::decimal_scale: {
+      case dw_attrs::decimal_scale: {
         return out << "decimal_scale";
       } break;
-      case attr_type::small_: {
+      case dw_attrs::small_: {
         return out << "small_";
       } break;
-      case attr_type::decimal_sign: {
+      case dw_attrs::decimal_sign: {
         return out << "decimal_sign";
       } break;
-      case attr_type::digit_count: {
+      case dw_attrs::digit_count: {
         return out << "digit_count";
       } break;
-      case attr_type::picture_string: {
+      case dw_attrs::picture_string: {
         return out << "picture_string";
       } break;
-      case attr_type::mutable_: {
+      case dw_attrs::mutable_: {
         return out << "mutable_";
       } break;
-      case attr_type::threads_scaled: {
+      case dw_attrs::threads_scaled: {
         return out << "threads_scaled";
       } break;
-      case attr_type::explicit_: {
+      case dw_attrs::explicit_: {
         return out << "explicit_";
       } break;
-      case attr_type::object_pointer: {
+      case dw_attrs::object_pointer: {
         return out << "object_pointer";
       } break;
-      case attr_type::endianity: {
+      case dw_attrs::endianity: {
         return out << "endianity";
       } break;
-      case attr_type::elemental: {
+      case dw_attrs::elemental: {
         return out << "elemental";
       } break;
-      case attr_type::pure: {
+      case dw_attrs::pure: {
         return out << "pure";
       } break;
-      case attr_type::recursive: {
+      case dw_attrs::recursive: {
         return out << "recursive";
       } break;
-      case attr_type::signature: {
+      case dw_attrs::signature: {
         return out << "signature";
       } break;
-      case attr_type::main_subprogram: {
+      case dw_attrs::main_subprogram: {
         return out << "main_subprogram";
       } break;
-      case attr_type::data_bit_offset: {
+      case dw_attrs::data_bit_offset: {
         return out << "data_bit_offset";
       } break;
-      case attr_type::const_expr: {
+      case dw_attrs::const_expr: {
         return out << "const_expr";
       } break;
-      case attr_type::enum_class: {
+      case dw_attrs::enum_class: {
         return out << "enum_class";
       } break;
-      case attr_type::linkage_name: {
+      case dw_attrs::linkage_name: {
         return out << "linkage_name";
       } break;
-      case attr_type::string_length_bit_size: {
+      case dw_attrs::string_length_bit_size: {
         return out << "string_length_bit_size";
       } break;
-      case attr_type::string_length_byte_size: {
+      case dw_attrs::string_length_byte_size: {
         return out << "string_length_byte_size";
       } break;
-      case attr_type::rank: {
+      case dw_attrs::rank: {
         return out << "rank";
       } break;
-      case attr_type::str_offsets_base: {
+      case dw_attrs::str_offsets_base: {
         return out << "str_offsets_base";
       } break;
-      case attr_type::addr_base: {
+      case dw_attrs::addr_base: {
         return out << "addr_base";
       } break;
-      case attr_type::rnglists_base: {
+      case dw_attrs::rnglists_base: {
         return out << "rnglists_base";
       } break;
-      case attr_type::dwo_id: {
+      case dw_attrs::dwo_id: {
         return out << "dwo_id";
       } break;
-      case attr_type::dwo_name: {
+      case dw_attrs::dwo_name: {
         return out << "dwo_name";
       } break;
-      case attr_type::reference: {
+      case dw_attrs::reference: {
         return out << "reference";
       } break;
-      case attr_type::rvalue_reference: {
+      case dw_attrs::rvalue_reference: {
         return out << "rvalue_reference";
       } break;
-      case attr_type::macros: {
+      case dw_attrs::macros: {
         return out << "macros";
       } break;
-      case attr_type::call_all_calls: {
+      case dw_attrs::call_all_calls: {
         return out << "call_all_calls";
       } break;
-      case attr_type::call_all_source_calls: {
+      case dw_attrs::call_all_source_calls: {
         return out << "call_all_source_calls";
       } break;
-      case attr_type::call_all_tail_calls: {
+      case dw_attrs::call_all_tail_calls: {
         return out << "call_all_tail_calls";
       } break;
-      case attr_type::call_return_pc: {
+      case dw_attrs::call_return_pc: {
         return out << "call_return_pc";
       } break;
-      case attr_type::call_value: {
+      case dw_attrs::call_value: {
         return out << "call_value";
       } break;
-      case attr_type::call_origin: {
+      case dw_attrs::call_origin: {
         return out << "call_origin";
       } break;
-      case attr_type::call_parameter: {
+      case dw_attrs::call_parameter: {
         return out << "call_parameter";
       } break;
-      case attr_type::call_pc: {
+      case dw_attrs::call_pc: {
         return out << "call_pc";
       } break;
-      case attr_type::call_tail_call: {
+      case dw_attrs::call_tail_call: {
         return out << "call_tail_call";
       } break;
-      case attr_type::call_target: {
+      case dw_attrs::call_target: {
         return out << "call_target";
       } break;
-      case attr_type::call_target_clobbered: {
+      case dw_attrs::call_target_clobbered: {
         return out << "call_target_clobbered";
       } break;
-      case attr_type::call_data_location: {
+      case dw_attrs::call_data_location: {
         return out << "call_data_location";
       } break;
-      case attr_type::call_data_value: {
+      case dw_attrs::call_data_value: {
         return out << "call_data_value";
       } break;
-      case attr_type::noreturn: {
+      case dw_attrs::noreturn: {
         return out << "noreturn";
       } break;
-      case attr_type::alignment: {
+      case dw_attrs::alignment: {
         return out << "alignment";
       } break;
-      case attr_type::export_symbols: {
+      case dw_attrs::export_symbols: {
         return out << "export_symbols";
       } break;
-      case attr_type::deleted: {
+      case dw_attrs::deleted: {
         return out << "deleted";
       } break;
-      case attr_type::defaulted: {
+      case dw_attrs::defaulted: {
         return out << "defaulted";
       } break;
-      case attr_type::loclists_base: {
+      case dw_attrs::loclists_base: {
         return out << "loclists_base";
       } break;
       default: throw std::runtime_error("AAAAAAAAAAAAAAA");

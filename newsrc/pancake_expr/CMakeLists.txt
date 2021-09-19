@@ -23,5 +23,5 @@ target_include_directories(pancake.expr
 )
 
 target_link_libraries(pancake.expr
-  PUBLIC CONAN_PKG::libdwarf
+  PUBLIC CONAN_PKG::libdwarf CONAN_PKG::nlohmann_json
 )

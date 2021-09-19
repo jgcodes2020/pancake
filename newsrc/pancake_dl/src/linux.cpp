@@ -55,4 +55,16 @@ namespace pancake::dl {
       };
     }
   };
+  
+  void* library::_impl_get_symbol(const std::string& str) {
+    return p_impl->get_symbol(str);
+  }
+  
+  handle library::native_handle() {
+    return p_impl->hnd;
+  }
+  
+  section library::get_section(const std::string& name) {
+    return p_impl->get_section(name);
+  }
 }

@@ -32,7 +32,7 @@ namespace pancake::dl {
     struct impl;
     std::unique_ptr<impl> p_impl;
     
-    void* _impl_get_symbol(std::string name);
+    void* _impl_get_symbol(const std::string& name);
   public:
     library(std::filesystem::path path);
     

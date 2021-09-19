@@ -7,8 +7,6 @@ project(pancake_dwarf
 
 add_library(pancake.dwarf
   "src/error.cpp"
-  "src/functions.cpp"
-  "src/type_lookup.cpp"
 )
 
 # Properties

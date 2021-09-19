@@ -28,14 +28,14 @@ using std::unique_ptr, std::shared_ptr, std::string;
 using pdwarf::dw_signed, pdwarf::attr_type, pdwarf::die_tag;
 
 namespace {
-  void print_ast(std::ostream& out, const pancake.expr::expr_ast& ast, size_t limit = std::numeric_limits<size_t>::max()) {
+  void print_ast(std::ostream& out, const pancake::expr::expr_ast& ast, size_t limit = std::numeric_limits<size_t>::max()) {
     out << ast.global;
     for (size_t i = 0; i < std::min(ast.steps.size(), limit); i++) {
       std::visit(stx::overload {
-        [&](const pancake.expr::expr_ast::member& step) {
+        [&](const pancake::expr::expr_ast::member& step) {
           out << "." << step.name;
         },
-        [&](const pancake.expr::expr_ast::subscript& step) {
+        [&](const pancake::expr::expr_ast::subscript& step) {
           out << "[" << step.index << "]";
         }
       }, ast.steps[i]);
