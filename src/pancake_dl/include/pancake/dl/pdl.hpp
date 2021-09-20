@@ -36,7 +36,7 @@ namespace pancake::dl {
   public:
     library(std::filesystem::path path);
     
-    ~library() = default;
+    ~library();
     
     /// Returns a native handle.
     handle native_handle();

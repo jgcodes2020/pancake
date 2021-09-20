@@ -27,9 +27,8 @@ function(pancake_rsrc_gen target src_name)
   
   target_sources(${target}
     PRIVATE ${gen_obj}
-    PUBLIC ${gen_inc}
   )
-  set_source_files_properties(gen_obj PROPERTIES
+  set_source_files_properties(${gen_obj} PROPERTIES
     EXTERNAL_OBJECT on
     GENERATED on
   )

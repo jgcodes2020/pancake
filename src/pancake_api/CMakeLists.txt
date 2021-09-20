@@ -16,3 +16,7 @@ set_target_properties(pancake.api PROPERTIES
   CXX_STANDARD 17
   CXX_STANDARD_REQUIRED on
 )
+
+target_link_libraries(pancake.api
+  PUBLIC CONAN_PKG::ms-gsl
+)

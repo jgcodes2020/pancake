@@ -21,6 +21,7 @@
 #include <unordered_map>
 #include <variant>
 
+#include <pancake/dwarf/type_lookup.hpp>
 #include <pancake/exception.hpp>
 #include <pancake/movie.hpp>
 
@@ -37,9 +38,12 @@ namespace pancake {
 
   private:
     struct impl;
-    std::shared_ptr<impl> pimpl;
+    std::shared_ptr<impl> p_impl;
 
-    void* const _impl_get(std::string expr, const std::type_info* type = nullptr);
+    void* _impl_get(
+      const std::string& expr,
+      dwarf::base_type_info type = dwarf::base_type_info {
+        dwarf::encoding::none, 0});
 
   public:
     class savestate final {
@@ -47,12 +51,12 @@ namespace pancake {
 
     private:
       struct impl;
-      std::unique_ptr<impl> pimpl;
-
-      void save(sm64 const& impl);
-      void load(sm64& impl) const;
-
+      std::unique_ptr<impl> p_impl;
+      
       savestate(sm64 const& game);
+    public:
+      void save();
+      void load() const;
     };
     /**
      * @brief Loads libsm64.
@@ -77,7 +81,8 @@ namespace pancake {
 
     /**
      * @brief Returns a reference to a specific field.
-     * @note This method does type checking. You can use `get_unsafe()` if you favour performance over safety.
+     * @note This method does type checking. You can use `get_unsafe()` if you
+     * favour performance over safety.
      *
      * @tparam T Must be an integer or floating-point type that is not `long
      * double`
@@ -89,28 +94,28 @@ namespace pancake {
      */
     template <typename T>
     [[nodiscard]] T& get(std::string expr) {
-      static_assert(std::is_arithmetic_v<T> && !std::is_same_v<T, long double>,
+      static_assert(
+        std::is_arithmetic_v<T> && !std::is_same_v<T, long double>,
         "T should be any integer, or float or double or void pointer");
 
       // unsafe cast back to correct type
-      return *reinterpret_cast<T*>(_impl_get(expr, &typeid(T)));
+      return *reinterpret_cast<T*>(_impl_get(expr, dwarf::get_type_info<T>()));
     }
-    
+
     /**
      * @brief Returns a pointer to a specific field.
-     * @note This method does not do type checking. You can use `template<typename T> get()` if you favour safety over performance.
-     * 
+     * @note This method does not do type checking. You can use
+     * `template<typename T> get()` if you favour safety over performance.
+     *
      * @param expr an accessor expression.
      * @return void* a pointer to the value from the accessor expression
      * @exception std::domain_error if the resulting field is not a fundamental
      * type
      */
-    void* get_unsafe(std::string expr) {
-      return _impl_get(expr);
-    }
+    void* get_unsafe(std::string expr) { return _impl_get(expr); }
 
     /**
-     * @brief Advances the savestate forward by 1 frame.
+     * @brief Advances the game forward by 1 frame.
      *
      */
     void advance();
@@ -120,21 +125,7 @@ namespace pancake {
      *
      * @return a new savestate bound to this game.
      */
-    savestate alloc_svst() const;
-    /**
-     * @brief Saves the game's state to the savestate buffer.
-     *
-     * @param st the savestate to save
-     * @exception std::domain_error if the savestate is not linked to THIS game.
-     */
-    void save_svst(savestate& st) const;
-    /**
-     * @brief Loads the game's state from a savestate buffer.
-     *
-     * @param st
-     * @exception std::domain_error if the savestate is not linked to THIS game.
-     */
-    void load_svst(savestate const& st);
+    [[nodiscard]] savestate alloc_svst() const;
 
     /**
      * @brief Loads a constant.

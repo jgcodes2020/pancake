@@ -56,6 +56,8 @@ namespace pancake::dl {
     }
   };
   
+  library::~library() = default;
+  
   void* library::_impl_get_symbol(const std::string& str) {
     return p_impl->get_symbol(str);
   }
