@@ -34,7 +34,7 @@ namespace pancake::dl {
     
     void* _impl_get_symbol(const std::string& name);
   public:
-    library(std::filesystem::path path);
+    library(const std::filesystem::path& path);
     
     ~library();
     

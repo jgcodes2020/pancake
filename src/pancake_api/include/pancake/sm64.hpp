@@ -63,21 +63,7 @@ namespace pancake {
      *
      * @param path path to libsm64
      */
-    sm64(std::filesystem::path path);
-
-    /**
-     * @brief Loads libsm64.
-     *
-     * @param path path to libsm64
-     */
-    sm64(std::string path);
-
-    /**
-     * @brief Loads libsm64.
-     *
-     * @param path path to libsm64
-     */
-    sm64(const char* path);
+    sm64(const std::filesystem::path& path);
 
     /**
      * @brief Returns a reference to a specific field.

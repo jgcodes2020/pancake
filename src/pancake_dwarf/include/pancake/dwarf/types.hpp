@@ -88,7 +88,7 @@ namespace pancake::dwarf {
         if (dwarf_globname(ptr[i], &str, &err) == DW_DLV_ERROR) {
           throw std::logic_error(dwarf_errmsg(err));
         }
-        
+
         if (sym == str) {
           value = i;
           break;
@@ -112,9 +112,23 @@ namespace pancake::dwarf {
     std::shared_ptr<Dwarf_Debug_s> ptr;
 
   public:
-    debug(const std::filesystem::path& path);
-
-    operator Dwarf_Debug();
+    debug(const std::filesystem::path& path) :
+        ptr(
+          [&]() -> Dwarf_Debug {
+            Dwarf_Debug res;
+            Dwarf_Error err;
+            switch (dwarf_init_path(
+              path.c_str(), nullptr, 0, 0, nullptr, nullptr, &res, &err)) {
+              case DW_DLV_ERROR: {
+                throw std::invalid_argument(dwarf_errmsg(err));
+              } break;
+              case DW_DLV_NO_ENTRY: {
+                throw std::invalid_argument("File does not exist");
+              } break;
+            }
+            return res;
+          }(),
+          deleter {}) {}
 
     array<global> globals() {
       Dwarf_Error err;
@@ -238,14 +252,14 @@ namespace pancake::dwarf {
 
       return die(dbg, res);
     }
-    
+
     die_tag tag() {
       Dwarf_Error err;
       Dwarf_Half res;
       if (dwarf_tag(ptr.get(), &res, &err) == DW_DLV_ERROR) {
         throw std::logic_error(dwarf_errmsg(err));
       }
-      
+
       return static_cast<die_tag>(res);
     }
 

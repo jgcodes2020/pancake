@@ -17,7 +17,7 @@ namespace pancake::dl {
     handle hnd;
     std::unique_ptr<ELF::Binary> bin;
     
-    impl(fs::path path) : 
+    impl(const fs::path& path) : 
       hnd([path]() {
         handle hnd = dlopen(path.c_str(), RTLD_LAZY);
         if (hnd == nullptr) {
@@ -55,6 +55,9 @@ namespace pancake::dl {
       };
     }
   };
+  
+  library::library(const fs::path& path) :
+    p_impl(new impl(path)) {}
   
   library::~library() = default;
   

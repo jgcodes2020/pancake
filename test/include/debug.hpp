@@ -16,8 +16,6 @@ using namespace std;
 
 // UTILITIES
 
-#include <mathutil.hpp>
-
 
 // DEBUG PRINTER
 

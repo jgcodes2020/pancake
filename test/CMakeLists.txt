@@ -7,7 +7,7 @@ set_target_properties(experiment PROPERTIES
 )
 
 target_include_directories(experiment
-  PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/include"
+  PRIVATE include
 )
 
-target_link_libraries(experiment pancake)
+target_link_libraries(experiment pancake.api pancake.expr)

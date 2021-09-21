@@ -38,7 +38,7 @@ recipe that you can use in your projects. You will need to build from source.
 
 
 ## Legal obligations
-libdwarf is licensed under the LGPL. To comply, I have provide instructions on relinking:
+libdwarf is licensed under the LGPL. To comply, here are instructions on relinking:
 1. Make a CMake imported target for your libdwarf. Here's a template.
 ```
 add_library(libdwarf_custom STATIC IMPORTED)

@@ -87,7 +87,7 @@ namespace pancake {
     }
   };
   
-  sm64::sm64(fs::path path) {
+  sm64::sm64(const fs::path& path) {
     p_impl = std::make_unique<impl>(path);
   }
   

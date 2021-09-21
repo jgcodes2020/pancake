@@ -71,6 +71,6 @@ namespace pancake::expr {
    * @param ast an AST to compile
    * @return const compiled_expr the offsets
    */
-  const std::pair<expr_eval, dwarf::base_type_info> compile(const expr_ast& ast, pancake::dwarf::debug dbg);
+  const std::pair<expr_eval, dwarf::base_type_info> compile(const expr_ast& ast, pancake::dwarf::debug& dbg);
 }
 #endif

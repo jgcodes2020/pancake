@@ -2,14 +2,14 @@
 #include <iostream>
 #include <string>
 #include "pancake/expr/compile.hpp"
-#include <pancake/dwarf/memory.hpp>
-#include <pancake/dwarf/functions.hpp>
+#include <pancake/dwarf/types.hpp>
 #include <pancake/expr/parse.hpp>
 
 using std::string, std::cout, std::cin, std::getline;
+namespace dwarf = pancake::dwarf;
 
 int main(int argc, char* argv[]) {
-  auto dbg = pdwarf::dwarf_make_shared<Dwarf_Debug>(pdwarf::init_path(argv[1]));
+  auto dbg = dwarf::debug(argv[1]);
   std::string in;
   
   while (true) {
