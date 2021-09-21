@@ -4,6 +4,7 @@
 #include <atomic>
 #include <cstring>
 #include <filesystem>
+#include <iostream>
 #include <memory>
 #include <optional>
 #include <stdexcept>
@@ -295,6 +296,65 @@ namespace pancake::dwarf {
         } break;
       }
       throw std::logic_error("this shouldn't happen");
+    }
+    
+    friend std::ostream& operator<<(std::ostream& out, die& die) {
+      out << "DIE of type " << die.tag() << "\n";
+      
+      Dwarf_Error err;
+      Dwarf_Attribute* attrs;
+      Dwarf_Signed size;
+      #define dw_check(fn) \
+      if (fn == DW_DLV_ERROR) throw std::invalid_argument(dwarf_errmsg(err))
+      
+      dw_check(dwarf_attrlist(die.ptr.get(), &attrs, &size, &err));
+      
+      for (size_t i = 0; i < size; i++) {
+        Dwarf_Half name;
+        dw_check(dwarf_whatattr(attrs[i], &name, &err));
+        out << static_cast<dw_attrs>(name) << ": ";
+        Dwarf_Half form;
+        dw_check(dwarf_whatform(attrs[i], &form, &err));
+        switch (static_cast<attr_form>(form)) {
+          case attr_form::udata: 
+          case attr_form::data1:
+          case attr_form::data2:
+          case attr_form::data4:
+          case attr_form::data8: {
+            Dwarf_Unsigned res;
+            dw_check(dwarf_formudata(attrs[i], &res, &err));
+            out << res << "\n";
+          } break;
+          case attr_form::sdata: {
+            Dwarf_Signed res;
+            dw_check(dwarf_formsdata(attrs[i], &res, &err));
+            out << res << "\n";
+          } break;
+          case attr_form::string:
+          case attr_form::strp: {
+            char* res;
+            dw_check(dwarf_formstring(attrs[i], &res, &err));
+            out << res << "\n";
+          } break;
+          case attr_form::ref1:
+          case attr_form::ref2:
+          case attr_form::ref4:
+          case attr_form::ref8: {
+            Dwarf_Off res;
+            dw_check(dwarf_global_formref(attrs[i], &res, &err));
+            auto flags = out.flags();
+            out << "<DIE at " << std::hex << res;
+            out.flags(flags);
+            out << ">\n";
+          } break;
+          default: {
+            out << "<didn't parse: form " << form << ">\n";
+          } break;
+        }
+      }
+      
+      #undef dw_check
+      return out;
     }
   };
 

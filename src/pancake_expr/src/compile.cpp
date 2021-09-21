@@ -5,6 +5,7 @@ file, You can obtain one at http://mozilla.org/MPL/2.0/.
 ******************************************************************/
 
 #include <libdwarf/libdwarf.h>
+#include "pancake/dwarf/enums.hpp"
 #include <pancake/expr/compile.hpp>
 
 #include <algorithm>
@@ -21,8 +22,6 @@ file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 using std::stringstream, std::invalid_argument;
 using std::string;
-
-namespace dwarf = pancake::dwarf;
 
 namespace {
   void print_ast(
@@ -190,14 +189,13 @@ namespace pancake::expr {
         throw std::domain_error(fmt.str());
       }
     }
-
-    // cerr << result << "\n";
+    
     return std::pair<expr_eval, dwarf::base_type_info> {
       result,
       dwarf::base_type_info {
-        static_cast<dwarf::encoding>(static_cast<Dwarf_Half>(
-          die.get_attr<Dwarf_Unsigned>(dwarf::dw_attrs::encoding))),
-        die.get_attr<Dwarf_Unsigned>(dwarf::dw_attrs::type)
+        static_cast<dwarf::encoding>(
+          die.get_attr<Dwarf_Unsigned>(dwarf::dw_attrs::encoding)),
+        die.get_attr<Dwarf_Unsigned>(dwarf::dw_attrs::byte_size)
       }
     };
   }

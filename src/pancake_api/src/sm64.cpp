@@ -83,7 +83,7 @@ namespace pancake {
     }
     
     void advance() {
-      lib.get_symbol<void()>("sm64_advance")();
+      lib.get_symbol<void()>("sm64_update")();
     }
   };
   

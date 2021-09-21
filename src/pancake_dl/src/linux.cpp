@@ -6,7 +6,9 @@
 #include <link.h>
 
 #include <filesystem>
+#include <iostream>
 #include <memory>
+#include <string>
 
 
 namespace fs = std::filesystem;
@@ -14,14 +16,15 @@ namespace ELF = LIEF::ELF;
 
 namespace pancake::dl {
   struct library::impl {
-    handle hnd;
+    const handle hnd;
     std::unique_ptr<ELF::Binary> bin;
     
     impl(const fs::path& path) : 
       hnd([path]() {
-        handle hnd = dlopen(path.c_str(), RTLD_LAZY);
+        handle hnd = dlopen(path.c_str(), RTLD_NOW);
         if (hnd == nullptr) {
-          throw dl_error(dlerror());
+          std::string error = dlerror();
+          throw dl_error(error);
         }
         return hnd;
       }()),
@@ -33,8 +36,10 @@ namespace pancake::dl {
     
     void* get_symbol(const std::string& name) {
       void* sym = dlsym(hnd, name.c_str());
-      if (!sym) {
-        throw dl_error(dlerror());
+      if (sym == nullptr) {
+        char* error = dlerror();
+        std::cerr << error << "\n";
+        throw dl_error(error);
       }
       
       return sym;

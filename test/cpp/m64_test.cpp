@@ -42,7 +42,7 @@ int main(int argc, char* argv[]) {
   float max_speed = 0;
   
   for (size_t i = 0; i < inputs.size(); i++) {
-    cerr << "\033[2K\033[1E\033[1FFrame: " << i;
+    cout << "Frame: " << setw(6) << i << " " << flush;
     
     inputs[i].apply(game);
     
