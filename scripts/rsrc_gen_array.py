@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/python3
 
 from argparse import ArgumentParser, ArgumentTypeError, ArgumentError
 from pathlib import Path

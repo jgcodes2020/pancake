@@ -1,3 +1,5 @@
+#!/usr/bin/python3
+
 from argparse import ArgumentParser, ArgumentTypeError, ArgumentError
 import os
 from pathlib import Path
