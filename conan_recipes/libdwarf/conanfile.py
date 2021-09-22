@@ -73,9 +73,7 @@ class LibdwarfConan(ConanFile):
         if shutil.which("ninja") is not None:
             cmake.generator = "Ninja"
         
-        cmake.configure(defs={
-            "LIBDWARF_CRT": ""
-        }, source_dir="libdwarf-code")
+        cmake.configure(source_dir="libdwarf-code")
         cmake.build()
 
         # Explicit way:
