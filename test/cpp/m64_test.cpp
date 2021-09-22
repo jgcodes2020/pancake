@@ -8,12 +8,18 @@
 #include <pancake/movie.hpp>
 #include <pancake/sm64.hpp>
 
-#include <debug.hpp>
+#ifdef _WIN32
+#include <windows.h>
+#define set_utf8 SetConsoleOutputCP(65001)
+#else
+#define set_utf8 ((void) 0)
+#endif
 
 using namespace pancake;
 using namespace std;
 
 std::ostream& operator<<(std::ostream& out, frame& f) {
+  set_utf8;
   out << (((f.buttons & frame::button::A) != frame::button::none)? "A":" ");
   out << (((f.buttons & frame::button::B) != frame::button::none)? "B":" ");
   out << (((f.buttons & frame::button::Z) != frame::button::none)? "Z":" ");

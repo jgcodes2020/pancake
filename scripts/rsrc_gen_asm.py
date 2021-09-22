@@ -1,6 +1,8 @@
 from argparse import ArgumentParser, ArgumentTypeError, ArgumentError
+import os
 from pathlib import Path
 import re
+import tempfile
 from textwrap import dedent
 import platform
 import subprocess as subp
@@ -90,16 +92,21 @@ asm_nbase = re.sub(r"\W", "_", args.input.name)
 asm = asm.format(fname=str(args.input),
                  name=asm_nbase)
 
-with NamedTemporaryFile(mode="w+",suffix=asm_suffix) as f:
-    f.write(asm)
-    f.flush()
+asmfname = tempfile.mktemp()
+asmfile = open(asmfname, "w+")
+try:
+    asmfile.write(asm)
+    asmfile.flush()
     asm_cmd = assembler.format(
-            input=f.name, output=str(args.object))
+            input=asmfname, output=str(args.object))
     print(f"Assembling with: {asm_cmd}")
     subp.run(
         shlex.split(asm_cmd, posix=True)
     )
     pass
+finally:
+    asmfile.close()
+    os.unlink(asmfname)
 
 # Header generation
 

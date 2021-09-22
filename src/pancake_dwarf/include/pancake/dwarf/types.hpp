@@ -119,7 +119,7 @@ namespace pancake::dwarf {
             Dwarf_Debug res;
             Dwarf_Error err;
             switch (dwarf_init_path(
-              path.c_str(), nullptr, 0, 0, nullptr, nullptr, &res, &err)) {
+              path.string().c_str(), nullptr, 0, 0, nullptr, nullptr, &res, &err)) {
               case DW_DLV_ERROR: {
                 throw std::invalid_argument(dwarf_errmsg(err));
               } break;
