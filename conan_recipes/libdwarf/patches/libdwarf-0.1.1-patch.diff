@@ -1,5 +1,5 @@
 diff --git a/CMakeLists.txt b/CMakeLists.txt
-index 793b917e..42fac9ea 100644
+index 793b917e..2e843dca 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
 @@ -1,7 +1,9 @@
@@ -94,7 +94,7 @@ index 793b917e..42fac9ea 100644
  
  # message("CMake flags are:")
  # message("  CMAKE_C_FLAGS: ${CMAKE_C_FLAGS}")
-@@ -305,40 +307,8 @@ check_c_source_compiles([=[
+@@ -305,41 +307,6 @@ check_c_source_compiles([=[
        return 0;
    } ]=]  HAVE_REGEX)
  
@@ -132,13 +132,12 @@ index 793b917e..42fac9ea 100644
 -  # For linking in libz
 -  set(DW_FZLIB "z")
 -endif()
-+set(DW_FZLIB CONAN_PKG::zlib)
-+
- 
+-
  check_c_source_compiles([=[
  #include <stdint.h>
+ int main()
 diff --git a/cmake/config.h.cmake b/cmake/config.h.cmake
-index 2e4d7e97..29bbdf32 100644
+index 2e4d7e97..ed738509 100644
 --- a/cmake/config.h.cmake
 +++ b/cmake/config.h.cmake
 @@ -126,11 +126,8 @@
@@ -150,8 +149,8 @@ index 2e4d7e97..29bbdf32 100644
 -
 -/* Define to 1 if you have the <zlib.h> header file. */
 -#cmakedefine HAVE_ZLIB_H 1
-+#define HAVE_ZLIB 1
-+#define HAVE_ZLIB_H 1
++#undef HAVE_ZLIB
++#undef HAVE_ZLIB_H
  
  /* Define to the sub-directory where libtool stores uninstalled libraries. */
  #cmakedefine LT_OBJDIR 1
