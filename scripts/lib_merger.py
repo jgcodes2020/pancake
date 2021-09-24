@@ -106,8 +106,6 @@ def ar_dir_merge():
         ["ar", "-M"],
         input=mri_data.encode('utf-8')
     )
-        
-        
 
 if platform.system() == "Windows":
     lib_exe_merge()

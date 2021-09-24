@@ -37,11 +37,6 @@ namespace pancake::expr {
     }
     return out << "]";
   }
-  // Matches either a [, a ], a ., a ->, an identifier,
-  // a decimal literal, a hex literal, a binary literal, or an octal literal.
-  inline static const regex EXP_TOKEN =
-    regex(R"(^\s*([\[\].]|(?:->)|(?:[A-Za-z_]\w*)|(?:[1-9]?[0-9]+)|)"
-          R"((?:\d|[1-9]\d+)|(?:0x[\da-fA-F]+)|(?:0b[01]+)|(?:0[0-7]+)))");
 
   // Lexes and preprocesses a string.
   vector<lexer::token> preprocess(const string& expr) {
