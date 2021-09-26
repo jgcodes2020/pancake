@@ -177,8 +177,16 @@ namespace pancake::expr {
 
     // Throw if not base type
     switch (tag) {
-      case dwarf::die_tag::base_type:
-        break;
+      case dwarf::die_tag::base_type: {
+        return std::pair<expr_eval, dwarf::base_type_info> {
+          result,
+          dwarf::base_type_info {
+            static_cast<dwarf::encoding>(
+              die.get_attr<Dwarf_Unsigned>(dwarf::dw_attrs::encoding)),
+            die.get_attr<Dwarf_Unsigned>(dwarf::dw_attrs::byte_size)
+          }
+        };
+      } break;
       default: {
         stringstream fmt;
         fmt << "Expression \033[0;38;5;202";
@@ -190,13 +198,6 @@ namespace pancake::expr {
       }
     }
     
-    return std::pair<expr_eval, dwarf::base_type_info> {
-      result,
-      dwarf::base_type_info {
-        static_cast<dwarf::encoding>(
-          die.get_attr<Dwarf_Unsigned>(dwarf::dw_attrs::encoding)),
-        die.get_attr<Dwarf_Unsigned>(dwarf::dw_attrs::byte_size)
-      }
-    };
+
   }
 }  // namespace pancake::expr
