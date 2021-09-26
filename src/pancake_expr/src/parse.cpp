@@ -25,6 +25,7 @@ using std::cerr, std::stringstream, std::vector, std::string_view;
 using std::string, std::regex, std::regex_search, std::smatch;
 
 namespace pancake::expr {
+  
   std::ostream& operator<<(std::ostream& out, lexer::token& token) {
     return out << "\"" << token.text << "\"";
   }
@@ -44,12 +45,13 @@ namespace pancake::expr {
 
     auto begin = expr.begin();
     smatch match;
-    token::type last_type;
+    token::type_t last_type;
 
     vector<token> result;
-
+    
     for (; begin < expr.end(); begin += match.length()) {
       bool found_regex = false;
+      
       for (auto it = lexer::type_regexes().begin();
            it != lexer::type_regexes().end(); it++) {
         if (regex_search(begin, expr.end(), match, it->second)) {
@@ -78,21 +80,21 @@ namespace pancake::expr {
         auto& obj = *entry;
         result.insert(
           result.end(),
-          {token {"rawData", token::type::identifier, begin - expr.begin()},
-           token {".", token::type::member_op, begin - expr.begin()},
+          {token {"rawData", token::type_t::identifier, begin - expr.begin()},
+           token {".", token::type_t::dot, begin - expr.begin()},
            token {
-             static_cast<string>(obj.at("array")), token::type::identifier,
+             static_cast<string>(obj.at("array")), token::type_t::identifier,
              begin - expr.begin()}});
         // before indices
         for (auto& i : obj.at("indices")) {
           result.insert(
             result.end(),
             {
-              token {"[", token::type::subscript_begin, begin - expr.begin()},
+              token {"[", token::type_t::subscript_begin, begin - expr.begin()},
               token {
-                std::to_string(ptrdiff_t(i)), token::type::number,
+                std::to_string(ptrdiff_t(i)), token::type_t::number,
                 begin - expr.begin()},
-              token {"]", token::type::subscript_end, begin - expr.begin()},
+              token {"]", token::type_t::subscript_end, begin - expr.begin()},
             });
         }
         continue;
@@ -107,7 +109,7 @@ namespace pancake::expr {
         if (type == "s64") {
           result.push_back(
             {std::to_string(obj.at("value").get<int64_t>()),
-             token::type::number, begin - expr.begin()});
+             token::type_t::number, begin - expr.begin()});
         }
         else if (type == "f64") {
           throw std::invalid_argument("Floating point values are not allowed");
@@ -131,24 +133,24 @@ namespace pancake::expr {
   // Parses a lexed expression.
   expr_ast parse(const std::vector<lexer::token>& tokens, const string& expr) {
     using lexer::token;
-    if (tokens[0].t_type != token::type::identifier) {
-      stringstream fmt;
-      fmt << "\"" << expr << "\" does not begin with an identifier";
-      throw std::invalid_argument(fmt.str());
-    }
-    expr_ast result {tokens[0].text, vector<expr_ast::step> {}};
-    for (size_t i = 1; i < tokens.size();) {
-      switch (tokens[i].t_type) {
-        case token::type::subscript_begin: {
+    using type_t = lexer::token::type_t;
+    size_t i = 1;
+    
+    // increment i here because we want to process the token AFTER the global/typename
+    expr_ast result {tokens[0].text, vector<expr_ast::step>()};
+    
+    while (i < tokens.size()) {
+      switch (tokens[i].type) {
+        case token::type_t::subscript_begin: {
           if (
             i + 2 >= tokens.size() ||
-            tokens[i + 2].t_type != token::type::subscript_end) {
+            tokens[i + 2].type != token::type_t::subscript_end) {
             stringstream fmt;
             fmt << "Error parsing \"" << expr << "\": Bracket at index ";
             fmt << tokens[i].index << " is unclosed";
             throw std::invalid_argument(fmt.str());
           }
-          if (tokens[i + 1].t_type != token::type::number) {
+          if (tokens[i + 1].type != token::type_t::number) {
             stringstream fmt;
             fmt << "Error parsing \"" << expr << "\": Subscript at index";
             fmt << tokens[i].index << " does not contain an index";
@@ -158,19 +160,32 @@ namespace pancake::expr {
             expr_ast::subscript {std::stoull(tokens[i + 1].text)});
           i += 3;
         } break;
-        case token::type::member_op: {
+        case token::type_t::dot: {
           if (
             i + 1 >= tokens.size() ||
-            tokens[i + 1].t_type != token::type::identifier) {
+            tokens[i + 1].type != token::type_t::identifier) {
             stringstream fmt;
             fmt << "Error parsing \"" << expr
                 << "\": Member operator at index ";
             fmt << tokens[i].index << " does not precede an identifier";
             throw std::invalid_argument(fmt.str());
           }
-          result.steps.push_back(expr_ast::member {tokens[i + 1].text});
+          result.steps.push_back(expr_ast::dot {tokens[i + 1].text});
           i += 2;
         } break;
+        case token::type_t::arrow: {
+          if (
+            i + 1 >= tokens.size() ||
+            tokens[i + 1].type != token::type_t::identifier) {
+            stringstream fmt;
+            fmt << "Error parsing \"" << expr
+                << "\": Member operator at index ";
+            fmt << tokens[i].index << " does not precede an identifier";
+            throw std::invalid_argument(fmt.str());
+          }
+          result.steps.push_back(expr_ast::arrow {tokens[i + 1].text});
+          i += 2;
+        }
         default: {
           stringstream fmt;
           fmt << "Error parsing \"" << expr << "\": unexpected token \"";

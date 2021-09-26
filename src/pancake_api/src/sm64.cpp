@@ -53,13 +53,10 @@ namespace pancake {
           return info.ptr;
         }
       }
-      
-      auto data = expr::compile(expr::parse(expr), dbg);
 
+      expr::expr_eval eval = expr::compile(expr::parse(expr), dbg);
       
-      expr::expr_eval& eval = data.first;
-      
-      uint8_t* ptr = &this->lib.get_symbol<uint8_t>(eval.global);
+      uint8_t* ptr = &this->lib.get_symbol<uint8_t>(eval.start);
       for (auto& step: eval.steps) {
         std::visit(stx::overload {
           [&](expr::expr_eval::offset step) mutable {
@@ -72,10 +69,10 @@ namespace pancake {
       }
       
       cache[expr] = expr_info {
-        ptr, true, data.second
+        ptr, true, eval.result
       };
       
-      if (type.encoding != dwarf::encoding::none && type != data.second) {
+      if (type.encoding != dwarf::encoding::none && type != eval.result) {
         throw std::invalid_argument("Type mismatch");
       }
       

@@ -5,10 +5,11 @@ A parser and state-compiler for *expressions*.
 *Expressions* are Pancake's way of deciding what data to retrieve,
 and use a limited subset of C syntax.
 
-Operator | Usage                                        |
-:-------:|:--------------------------------------------:|
-`.`, `->`| Access a member                              |
-`[x]`    | Access an array index from a pointer or array|
+Operator | Usage                                         |
+:-------:|:---------------------------------------------:|
+`.`      | Access a member                               |
+`->`     | Access a member through a pointer             |
+`[x]`    | Access an array index from a pointer or array |
 
 For example, to access physical Mario's<sup><a href="#note-1">1</a></sup> x-coordinate:
 ```c++

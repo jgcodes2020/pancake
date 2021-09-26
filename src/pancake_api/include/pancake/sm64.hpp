@@ -21,7 +21,7 @@
 #include <unordered_map>
 #include <variant>
 
-#include <pancake/dwarf/type_lookup.hpp>
+#include <pancake/dwarf/type_info.hpp>
 #include <pancake/exception.hpp>
 #include <pancake/movie.hpp>
 

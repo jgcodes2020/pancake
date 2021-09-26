@@ -6,7 +6,10 @@ file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 #ifndef _PANCAKE_EXPR_COMPILE_HPP_
 #define _PANCAKE_EXPR_COMPILE_HPP_
+#include <algorithm>
 #include <cstdint>
+#include <functional>
+#include <iterator>
 #include <memory>
 #include <string>
 #include <variant>
@@ -15,7 +18,7 @@ file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 #include <pancake/expr/parse.hpp>
 #include <pancake/dwarf/types.hpp>
-#include <pancake/dwarf/type_lookup.hpp>
+#include <pancake/dwarf/type_info.hpp>
 #include <pancake/stx/overload.hpp>
 
 namespace pancake::expr {
@@ -33,10 +36,22 @@ namespace pancake::expr {
      * @brief Instruction to indirect the current pointer.
      */
     struct indirect {};
+    
     using step = std::variant<offset, indirect>;
-    std::string global;
+    using result_type = std::variant<dwarf::base_type_info, dwarf::die>;
+    
+    std::string start;
     std::vector<step> steps;
+    dwarf::base_type_info result;
+    
+    expr_eval& operator+=(expr_eval&& eval) {
+      std::copy(eval.steps.begin(), eval.steps.end(), std::back_inserter(steps));
+      result = eval.result;
+      return *this;
+    }
   };
+  
+  
   
   inline std::ostream& operator<<(std::ostream& out, const expr_eval::step& s) {
     visit(stx::overload {
@@ -51,7 +66,7 @@ namespace pancake::expr {
   }
   
   inline std::ostream& operator<<(std::ostream& out, const expr_eval& e) {
-    out << "get " << e.global;
+    out << "get " << e.start;
     for (auto& i : e.steps) {
       visit(stx::overload {
         [&](expr_eval::offset step) mutable -> void {
@@ -71,6 +86,6 @@ namespace pancake::expr {
    * @param ast an AST to compile
    * @return const compiled_expr the offsets
    */
-  const std::pair<expr_eval, dwarf::base_type_info> compile(const expr_ast& ast, pancake::dwarf::debug& dbg);
+  expr_eval compile(const expr_ast& ast, pancake::dwarf::debug& dbg);
 }
 #endif

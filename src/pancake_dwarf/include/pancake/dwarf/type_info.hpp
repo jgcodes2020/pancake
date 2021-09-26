@@ -8,6 +8,7 @@ file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #define _PANCAKE_DWARF_TYPELOOKUP_HPP_
 #include <cmath>
 #include <limits>
+#include <memory>
 #include <string>
 #include <type_traits>
 #include <typeinfo>
@@ -16,6 +17,7 @@ file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #include <pancake/dwarf/enums.hpp>
 
 namespace pancake::dwarf {
+  struct any_type_info;
 
   struct base_type_info {
     encoding encoding;

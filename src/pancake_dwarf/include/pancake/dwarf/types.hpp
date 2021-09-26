@@ -14,6 +14,10 @@
 
 #include <pancake/dwarf/enums.hpp>
 
+#define dw_check(fn)      \
+  if (fn == DW_DLV_ERROR) \
+  throw std::invalid_argument(dwarf_errmsg(err))
+
 namespace pancake::dwarf {
   namespace details {
     template <typename...>
@@ -125,7 +129,7 @@ namespace pancake::dwarf {
       return global(dbg, ptr[value]);
     }
   };
-  
+
   template <>
   class array<global_type> final {
     friend class debug;
@@ -226,7 +230,7 @@ namespace pancake::dwarf {
       }
       throw std::logic_error("This shouldn't happen");
     }
-    
+
     array<global_type> global_types() {
       Dwarf_Error err;
       Dwarf_Type* arr;
@@ -234,7 +238,7 @@ namespace pancake::dwarf {
       switch (dwarf_get_pubtypes(ptr.get(), &arr, &size, &err)) {
         case DW_DLV_NO_ENTRY: {
           throw std::logic_error(
-            "No .debug_pubtypes section exists in this binary");
+            "No .debug_pubnames section exists in this binary");
         } break;
         case DW_DLV_ERROR: {
           throw std::invalid_argument(dwarf_errmsg(err));
@@ -401,9 +405,6 @@ namespace pancake::dwarf {
       Dwarf_Error err;
       Dwarf_Attribute* attrs;
       Dwarf_Signed size;
-#define dw_check(fn)      \
-  if (fn == DW_DLV_ERROR) \
-  throw std::invalid_argument(dwarf_errmsg(err))
 
       dw_check(dwarf_attrlist(die.ptr.get(), &attrs, &size, &err));
 
@@ -451,7 +452,6 @@ namespace pancake::dwarf {
         }
       }
 
-#undef dw_check
       return out;
     }
   };
@@ -490,4 +490,6 @@ namespace pancake::dwarf {
     return dwarf::die(dbg, res);
   }
 }  // namespace pancake::dwarf
+
+#undef dw_check
 #endif
