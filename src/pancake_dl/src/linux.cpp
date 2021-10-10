@@ -34,7 +34,7 @@ namespace pancake::dl {
       dlclose(hnd);
     }
     
-    void* get_symbol(const std::string& name) {
+    void* get_symbol(const std::string& name) const {
       void* sym = dlsym(hnd, name.c_str());
       if (sym == nullptr) {
         char* error = dlerror();
@@ -45,7 +45,7 @@ namespace pancake::dl {
       return sym;
     }
     
-    section get_section(const std::string& name) {
+    section get_section(const std::string& name) const {
       link_map* map;
       int rc = dlinfo(hnd, RTLD_DI_LINKMAP, &map);
       if (rc == -1) {
@@ -66,15 +66,15 @@ namespace pancake::dl {
   
   library::~library() = default;
   
-  void* library::_impl_get_symbol(const std::string& str) {
+  void* library::_impl_get_symbol(const std::string& str) const {
     return p_impl->get_symbol(str);
   }
   
-  handle library::native_handle() {
+  handle library::native_handle() const {
     return p_impl->hnd;
   }
   
-  section library::get_section(const std::string& name) {
+  section library::get_section(const std::string& name) const {
     return p_impl->get_section(name);
   }
 }

@@ -21,6 +21,8 @@
 #include <unordered_map>
 #include <variant>
 
+#include "pancake/dl/pdl.hpp"
+#include "pancake/dwarf/types.hpp"
 #include <pancake/dwarf/type_info.hpp>
 #include <pancake/exception.hpp>
 #include <pancake/movie.hpp>
@@ -28,6 +30,8 @@
 using std::nullptr_t;
 
 namespace pancake {
+  
+  
 
   /**
    * @brief An instance of the SM64 DLL.
@@ -37,8 +41,14 @@ namespace pancake {
     friend struct frame;
 
   private:
-    struct impl;
-    std::shared_ptr<impl> p_impl;
+    struct expr_info {
+      void* ptr;
+      pancake::dwarf::base_type_info type;
+    };
+    
+    dl::library lib;
+    dwarf::debug dbg;
+    std::unordered_map<std::string, expr_info> cache;
 
     void* _impl_get(
       const std::string& expr,
@@ -98,7 +108,12 @@ namespace pancake {
      * @exception std::domain_error if the resulting field is not a fundamental
      * type
      */
-    void* get_unsafe(std::string expr) { return _impl_get(expr); }
+    void* get_unsafe(const std::string& expr) { return _impl_get(expr); }
+    
+    template<typename T>
+    decltype(auto) get_symbol(const std::string& name) {
+      return lib.get_symbol<T>(name);
+    }
 
     /**
      * @brief Advances the game forward by 1 frame.
@@ -122,6 +137,19 @@ namespace pancake {
      */
     const std::variant<double, int64_t, nullptr_t> constant(
       std::string name) const;
+    
+    /**
+     * @brief Returns the library instance associated with this sm64.
+     * 
+     * @return dl::library the library instance
+     */
+    dl::library& get_lib();
+    /**
+     * @brief Returns the debug info associated with this sm64.
+     * 
+     * @return dwarf::debug the debug info
+     */
+    dwarf::debug& get_debug_info();
   };
 }  // namespace pancake
 #endif

@@ -1,5 +1,6 @@
 #include "pancake/dwarf/types.hpp"
 #include "pancake/expr/parse.hpp"
+#include "pancake/movie.hpp"
 #include "pancake/stx/overload.hpp"
 #include <pancake/sm64.hpp>
 
@@ -25,71 +26,52 @@ namespace fs = std::filesystem;
 namespace {
   struct expr_info {
     void* ptr;
-    bool is_complete;
     pancake::dwarf::base_type_info type;
   };
 }
 
 namespace pancake {
-  struct sm64::impl {
-    dl::library lib;
-    dwarf::debug dbg;
-    
-    impl(fs::path path) :
-      lib(path), dbg(path) {
-      lib.get_symbol<void()>("sm64_init")();
-    }
-      
-    void* get(const string& expr, pancake::dwarf::base_type_info type) {
-      // check the pointer cache first
-      static std::unordered_map<string, expr_info> cache;
-      {
-        decltype(cache)::iterator it;
-        if ((it = cache.find(expr)) != cache.end()) {
-          expr_info& info = it->second;
-          if (type.encoding != dwarf::encoding::none && info.type != type) {
-            throw std::invalid_argument("Type mismatch");
-          }
-          return info.ptr;
-        }
-      }
-
-      expr::expr_eval eval = expr::compile(expr::parse(expr), dbg);
-      
-      uint8_t* ptr = &this->lib.get_symbol<uint8_t>(eval.start);
-      for (auto& step: eval.steps) {
-        std::visit(stx::overload {
-          [&](expr::expr_eval::offset step) mutable {
-            ptr += step.off;
-          },
-          [&](expr::expr_eval::indirect step) mutable {
-            ptr = *reinterpret_cast<uint8_t**>(ptr);
-          }
-        }, step);
-      }
-      
-      cache[expr] = expr_info {
-        ptr, true, eval.result
-      };
-      
-      if (type.encoding != dwarf::encoding::none && type != eval.result) {
-        throw std::invalid_argument("Type mismatch");
-      }
-      
-      return ptr;
-    }
-    
-    void advance() {
-      lib.get_symbol<void()>("sm64_update")();
-    }
-  };
-  
-  sm64::sm64(const fs::path& path) {
-    p_impl = std::make_unique<impl>(path);
+  sm64::sm64(const fs::path& path) :
+    lib(path), dbg(path) {
+    lib.get_symbol<void()>("sm64_init")();
   }
   
   void* sm64::_impl_get(const string& expr, pancake::dwarf::base_type_info type) {
-    return p_impl->get(expr, type);
+    static std::unordered_map<string, expr_info> cache;
+    {
+      decltype(cache)::iterator it;
+      if ((it = cache.find(expr)) != cache.end()) {
+        expr_info& info = it->second;
+        if (type.encoding != dwarf::encoding::none && info.type != type) {
+          throw std::invalid_argument("Type mismatch");
+        }
+        return info.ptr;
+      }
+    }
+
+    expr::expr_eval eval = expr::compile(expr::parse(expr), dbg);
+    
+    uint8_t* ptr = static_cast<uint8_t*>(lib.get_symbol(eval.start));
+    for (auto& step: eval.steps) {
+      std::visit(stx::overload {
+        [&](expr::expr_eval::offset step) mutable {
+          ptr += step.off;
+        },
+        [&](expr::expr_eval::indirect step) mutable {
+          ptr = *reinterpret_cast<uint8_t**>(ptr);
+        }
+      }, step);
+    }
+    
+    cache[expr] = expr_info {
+      ptr, eval.result
+    };
+    
+    if (type.encoding != dwarf::encoding::none && type != eval.result) {
+      throw std::invalid_argument("Type mismatch");
+    }
+    
+    return ptr;
   }
   
   sm64::savestate sm64::alloc_svst() const {
@@ -97,7 +79,11 @@ namespace pancake {
   }
   
   void sm64::advance() {
-    p_impl->advance();
+    lib.get_symbol<void()>("sm64_update");
+  }
+  
+  dwarf::debug& sm64::get_debug_info() {
+    return dbg;
   }
   
   struct sm64::savestate::impl {
@@ -107,8 +93,8 @@ namespace pancake {
     const sm64& game;
     
     impl(const sm64& game_p) : game(game_p) {
-      auto sect_data = game.p_impl->lib.get_section(".data");
-      auto sect_bss = game.p_impl->lib.get_section(".bss");
+      auto sect_data = game.lib.get_section(".data");
+      auto sect_bss = game.lib.get_section(".bss");
       regions[0] = gsl::span<char> {
         reinterpret_cast<char*>(sect_data.ptr),
         sect_data.size

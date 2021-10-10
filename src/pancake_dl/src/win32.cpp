@@ -61,7 +61,7 @@ namespace pancake::dl {
 
     ~impl() { FreeLibrary(hnd); }
 
-    void* get_symbol(const std::string& name) {
+    void* get_symbol(const std::string& name) const {
       void* sym = reinterpret_cast<void*>(GetProcAddress(hnd, name.c_str()));
       if (sym == nullptr) {
         string error = win_errmsg(GetLastError());
@@ -71,7 +71,7 @@ namespace pancake::dl {
       return sym;
     }
 
-    section get_section(const std::string& name) {
+    section get_section(const std::string& name) const {
       auto sect = bin->get_section(name);
 
       return section {
@@ -85,13 +85,13 @@ namespace pancake::dl {
 
   library::~library() = default;
 
-  void* library::_impl_get_symbol(const std::string& str) {
+  void* library::_impl_get_symbol(const std::string& str) const {
     return p_impl->get_symbol(str);
   }
 
-  handle library::native_handle() { return p_impl->hnd; }
+  handle library::native_handle() const { return p_impl->hnd; }
 
-  section library::get_section(const std::string& name) {
+  section library::get_section(const std::string& name) const {
     return p_impl->get_section(name);
   }
 }  // namespace pancake::dl
