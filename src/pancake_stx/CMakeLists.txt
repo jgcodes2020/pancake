@@ -18,3 +18,9 @@ set_target_properties(pancake.stx PROPERTIES
 target_include_directories(pancake.stx
   INTERFACE include
 )
+
+# Installation
+# ============
+install(DIRECTORY "include"
+  DESTINATION "."
+)

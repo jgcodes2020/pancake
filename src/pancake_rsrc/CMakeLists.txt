@@ -55,3 +55,9 @@ target_include_directories(pancake.rsrc
 target_link_libraries(pancake.rsrc
   PUBLIC CONAN_PKG::ms-gsl CONAN_PKG::nlohmann_json
 )
+
+# Installation
+# ============
+install(DIRECTORY "include"
+  DESTINATION "."
+)

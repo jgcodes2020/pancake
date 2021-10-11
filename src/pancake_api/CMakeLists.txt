@@ -20,3 +20,10 @@ set_target_properties(pancake.api PROPERTIES
 target_link_libraries(pancake.api
   PUBLIC CONAN_PKG::ms-gsl
 )
+
+# Installation
+# ============
+
+install(DIRECTORY "include"
+  DESTINATION "."
+)

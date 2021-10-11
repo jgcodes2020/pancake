@@ -20,7 +20,7 @@ namespace pancake::dwarf {
   struct any_type_info;
 
   struct base_type_info {
-    encoding encoding;
+    dwarf::encoding encoding;
     size_t size;
     
     bool operator==(const base_type_info& other) const {

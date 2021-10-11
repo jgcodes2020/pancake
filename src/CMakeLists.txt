@@ -1,5 +1,4 @@
 add_subdirectory(pancake_api)
-add_subdirectory(pancake_cosa)
 add_subdirectory(pancake_dl)
 add_subdirectory(pancake_dwarf)
 add_subdirectory(pancake_expr)
@@ -17,6 +16,7 @@ target_link_libraries(pancake.api
   PRIVATE pancake.expr
   PUBLIC pancake.dwarf pancake.dl
 )
-target_link_libraries(pancake.cosa
-  PRIVATE pancake.api
+
+install(TARGETS pancake.api pancake.dl pancake.dwarf pancake.expr pancake.rsrc pancake.stx
+  DESTINATION "./lib"
 )

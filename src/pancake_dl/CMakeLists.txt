@@ -36,3 +36,9 @@ target_include_directories(pancake.dl
 target_link_libraries(pancake.dl 
   PRIVATE CONAN_PKG::LIEF ${CMAKE_DL_LIBS}
 )
+
+# Installation
+# ============
+install(DIRECTORY "include"
+  DESTINATION "."
+)

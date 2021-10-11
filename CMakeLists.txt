@@ -74,6 +74,8 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS on)
 configure_file("pancake_metadata.json.in" "pancake_metadata.json")
 
 add_subdirectory(src)
-add_subdirectory(test)
+if (PANCAKE_BUILD_TESTS)
+  add_subdirectory(test)
+endif()
 
-install(SCRIPT "installer.cmake")
+install (SCRIPT "cmake/install_helper.cmake")

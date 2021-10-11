@@ -24,3 +24,9 @@ target_include_directories(pancake.dwarf
 target_link_libraries(pancake.dwarf 
   PUBLIC CONAN_PKG::libdwarf
 )
+
+# Installation
+# ============
+install(DIRECTORY "include"
+  DESTINATION "."
+)

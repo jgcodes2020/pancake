@@ -17,7 +17,7 @@ class PancakeConan(ConanFile):
         "fPIC": True
     }
     generators = "cmake"
-    exports_sources = "modules/*", "conan_recipes/*"
+    exports_sources = "src/*", "scripts/*", "conan_recipes/*", "cmake/*", "CMakeLists.txt", "pancake_metadata.json.in"
 
     def config_options(self):
         if self.settings.os == "Windows":
@@ -46,4 +46,4 @@ class PancakeConan(ConanFile):
         cmake.install()
 
     def package_info(self):
-        pass
+        self.cpp_info.libs = ["pancake"]

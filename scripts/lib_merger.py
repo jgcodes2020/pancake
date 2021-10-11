@@ -61,7 +61,7 @@ args = parser.parse_args()
 del parser
 
 
-def lib_exe_merge():
+def lib_exe_merge(output, libs):
     vswhere_exe = str(Path(__file__).parent.joinpath("vswhere.exe"))
     vswhere_proc = proc.run(
         [vswhere_exe, "-latest", "-products", "*",
@@ -82,11 +82,11 @@ def lib_exe_merge():
         f"VC\\Tools\\MSVC\\{vcver}\\bin\\Hostx64\\x64\\lib.exe"))
     lib_cmd: list[str] = [lib_exe]
     try:
-        lib_output = f"/OUT:{str(args.output[0])}"
+        lib_output = f"/OUT:{str(output)}"
         lib_cmd.append(lib_output)
     except AttributeError:
         pass
-    lib_cmd += [str(p) for p in args.libs]
+    lib_cmd += [str(p) for p in libs]
     print(f"lib_cmd: {lib_cmd}")
     lib_proc = proc.run(
         lib_cmd
@@ -94,11 +94,11 @@ def lib_exe_merge():
     sys.exit(lib_proc.returncode)
 
 
-def ar_dir_merge():
+def ar_dir_merge(output, libs):
     mri_data = None
     with StringIO() as script:
-        print(f"create {args.output[0]}", file=script)
-        for i in args.libs:
+        print(f"create {output}", file=script)
+        for i in libs:
             print(f"addlib {i}", file=script)
         print("save", "end", sep="\n", file=script)
         mri_data = script.getvalue()
@@ -107,7 +107,11 @@ def ar_dir_merge():
         input=mri_data.encode('utf-8')
     )
 
-if platform.system() == "Windows":
-    lib_exe_merge()
-elif platform.system() == "Linux":
-    ar_dir_merge()
+def merge_libs(output, libs):
+    if platform.system() == "Windows":
+        lib_exe_merge(output, libs)
+    elif platform.system() == "Linux":
+        ar_dir_merge(output, libs)
+
+if __name__ == "__main__":
+    merge_libs(args.output[0], args.libs)

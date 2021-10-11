@@ -51,7 +51,7 @@ namespace pancake::dwarf {
       return result;
     }
 
-    die die();
+    pancake::dwarf::die die();
   };
 
   class global_type final {
@@ -75,7 +75,7 @@ namespace pancake::dwarf {
       return result;
     }
 
-    die die();
+    dwarf::die die();
   };
 
   template <>
@@ -294,67 +294,6 @@ namespace pancake::dwarf {
     template <typename T>
     T get_attr(dw_attrs type);
 
-    template <>
-    Dwarf_Unsigned get_attr(dw_attrs type) {
-      Dwarf_Attribute attr = attr_obj(type);
-
-      Dwarf_Error err;
-      Dwarf_Unsigned res;
-      if (dwarf_formudata(attr, &res, &err) == DW_DLV_ERROR) {
-        throw std::invalid_argument(dwarf_errmsg(err));
-      }
-      dwarf_dealloc_attribute(attr);
-
-      return res;
-    }
-
-    template <>
-    Dwarf_Signed get_attr(dw_attrs type) {
-      Dwarf_Attribute attr = attr_obj(type);
-
-      Dwarf_Error err;
-      Dwarf_Signed res;
-      if (dwarf_formsdata(attr, &res, &err) == DW_DLV_ERROR) {
-        throw std::invalid_argument(dwarf_errmsg(err));
-      }
-      dwarf_dealloc_attribute(attr);
-
-      return res;
-    }
-
-    template <>
-    std::string get_attr(dw_attrs type) {
-      Dwarf_Attribute attr = attr_obj(type);
-
-      Dwarf_Error err;
-      char* res;
-      if (dwarf_formstring(attr, &res, &err) == DW_DLV_ERROR) {
-        throw std::invalid_argument(dwarf_errmsg(err));
-      }
-      dwarf_dealloc_attribute(attr);
-
-      return res;
-    }
-
-    template <>
-    die get_attr(dw_attrs type) {
-      Dwarf_Attribute attr = attr_obj(type);
-
-      Dwarf_Error err;
-      Dwarf_Off off;
-      if (dwarf_global_formref(attr, &off, &err) == DW_DLV_ERROR) {
-        throw std::invalid_argument(dwarf_errmsg(err));
-      }
-      dwarf_dealloc_attribute(attr);
-
-      Dwarf_Die res;
-      if (dwarf_offdie_b(dbg.get(), off, true, &res, &err) == DW_DLV_ERROR) {
-        throw std::invalid_argument(dwarf_errmsg(err));
-      }
-
-      return die(dbg, res);
-    }
-
     die_tag tag() {
       Dwarf_Error err;
       Dwarf_Half res;
@@ -455,8 +394,69 @@ namespace pancake::dwarf {
       return out;
     }
   };
+  
+  template <>
+  inline Dwarf_Unsigned die::get_attr(dw_attrs type) {
+    Dwarf_Attribute attr = attr_obj(type);
 
-  inline die global::die() {
+    Dwarf_Error err;
+    Dwarf_Unsigned res;
+    if (dwarf_formudata(attr, &res, &err) == DW_DLV_ERROR) {
+      throw std::invalid_argument(dwarf_errmsg(err));
+    }
+    dwarf_dealloc_attribute(attr);
+
+    return res;
+  }
+
+  template <>
+  inline Dwarf_Signed die::get_attr(dw_attrs type) {
+    Dwarf_Attribute attr = attr_obj(type);
+
+    Dwarf_Error err;
+    Dwarf_Signed res;
+    if (dwarf_formsdata(attr, &res, &err) == DW_DLV_ERROR) {
+      throw std::invalid_argument(dwarf_errmsg(err));
+    }
+    dwarf_dealloc_attribute(attr);
+
+    return res;
+  }
+
+  template <>
+  inline std::string die::get_attr(dw_attrs type) {
+    Dwarf_Attribute attr = attr_obj(type);
+
+    Dwarf_Error err;
+    char* res;
+    if (dwarf_formstring(attr, &res, &err) == DW_DLV_ERROR) {
+      throw std::invalid_argument(dwarf_errmsg(err));
+    }
+    dwarf_dealloc_attribute(attr);
+
+    return res;
+  }
+
+  template <>
+  inline die die::get_attr(dw_attrs type) {
+    Dwarf_Attribute attr = attr_obj(type);
+
+    Dwarf_Error err;
+    Dwarf_Off off;
+    if (dwarf_global_formref(attr, &off, &err) == DW_DLV_ERROR) {
+      throw std::invalid_argument(dwarf_errmsg(err));
+    }
+    dwarf_dealloc_attribute(attr);
+
+    Dwarf_Die res;
+    if (dwarf_offdie_b(dbg.get(), off, true, &res, &err) == DW_DLV_ERROR) {
+      throw std::invalid_argument(dwarf_errmsg(err));
+    }
+
+    return die(dbg, res);
+  }
+
+  inline dwarf::die global::die() {
     namespace dwarf = pancake::dwarf;
 
     Dwarf_Error err;
@@ -473,7 +473,7 @@ namespace pancake::dwarf {
     return dwarf::die(dbg, res);
   }
 
-  inline die global_type::die() {
+  inline dwarf::die global_type::die() {
     namespace dwarf = pancake::dwarf;
 
     Dwarf_Error err;

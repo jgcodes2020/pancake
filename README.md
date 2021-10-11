@@ -30,10 +30,24 @@ You'll need:
 - Recommended: Ninja (`pip install ninja`) to improve build times
 
 ### Standalone
+Simply go through the CMake workflow as usual. The install package is laid out as follows:
+```
+(root)
+ ├─ include/
+ └─ lib/
+     ├─ pancake.lib
+     └─ pancake.<module>.lib
+```
+If you don't care about fine-grained control, use `pancake.lib` or `libpancake.a`. This is
+all the modules combined together.
 
+Each module (not to be confused with the C++20 feature) compiles its own static library.
+These static libraries are available individually as `pancake.<module>.lib` or `libpancake.<module>.a`, 
+where module is replaced with one of the names of the modules, like `dl` or `api`. Be mindful of 
+dependencies as outlined in `src/CMakeLists.txt`.
 
 ### As a Conan package
-Run `conan export . pancake/0.2.0@local/beta` in the project folder. This exports Pancake as a Conan 
+Run `conan export . pancake/0.3.0` in the project folder. This exports Pancake as a Conan 
 recipe that you can use in your projects. You will need to build from source.
 
 
@@ -52,5 +66,6 @@ set_target_properties(libdwarf_custom PROPERTIES
 2. Replace `CONAN_PKG::libdwarf` with `libdwarf_custom` or whatever you named your cmake target.
 3. You're done, rebuild again and test!
 
+## Licensing
 This library is licensed under the Mozilla Public License, version 2. See the license at LICENSE.md 
 for full information.
