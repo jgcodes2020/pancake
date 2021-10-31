@@ -136,6 +136,9 @@ const size_t _pancake_rsrc_{asm_nbase}_size = _pancake_rsrc_{asm_nbase}_end - _p
 #endif
 #endif
 """
-with open(args.header, "w") as f:
+
+Path(args.header).parent.mkdir(parents=True)
+
+with open(args.header, "w+") as f:
     f.write(header)
     f.flush()
